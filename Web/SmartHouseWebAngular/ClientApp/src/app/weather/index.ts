@@ -1,0 +1,2 @@
+export * from './weather.component';
+

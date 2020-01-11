@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Edit goal</h1>
+<mat-dialog-content [formGroup]="form">
+  <p>
+    Enter goal description.
+  </p>
+  <mat-form-field>
+    <mat-checkbox class="example-margin" [(ngModel)]="done" formControlName="done">
+      Mark done
+    </mat-checkbox>
+    <textarea matInput min="0" max="100" required placeholder="Text goal" formControlName="name"
+      value="{{name}}"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onExit()">Close</button>
+  <button mat-button color="primary" (click)="onSave()">Save</button>
+</mat-dialog-actions>

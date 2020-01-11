@@ -1,0 +1,36 @@
+table {
+  width: 100%;
+
+  td {
+    cursor: pointer;
+    text-align: center;
+
+    fa-icon[fa-check-circle] {
+      color: #673ab7;
+      cursor: pointer;
+    }
+
+    fa-icon[fa-trash-alt] {
+      color: #f44336;
+      cursor: pointer;
+    }
+  }
+
+  th {
+    text-align: center;
+  }
+
+  td[mat-cell-name], th[mat-header-cell-name] {
+    text-align: left;
+  }
+}
+
+button {
+  margin: 16px 8px;
+}
+
+mat-button-toggle-group {
+  float: right;
+}
+
+
