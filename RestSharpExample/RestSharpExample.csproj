@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartHouse.Domain.Core\SmartHouse.Domain.Core.csproj" />
+    <ProjectReference Include="..\SmartHouse.Infrastructure.Data\SmartHouse.Infrastructure.Data.csproj" />
+  </ItemGroup>
+
+</Project>
