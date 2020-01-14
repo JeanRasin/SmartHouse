@@ -18,6 +18,8 @@ namespace SmartHouse.Infrastructure.Data.Weather
         private readonly ILogger<OpenWeatherService> logger;
         private readonly HttpClient client;
 
+        private const string url = "https://api.openweathermap.org";
+
         public OpenWeatherService(ILogger<OpenWeatherService> logger, Dictionary<string, string> parm, HttpMessageHandler handler = null)
         {
             string[] keys = { "city", "api" };
@@ -53,7 +55,7 @@ namespace SmartHouse.Infrastructure.Data.Weather
         {
             try
             {
-                client.BaseAddress = new Uri("https://api.openweathermap.org");
+                client.BaseAddress = new Uri(url);
                 var response = await client.GetAsync($"/data/2.5/weather?q={city}&APPID={api}&units=metric");
                 response.EnsureSuccessStatusCode();
 

@@ -76,7 +76,7 @@ namespace ConsoleAPI
             var parm = new Dictionary<string, string>
             {
                 { "city", "Perm,ru" },
-                { "api", "f4c946ac33b35d68233bbcf83619eb58w" }
+                { "api", "f4c946ac33b35d68233bbcf83619eb58" }
             };
 
             var serviceProvider = new ServiceCollection()
@@ -106,7 +106,7 @@ namespace ConsoleAPI
 
             var weatherWork = new WeatherWork(ows);
 
-            var weather = weatherWork.GetWeather().Result;
+            var weather = weatherWork.GetWeather();//.Result;
             var weatherJson = JsonSerializer.Serialize(weather);
 
             Console.WriteLine($"Weather: {weatherJson}");

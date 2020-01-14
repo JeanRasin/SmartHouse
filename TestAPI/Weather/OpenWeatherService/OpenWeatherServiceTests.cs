@@ -62,10 +62,20 @@ namespace TestAPI
         {
             mockHttp.Fallback.Respond(HttpStatusCode.ServiceUnavailable);
 
+            //mockHttp.Fallback.Respond(()=>
+            //{
+            //    throw new HttpRequestException(HttpStatusCode.ServiceUnavailable.ToString(), new WebException("", WebExceptionStatus));
+            //});
+
             var ows = new OpenWeatherService(parm, mockHttp);
 
             var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await ows.GetWeather());
-            Assert.AreEqual("Response status code does not indicate success: 503 (Service Unavailable).", ex.Message);
+            //if (ex.InnerException is WebException webException && webException.Status == WebExceptionStatus.NameResolutionFailure)
+            //{
+            //    Assert.Pass();
+            //}
+
+           Assert.AreEqual("Response status code does not indicate success: 503 (Service Unavailable).", ex.Message);//todo:!!!
         }
 
         [Test]
