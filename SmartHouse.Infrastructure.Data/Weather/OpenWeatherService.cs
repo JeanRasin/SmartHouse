@@ -1,65 +1,114 @@
-﻿using SmartHouse.Domain.Core.Weather;
+﻿using Microsoft.Extensions.Logging;
+using SmartHouse.Domain.Core.Weather;
 using SmartHouse.Domain.Interfaces.Weather;
 using SmartHouse.Infrastructure.Data.Weather.OpenWeather;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SmartHouse.Infrastructure.Data.Weather
 {
-    public class OpenWeatherService : IWeatherService
+    public class OpenWeatherService : IWeatherService, IDisposable
     {
         private readonly string city;
         private readonly string api;
+        private readonly ILogger<OpenWeatherService> logger;
+        private readonly HttpClient client;
 
-        //public OpenWeatherService(string city, string api)
-        public OpenWeatherService(Dictionary<string, string> parm)
+        public OpenWeatherService(ILogger<OpenWeatherService> logger, Dictionary<string, string> parm, HttpMessageHandler handler = null)
         {
             string[] keys = { "city", "api" };
-            if (!keys.Any() || !keys.All(key => parm.ContainsKey(key)))
+            if (!keys.All(key => parm.ContainsKey(key)))
             {
                 throw new Exception("Not parameters.");
             }
 
-            city = parm["city"];//"Perm,ru";
-            api = parm["api"];// "f4c946ac33b35d68233bbcf83619eb58";
+            if (handler == null)
+            {
+                client = new HttpClient();
+            }
+            else
+            {
+                client = new HttpClient(handler);
+            }
 
-            //this.city = city;//"Perm,ru";
-            //this.api = api;// "f4c946ac33b35d68233bbcf83619eb58";
+            city = parm["city"];
+            api = parm["api"];
+
+            this.logger = logger;
         }
+
+        public OpenWeatherService(Dictionary<string, string> parm, HttpMessageHandler handler = null) : this(null, parm, handler)
+        {
+
+        }
+
 
         public async Task<WeatherData> GetWeather()
         {
-            using (var client = new HttpClient())
+            try
             {
-                try
+                client.BaseAddress = new Uri("https://api.openweathermap.org");
+                var response = await client.GetAsync($"/data/2.5/weather?q={city}&APPID={api}&units=metric");
+                response.EnsureSuccessStatusCode();
+
+                string stringResult = await response.Content.ReadAsStringAsync();
+                WeatherResponse rawWeather = JsonSerializer.Deserialize<WeatherResponse>(stringResult);
+
+                var result = new WeatherData
                 {
-                    client.BaseAddress = new Uri("https://api.openweathermap.org");
-                    var response = await client.GetAsync($"/data/2.5/weather?q={city}&APPID={api}&units=metric");
-                    response.EnsureSuccessStatusCode();
+                    Temp = rawWeather.Main.Temp,
+                    WindSpeed = rawWeather.Wind.Speed,
+                };
 
-                    string stringResult = await response.Content.ReadAsStringAsync();
-                    WeatherResponse rawWeather = JsonSerializer.Deserialize<WeatherResponse>(stringResult);
+                return result;
+            }
+            catch (HttpRequestException ex)
+            {
+                LogErrorWrite(3, ex);
+                throw ex;
+            }
+            catch (JsonException ex)
+            {
+                LogErrorWrite(2, ex);
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                LogErrorWrite(1, ex);
+                throw ex;
+            }
+        }
 
-                    var result = new WeatherData
-                    {
-                        Temp = rawWeather.Main.Temp,
-                        WindSpeed = rawWeather.Wind.Speed,
-                    };
+        private void LogErrorWrite(int eventId, Exception ex)
+        {
+            if (logger != null)
+                logger.LogError(new EventId(eventId), ex, ex.Message);
+        }
 
-                    return result;
-                }
-               // catch (HttpRequestException httpRequestException)
-                catch (Exception ex)
+        #region dispose
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
                 {
-                    //log write
+                    client.Dispose();
                 }
             }
-            return null;
+            this.disposed = true;
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

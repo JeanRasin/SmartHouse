@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace TestAPI
 {
-    public class Tests
+    public class GoalTests
     {
         private DbContextOptions<ActContext> options;
 

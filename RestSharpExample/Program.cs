@@ -20,7 +20,7 @@ namespace RestSharpExample
             {
                 try
                 {
-                    //http://api.openweathermap.org/data/2.5/weather?q=Perm,ru&APPID=f4c946ac33b35d68233bbcf83619eb58 
+                    //https://api.openweathermap.org/data/2.5/weather?q=Perm,ru&APPID=f4c946ac33b35d68233bbcf83619eb58 
 
                     client.BaseAddress = new Uri("https://api.openweathermap.org");
                     var response = await client.GetAsync($"/data/2.5/weather?q={city}&APPID={api}&units=metric");//
