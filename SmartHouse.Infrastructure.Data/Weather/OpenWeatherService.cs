@@ -64,21 +64,23 @@ namespace SmartHouse.Infrastructure.Data.Weather
                     WindSpeed = rawWeather.Wind.Speed,
                 };
 
+                LogInfoWrite(1, stringResult);
+
                 return result;
             }
             catch (HttpRequestException ex)
             {
-                LogErrorWrite(3, ex);
+                LogErrorWrite(4, ex);
                 throw ex;
             }
             catch (JsonException ex)
             {
-                LogErrorWrite(2, ex);
+                LogErrorWrite(3, ex);
                 throw ex;
             }
             catch (Exception ex)
             {
-                LogErrorWrite(1, ex);
+                LogErrorWrite(2, ex);
                 throw ex;
             }
         }
@@ -87,6 +89,12 @@ namespace SmartHouse.Infrastructure.Data.Weather
         {
             if (logger != null)
                 logger.LogError(new EventId(eventId), ex, ex.Message);
+        }
+
+        private void LogInfoWrite(int eventId, string message)
+        {
+            if (logger != null)
+                logger.LogInformation(new EventId(eventId), message);
         }
 
         #region dispose

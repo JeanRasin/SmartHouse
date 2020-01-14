@@ -81,7 +81,7 @@ namespace ConsoleAPI
 
             var serviceProvider = new ServiceCollection()
            .AddLogging(cfg => cfg.AddConsole())
-           .AddSingleton<IWeatherService>(x => new OpenWeatherService(parm))
+           .AddSingleton<IWeatherService>(x => new OpenWeatherService(x.GetRequiredService<ILogger<OpenWeatherService>>(), parm))
             //.AddSingleton<IWeatherService, OpenWeatherService>()
             // .AddSingleton<IBarService, BarService>()
             .BuildServiceProvider();
