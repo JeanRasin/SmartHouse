@@ -35,6 +35,8 @@ namespace SmartHouse.Infrastructure.Data.Weather
                 client = new HttpClient(handler);
             }
 
+            client.Timeout = TimeSpan.FromMilliseconds(1000);
+
             city = parm["city"];
             api = parm["api"];
 
@@ -55,6 +57,9 @@ namespace SmartHouse.Infrastructure.Data.Weather
                 var response = await client.GetAsync($"/data/2.5/weather?q={city}&APPID={api}&units=metric");
                 response.EnsureSuccessStatusCode();
 
+                string requestJson = JsonSerializer.Serialize(response.RequestMessage);
+                LogInfoWrite(1, requestJson);
+
                 string stringResult = await response.Content.ReadAsStringAsync();
                 WeatherResponse rawWeather = JsonSerializer.Deserialize<WeatherResponse>(stringResult);
 
@@ -64,13 +69,13 @@ namespace SmartHouse.Infrastructure.Data.Weather
                     WindSpeed = rawWeather.Wind.Speed,
                 };
 
-                LogInfoWrite(1, stringResult);
+                LogInfoWrite(2, stringResult);
 
                 return result;
             }
             catch (HttpRequestException ex)
             {
-                LogErrorWrite(4, ex);
+                LogErrorWrite(3, ex);
                 throw ex;
             }
             catch (JsonException ex)
@@ -78,9 +83,14 @@ namespace SmartHouse.Infrastructure.Data.Weather
                 LogErrorWrite(3, ex);
                 throw ex;
             }
+            catch (OperationCanceledException ex)
+            {
+                LogErrorWrite(3, ex);
+                throw new InvalidOperationException("Expected timeout exception");
+            }
             catch (Exception ex)
             {
-                LogErrorWrite(2, ex);
+                LogErrorWrite(3, ex);
                 throw ex;
             }
         }

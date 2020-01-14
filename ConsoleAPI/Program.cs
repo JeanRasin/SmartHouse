@@ -76,17 +76,15 @@ namespace ConsoleAPI
             var parm = new Dictionary<string, string>
             {
                 { "city", "Perm,ru" },
-                { "api", "f4c946ac33b35d68233bbcf83619eb58" }
+                { "api", "f4c946ac33b35d68233bbcf83619eb58w" }
             };
 
             var serviceProvider = new ServiceCollection()
            .AddLogging(cfg => cfg.AddConsole())
            .AddSingleton<IWeatherService>(x => new OpenWeatherService(x.GetRequiredService<ILogger<OpenWeatherService>>(), parm))
             //.AddSingleton<IWeatherService, OpenWeatherService>()
-            // .AddSingleton<IBarService, BarService>()
+             //.AddSingleton<IWeatherService, BarService>()
             .BuildServiceProvider();
-
-            //serviceProvider.AddSingleton<IWeatherService>(x => new OpenWeatherService(parm))
 
             var context = new ApplicationContext();
             var goalWork = new GoalWork(context);

@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using SmartHouse.Infrastructure.Data;
 using SmartHouse.Business.Data;
+using SmartHouse.Domain.Interfaces.Weather;
+using SmartHouse.Infrastructure.Data.Weather;
 
 namespace SmartHouseAPI
 {
@@ -28,6 +30,13 @@ namespace SmartHouseAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddLogging(cfg => cfg.AddConsole());
+
+            var parm = new Dictionary<string, string>
+            {
+                { "city", "Perm,ru" },
+                { "api", "f4c946ac33b35d68233bbcf83619eb58" }
+            };
 
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
@@ -37,6 +46,7 @@ namespace SmartHouseAPI
             //services.AddControllersWithViews();
 
             services.AddTransient<IGoalWork, GoalWork>();
+            services.AddTransient<IWeatherService>(x => new OpenWeatherService(x.GetRequiredService<ILogger<OpenWeatherService>>(), parm));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
