@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartHouse.Business.Data.Weather;
 using SmartHouse.Domain.Core.Weather;
 using SmartHouse.Domain.Interfaces.Weather;
 
@@ -8,17 +9,19 @@ namespace SmartHouseAPI.Controllers
     [ApiController]
     public class WeatherController : ControllerBase
     {
-        private readonly IWeatherService weatherService;
+       // private readonly IWeatherService weatherService;
+        private readonly WeatherWork weatherWork;
 
         public WeatherController(IWeatherService ws)
         {
-            weatherService = ws;
+           // weatherService = ws;
+            weatherWork = new WeatherWork(ws, 100);
         }
 
         [HttpGet("get")]
         public WeatherData GetWeather()
         {
-            var result = weatherService.GetWeather().Result;
+            var result = weatherWork.GetWeather();
 
             return result;
         }

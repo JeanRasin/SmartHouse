@@ -1,37 +1,36 @@
 ﻿using SmartHouse.Domain.Core.Weather;
 using SmartHouse.Domain.Interfaces.Weather;
 using System;
-using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace SmartHouse.Business.Data.Weather
 {
     public class WeatherWork
     {
-        private const int counterMax = 2;
+        public int CounterMax { get; }
 
         private readonly IWeatherService weatherService;
         private int counter = 0;
-        private int hour = 0;
+        private int hour = int.MaxValue;
 
+        //        public WeatherWork(IWeatherService weatherService, int counterMax)
         public WeatherWork(IWeatherService weatherService)
         {
             this.weatherService = weatherService;
+           //CounterMax = counterMax;
         }
 
-        //public async Task<WeatherData> GetWeather()
         public WeatherData GetWeather()
         {
-            if(DateTime.Now.Hour < hour)
+            if (DateTime.Now.Hour < hour)
             {
                 hour = DateTime.Now.Hour;
                 counter = 0;
             }
 
-            if (counter >= counterMax)
+            if (counter > CounterMax)
             {
-                throw new Exception("!!!");
+                throw new Exception("The number of requests per day exceeded.");
             }
 
             WeatherData result;
@@ -48,11 +47,11 @@ namespace SmartHouse.Business.Data.Weather
                 //    // return true;
                 //}
 
-                if (ex.Message == "Response status code does not indicate success: 503 (Service Unavailable).")
-                {
-                    Task.Delay(2000);
-                    result = GetWeather();
-                }
+                //if (ex.Message == "Response status code does not indicate success: 503 (Service Unavailable).") //todo:!!!
+                //{
+                //    System.Threading.Thread.Sleep(2000);
+                //    result = GetWeather();
+                //}
 
                 throw ex;
             }
