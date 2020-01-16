@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SmartHouse.Infrastructure.Data.Weather.OpenWeather
+namespace SmartHouse.Service.Weather.OpenWeatherMap.Model
 {
     public class Clouds
     {

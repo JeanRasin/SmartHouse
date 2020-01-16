@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartHouse.Domain.Core.Weather;
 using SmartHouse.Domain.Interfaces.Weather;
-using SmartHouse.Infrastructure.Data.Weather.OpenWeather;
+using SmartHouse.Service.Weather.OpenWeatherMap.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +9,20 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace SmartHouse.Infrastructure.Data.Weather
+namespace SmartHouse.Service.Weather.OpenWeatherMap
 {
-    public class OpenWeatherService : IWeatherService, IDisposable
+    public class OpenWeatherMapService : IWeatherService, IDisposable
     {
         private readonly string city;
         private readonly string api;
-        private readonly ILogger<OpenWeatherService> logger;
+        private readonly ILogger<OpenWeatherMapService> logger;
         private readonly HttpClient client;
 
-        private const string url = "https://api.openweathermap.org";
+        private readonly string url;// = "https://api.openweathermap.org";
 
-        public OpenWeatherService(ILogger<OpenWeatherService> logger, Dictionary<string, string> parm, HttpMessageHandler handler = null)
+        public OpenWeatherMapService(ILogger<OpenWeatherMapService> logger, Dictionary<string, string> parm, HttpMessageHandler handler = null)
         {
-            string[] keys = { "city", "api" };
+            string[] keys = { "city", "api", "url" };
             if (!keys.All(key => parm.ContainsKey(key)))
             {
                 throw new Exception("Not parameters.");
@@ -39,19 +39,20 @@ namespace SmartHouse.Infrastructure.Data.Weather
 
             client.Timeout = TimeSpan.FromMilliseconds(1000);
 
+            url = parm["url"];
             city = parm["city"];
             api = parm["api"];
 
             this.logger = logger;
         }
 
-        public OpenWeatherService(Dictionary<string, string> parm, HttpMessageHandler handler = null) : this(null, parm, handler)
+        public OpenWeatherMapService(Dictionary<string, string> parm, HttpMessageHandler handler = null) : this(null, parm, handler)
         {
 
         }
 
 
-        public async Task<WeatherData> GetWeather()
+        public async Task<WeatherData> GetWeatherAsync()
         {
             try
             {
@@ -114,14 +115,14 @@ namespace SmartHouse.Infrastructure.Data.Weather
 
         public virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!disposed)
             {
                 if (disposing)
                 {
                     client.Dispose();
                 }
             }
-            this.disposed = true;
+            disposed = true;
         }
 
         public void Dispose()

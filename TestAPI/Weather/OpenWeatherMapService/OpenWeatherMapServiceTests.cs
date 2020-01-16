@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
-using SmartHouse.Infrastructure.Data.Weather;
+using SmartHouse.Service.Weather.OpenWeatherMap;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace TestAPI
 {
-    public class OpenWeatherServiceTests
+    public class OpenWeatherMapServiceTests
     {
         private MockHttpMessageHandler mockHttp;
-        //  private const string url = "https://api.openweathermap.org/*";
         private readonly Dictionary<string, string> parm = new Dictionary<string, string>
             {
+                { "url", "https://api.openweathermap.org" },
                 { "city", "Perm,ru" },
                 { "api", "f4c946ac33b35d68233bbcf83619eb58" }
             };
@@ -33,7 +33,7 @@ namespace TestAPI
         {
             mockHttp.Fallback.Respond("application/json", "");
 
-            Assert.Throws<NullReferenceException>(() => new OpenWeatherService(null, mockHttp));
+            Assert.Throws<NullReferenceException>(() => new OpenWeatherMapService(null, mockHttp));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace TestAPI
 
             mockHttp.Fallback.Respond("application/json", "{'name' : 'Test McGee'}");
 
-            var ex = Assert.Throws<Exception>(() => new OpenWeatherService(parm, mockHttp));
+            var ex = Assert.Throws<Exception>(() => new OpenWeatherMapService(parm, mockHttp));
             Assert.AreEqual("Not parameters.", ex.Message);
         }
 
@@ -52,9 +52,9 @@ namespace TestAPI
         {
             mockHttp.Fallback.Respond("application/json", "{'name' : 'not'}");
 
-            var ows = new OpenWeatherService(parm, mockHttp);
+            var service = new OpenWeatherMapService(parm, mockHttp);
 
-            Assert.ThrowsAsync<JsonException>(async () => await ows.GetWeather());
+            Assert.ThrowsAsync<JsonException>(async () => await service.GetWeatherAsync());
         }
 
         [Test]
@@ -67,15 +67,15 @@ namespace TestAPI
             //    throw new HttpRequestException(HttpStatusCode.ServiceUnavailable.ToString(), new WebException("", WebExceptionStatus));
             //});
 
-            var ows = new OpenWeatherService(parm, mockHttp);
+            var service = new OpenWeatherMapService(parm, mockHttp);
 
-            var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await ows.GetWeather());
+            var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await service.GetWeatherAsync());
             //if (ex.InnerException is WebException webException && webException.Status == WebExceptionStatus.NameResolutionFailure)
             //{
             //    Assert.Pass();
             //}
 
-           Assert.AreEqual("Response status code does not indicate success: 503 (Service Unavailable).", ex.Message);//todo:!!!
+            Assert.AreEqual("Response status code does not indicate success: 503 (Service Unavailable).", ex.Message);//todo:!!!
         }
 
         [Test]
@@ -85,13 +85,14 @@ namespace TestAPI
 
             var parm = new Dictionary<string, string>
             {
+                { "url", "https://api.openweathermap.org" },
                 { "city", "Perm,ru" },
                 { "api", "0" }
             };
 
-            var ows = new OpenWeatherService(parm, mockHttp);
+            var service = new OpenWeatherMapService(parm, mockHttp);
 
-            var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await ows.GetWeather());
+            var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await service.GetWeatherAsync());
             Assert.AreEqual("Response status code does not indicate success: 401 (Unauthorized).", ex.Message);
         }
 
@@ -100,9 +101,9 @@ namespace TestAPI
         {
             mockHttp.Fallback.Throw(new Exception());
 
-            var ows = new OpenWeatherService(parm, mockHttp);
+            var service = new OpenWeatherMapService(parm, mockHttp);
 
-            Assert.ThrowsAsync<Exception>(async () => await ows.GetWeather());
+            Assert.ThrowsAsync<Exception>(async () => await service.GetWeatherAsync());
         }
 
         [Test]
@@ -110,11 +111,11 @@ namespace TestAPI
         {
             mockHttp.Fallback.Throw(new Exception());
 
-            var logger = Mock.Of<ILogger<OpenWeatherService>>();
+            var logger = Mock.Of<ILogger<OpenWeatherMapService>>();
 
-            var ows = new OpenWeatherService(logger, parm, mockHttp);
+            var service = new OpenWeatherMapService(logger, parm, mockHttp);
 
-            Assert.ThrowsAsync<Exception>(async () => await ows.GetWeather());
+            Assert.ThrowsAsync<Exception>(async () => await service.GetWeatherAsync());
         }
 
         [Test]
@@ -122,15 +123,15 @@ namespace TestAPI
         {
             mockHttp.Fallback.Respond(async () =>
             {
-                 await Task.Delay(2000); 
+                await Task.Delay(2000);
                 //System.Threading.Thread.Sleep(2000);// todo:!!!
 
                 return await Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
             });
 
-            var ows = new OpenWeatherService(parm, mockHttp);
+            var service = new OpenWeatherMapService(parm, mockHttp);
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await ows.GetWeather());
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.GetWeatherAsync());
         }
 
         [Test]
@@ -143,9 +144,9 @@ namespace TestAPI
             // mockHttp.When(url).Respond("application/json", responseJson); todo:!!!
             mockHttp.Fallback.Respond("application/json", responseJson);
 
-            var ows = new OpenWeatherService(parm, mockHttp);
+            var service = new OpenWeatherMapService(parm, mockHttp);
 
-            var result = ows.GetWeather().Result;
+            var result = service.GetWeatherAsync().Result;
             Assert.IsNotNull(result);
         }
     }

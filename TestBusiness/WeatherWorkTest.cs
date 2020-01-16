@@ -3,7 +3,6 @@ using SmartHouse.Business.Data.Weather;
 using SmartHouse.Domain.Core.Weather;
 using SmartHouse.Domain.Interfaces.Weather;
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -12,11 +11,11 @@ namespace TestBusiness
     public class WeatherWorkTest
     {
         [Fact]
-        public void Data_get_success()
+        public void Data_Get_Success()
         {
             var mock = new Mock<IWeatherService>();
 
-            mock.Setup(m => m.GetWeather()).Returns(async () =>
+            mock.Setup(m => m.GetWeatherAsync()).Returns(async () =>
             {
                 return await Task.Run(() =>
                 {
@@ -28,7 +27,7 @@ namespace TestBusiness
                 });
             });
 
-            var weatherWork = new WeatherWork(mock.Object, 500);
+            var weatherWork = new WeatherWork(mock.Object);
 
             WeatherData obj = weatherWork.GetWeather();
 
@@ -36,16 +35,16 @@ namespace TestBusiness
         }
 
         [Fact]
-        public void Data_get_exception()
+        public void Data_Get_Exception()
         {
             var mock = new Mock<IWeatherService>();
 
-            mock.Setup(m => m.GetWeather()).Returns(() =>
+            mock.Setup(m => m.GetWeatherAsync()).Returns(() =>
             {
                 throw new Exception();
             });
 
-            var weatherWork = new WeatherWork(mock.Object, 500);
+            var weatherWork = new WeatherWork(mock.Object);
 
             Assert.Throws<Exception>(() => weatherWork.GetWeather());
         }
@@ -67,36 +66,36 @@ namespace TestBusiness
         }
         */
 
-        [Fact]
-        public void Data_get_exception_counterMax()
-        {
-            var mock = new Mock<IWeatherService>();
+        //[Fact]
+        //public void Data_get_exception_counterMax()
+        //{
+        //    var mock = new Mock<IWeatherService>();
 
-            mock.Setup(m => m.GetWeather()).Returns(async () =>
-            {
-                return await Task.Run(() =>
-                {
-                    return new WeatherData
-                    {
-                        Temp = 5,
-                        WindSpeed = 12
-                    };
-                });
-            });
+        //    mock.Setup(m => m.GetWeather()).Returns(async () =>
+        //    {
+        //        return await Task.Run(() =>
+        //        {
+        //            return new WeatherData
+        //            {
+        //                Temp = 5,
+        //                WindSpeed = 12
+        //            };
+        //        });
+        //    });
 
-            var weatherWork = new WeatherWork(mock.Object, 3);
+        //    var weatherWork = new WeatherWork(mock.Object, 3);
 
-            Exception ex = Assert.Throws<Exception>(() =>
-            {
-                for (var i = 0; i < 5; i++)
-                {
-                    weatherWork.GetWeather();
-                }
+        //    Exception ex = Assert.Throws<Exception>(() =>
+        //    {
+        //        for (var i = 0; i < 5; i++)
+        //        {
+        //            weatherWork.GetWeather();
+        //        }
 
-            });
+        //    });
 
-            Assert.Equal("The number of requests per day exceeded.", ex.Message);
-        }
+        //    Assert.Equal("The number of requests per day exceeded.", ex.Message);
+        //}
 
         //[Fact]
         //public void Data_get_httpRequestException_serviceUnavailable_503()

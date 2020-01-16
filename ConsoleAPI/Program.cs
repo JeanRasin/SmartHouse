@@ -7,7 +7,8 @@ using SmartHouse.Business.Data.Weather;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces.Weather;
 using SmartHouse.Infrastructure.Data;
-using SmartHouse.Infrastructure.Data.Weather;
+using SmartHouse.Service.Weather.Gismeteo;
+using SmartHouse.Service.Weather.OpenWeatherMap;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -75,16 +76,16 @@ namespace ConsoleAPI
 
             var parm = new Dictionary<string, string>
             {
+                { "url", "https://api.openweathermap.org" },
                 { "city", "Perm,ru" },
                 { "api", "f4c946ac33b35d68233bbcf83619eb58" }
             };
 
             var serviceProvider = new ServiceCollection()
            .AddLogging(cfg => cfg.AddConsole())
-           .AddSingleton<IWeatherService>(x => new OpenWeatherService(x.GetRequiredService<ILogger<OpenWeatherService>>(), parm))
-            //.AddSingleton<IWeatherService, OpenWeatherService>()
-             //.AddSingleton<IWeatherService, BarService>()
-            .BuildServiceProvider();
+             // .AddSingleton<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)) // OpenWeatherMap service.
+            .AddSingleton<IWeatherService, GisMeteoService>() // GisMeteo service.
+           .BuildServiceProvider();
 
             var context = new ApplicationContext();
             var goalWork = new GoalWork(context);
@@ -97,16 +98,12 @@ namespace ConsoleAPI
 
             //
 
-
-
-            // var ows = new OpenWeatherService(parm);
-
             var ows = serviceProvider.GetService<IWeatherService>();
             var logger = serviceProvider.GetService<ILogger>();
 
             var weatherWork = new WeatherWork(ows);
 
-            var weather = weatherWork.GetWeather();//.Result;
+            var weather = weatherWork.GetWeather();
             var weatherJson = JsonSerializer.Serialize(weather);
 
             Console.WriteLine($"Weather: {weatherJson}");

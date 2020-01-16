@@ -13,7 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using SmartHouse.Infrastructure.Data;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Interfaces.Weather;
-using SmartHouse.Infrastructure.Data.Weather;
+using SmartHouse.Service.Weather.OpenWeatherMap;
+using SmartHouse.Service.Weather.Gismeteo;
 
 namespace SmartHouseAPI
 {
@@ -34,6 +35,7 @@ namespace SmartHouseAPI
 
             var parm = new Dictionary<string, string>
             {
+                { "url", "https://api.openweathermap.org" },
                 { "city", "Perm,ru" },
                 { "api", "f4c946ac33b35d68233bbcf83619eb58" }
             };
@@ -46,7 +48,8 @@ namespace SmartHouseAPI
             //services.AddControllersWithViews();
 
             services.AddTransient<IGoalWork, GoalWork>();
-            services.AddTransient<IWeatherService>(x => new OpenWeatherService(x.GetRequiredService<ILogger<OpenWeatherService>>(), parm));
+            //services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)); // OpenWeatherMap service.
+            services.AddTransient<IWeatherService, GisMeteoService>(); // GisMeteo service.
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,8 +10,8 @@ namespace SmartHouse.Business.Data.Weather
         public int CounterMax { get; }
 
         private readonly IWeatherService weatherService;
-        private int counter = 0;
-        private int hour = int.MaxValue;
+        //private int counter = 0;
+        //private int hour = int.MaxValue;
 
         //        public WeatherWork(IWeatherService weatherService, int counterMax)
         public WeatherWork(IWeatherService weatherService)
@@ -22,22 +22,22 @@ namespace SmartHouse.Business.Data.Weather
 
         public WeatherData GetWeather()
         {
-            if (DateTime.Now.Hour < hour)
-            {
-                hour = DateTime.Now.Hour;
-                counter = 0;
-            }
+            //if (DateTime.Now.Hour < hour)
+            //{
+            //    hour = DateTime.Now.Hour;
+            //    counter = 0;
+            //}
 
-            if (counter > CounterMax)
-            {
-                throw new Exception("The number of requests per day exceeded.");
-            }
+            //if (counter > CounterMax)
+            //{
+            //    throw new Exception("The number of requests per day exceeded.");
+            //}
 
             WeatherData result;
             try
             {
-                result = weatherService.GetWeather().Result;
-                counter++;
+                result = weatherService.GetWeatherAsync().Result;
+               // counter++;
 
             }
             catch (HttpRequestException ex)

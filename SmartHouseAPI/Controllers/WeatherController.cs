@@ -15,7 +15,7 @@ namespace SmartHouseAPI.Controllers
         public WeatherController(IWeatherService ws)
         {
            // weatherService = ws;
-            weatherWork = new WeatherWork(ws, 100);
+            weatherWork = new WeatherWork(ws);
         }
 
         [HttpGet("get")]
