@@ -9,12 +9,12 @@ namespace TestAPI
 {
     public class GoalTests
     {
-        private DbContextOptions<ActContext> options;
+        private DbContextOptions<GoalContext> options;
 
         [SetUp]
         public void Setup()
         {
-            options = new DbContextOptionsBuilder<ActContext>()
+            options = new DbContextOptionsBuilder<GoalContext>()
             .UseInMemoryDatabase(databaseName: "SmartHouseDataBase")
             .Options;
         }
@@ -22,7 +22,7 @@ namespace TestAPI
         [Test]
         public void GetGoalsTest()
         {
-            using (var context = new ActContext(options))
+            using (var context = new GoalContext(options))
             {
                 context.Goals.RemoveRange(context.Goals.ToList());
 

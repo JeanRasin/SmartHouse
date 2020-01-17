@@ -62,6 +62,7 @@ namespace ConsoleAPI
         public string Title { get; set; }
     }
     */
+
     class Program
     {
         static void Main(string[] args)
@@ -80,26 +81,48 @@ namespace ConsoleAPI
                 { "city", "Perm,ru" },
                 { "api", "f4c946ac33b35d68233bbcf83619eb58" }
             };
+            
+            var loggerContext = new LoggerContext("mongodb://localhost:27017", "smartHouseLogger0");
 
             var serviceProvider = new ServiceCollection()
-           .AddLogging(cfg => cfg.AddConsole())
-             // .AddSingleton<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)) // OpenWeatherMap service.
-            .AddSingleton<IWeatherService, GisMeteoService>() // GisMeteo service.
+           .AddLogging(cfg => cfg.Services.AddSingleton<ILogger>(x => new LoggerWork(loggerContext)))
+           //.AddSingleton<ILogger>(x=> new LoggerWork(loggerContext)) // GisMeteo service.
+              .AddSingleton<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)) // OpenWeatherMap service.
+            //.AddSingleton<IWeatherService, GisMeteoService>() // GisMeteo service.
+     
            .BuildServiceProvider();
 
-            var context = new ApplicationContext();
-            var goalWork = new GoalWork(context);
+            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+
+           // loggerFactory.AddContext(loggerContext);
+          //  var logger = loggerFactory.CreateLogger("NewLogger");
+
+            var connectStr = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres";
+            var postgreContext = new GoalContext(connectStr);
+            var goalWork = new GoalWork(postgreContext);
 
             List<Goal> items = goalWork.GetGoals();
 
             string jsonStr = JsonSerializer.Serialize(items);
             Console.WriteLine(jsonStr);
 
+            //
+
+            var logger = serviceProvider.GetService<ILogger>();
+
+            // var log = new LoggerWork(loggerContext);
+
+            //LoggerWork lw = (LoggerWork)logger;
+
+            logger.LogInformation("test_log_write");
+
+            //var logItems = lw.GetLogger();
+            //var logJson = JsonSerializer.Serialize(logItems);
+            //Console.WriteLine($"Log: {logJson}");
 
             //
 
             var ows = serviceProvider.GetService<IWeatherService>();
-            var logger = serviceProvider.GetService<ILogger>();
 
             var weatherWork = new WeatherWork(ows);
 

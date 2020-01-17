@@ -1,5 +1,5 @@
 ﻿using SmartHouse.Domain.Core.Weather;
-using SmartHouse.Infrastructure.Data.Weather.OpenWeather;
+using SmartHouse.Service.Weather.OpenWeatherMap.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

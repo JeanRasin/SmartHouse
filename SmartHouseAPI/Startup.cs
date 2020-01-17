@@ -43,7 +43,7 @@ namespace SmartHouseAPI
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
             // добавляем контекст MobileContext в качестве сервиса в приложение
-            services.AddDbContext<ActContext>(options =>
+            services.AddDbContext<GoalContext>(options =>
                 options.UseNpgsql(connection));
             //services.AddControllersWithViews();
 

@@ -11,18 +11,40 @@ namespace SmartHouse.Business.Data
         List<Goal> GetGoals();
     }
 
-    public class GoalWork : IGoalWork
+    public class GoalWork : IGoalWork, IDisposable
     {
-        private readonly ActContext db;
+        private readonly GoalRepository repository;
 
-        public GoalWork(ActContext context)
+        public GoalWork(GoalContext context)
         {
-            db = context;
+            repository = new GoalRepository(context);
         }
 
         public List<Goal> GetGoals()
         {
-            return db.Goals.ToList();
+            return repository.GetGoals().ToList();
         }
+
+        #region dispose
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    repository.Dispose();
+                }
+            }
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

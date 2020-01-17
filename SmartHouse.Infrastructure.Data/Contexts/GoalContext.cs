@@ -4,17 +4,25 @@ using SmartHouse.Domain.Core;
 
 namespace SmartHouse.Infrastructure.Data
 {
-    public class ActContext : DbContext
+    public class GoalContext : DbContext
     {
+        private readonly string connectText;
+
         public DbSet<Goal> Goals { get; set; }
 
-        public ActContext(DbContextOptions<ActContext> options) : base(options)
+        public GoalContext(DbContextOptions<GoalContext> options) : base(options)
         {
             Database.EnsureCreated(); // создаем базу данных при первом обращении
         }
 
-        public ActContext()
+        public GoalContext()
         {
+            Database.EnsureCreated(); // создаем базу данных при первом обращении
+        }
+
+        public GoalContext(string connectText)
+        {
+            this.connectText = connectText;
             Database.EnsureCreated(); // создаем базу данных при первом обращении
         }
 
@@ -23,8 +31,13 @@ namespace SmartHouse.Infrastructure.Data
             modelBuilder.Entity<Goal>().HasData(new Goal[] {
                 new Goal{Id=1,Name="iman"},
                 new Goal{Id=2,Name="Alex"},
-                new Goal{Id=3,Name="333"},
+                new Goal{Id=3,Name="555"},
             });
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql(connectText);
         }
 
     }

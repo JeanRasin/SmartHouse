@@ -17,10 +17,10 @@ namespace SmartHouseAPI.Controllers
     {
         //private readonly IGoalRepository repo;
 
-        private readonly ActContext db;
+        private readonly GoalContext db;
         private readonly IGoalWork goalWork;
 
-        public GoalController(ActContext context, IGoalWork gw)
+        public GoalController(GoalContext context, IGoalWork gw)
         {
             db = context;
             goalWork = gw;

@@ -9,9 +9,9 @@ namespace SmartHouse.Infrastructure.Data
 {
    public class GoalRepository : IGoalRepository
     {
-        private ActContext db;
+        private readonly GoalContext db;
 
-        public GoalRepository(ActContext context)
+        public GoalRepository(GoalContext context)
         {
             db = context;
         }
@@ -31,14 +31,14 @@ namespace SmartHouse.Infrastructure.Data
 
         public virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!disposed)
             {
                 if (disposing)
                 {
                     db.Dispose();
                 }
             }
-            this.disposed = true;
+            disposed = true;
         }
 
         public void Dispose()
