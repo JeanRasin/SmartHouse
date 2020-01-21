@@ -15,7 +15,7 @@ namespace TestAPI
         public void Get_Success_Data()
         {
             var service = new GisMeteoService();
-            WeatherData result = service.GetWeatherAsync().Result;
+            WeatherModel result = service.GetWeatherAsync().Result;
 
             Assert.IsNotNull(result);
         }

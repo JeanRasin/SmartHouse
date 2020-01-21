@@ -5,6 +5,6 @@ namespace SmartHouse.Services.Interfaces
 {
     public interface IGoalAction
     {
-        void Action(Goal goal);
+        void Action(GoalModel goal);
     }
 }

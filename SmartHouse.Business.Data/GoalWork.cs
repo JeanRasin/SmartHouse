@@ -8,7 +8,7 @@ namespace SmartHouse.Business.Data
 {
    public interface IGoalWork
     {
-        List<Goal> GetGoals();
+        List<GoalModel> GetGoals();
     }
 
     public class GoalWork : IGoalWork, IDisposable
@@ -20,7 +20,7 @@ namespace SmartHouse.Business.Data
             repository = new GoalRepository(context);
         }
 
-        public List<Goal> GetGoals()
+        public List<GoalModel> GetGoals()
         {
             return repository.GetGoals().ToList();
         }

@@ -20,7 +20,7 @@ namespace SmartHouse.Business.Data.Weather
            //CounterMax = counterMax;
         }
 
-        public WeatherData GetWeather()
+        public WeatherModel GetWeather()
         {
             //if (DateTime.Now.Hour < hour)
             //{
@@ -33,7 +33,7 @@ namespace SmartHouse.Business.Data.Weather
             //    throw new Exception("The number of requests per day exceeded.");
             //}
 
-            WeatherData result;
+            WeatherModel result;
             try
             {
                 result = weatherService.GetWeatherAsync().Result;

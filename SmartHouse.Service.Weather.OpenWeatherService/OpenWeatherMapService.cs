@@ -52,7 +52,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
         }
 
 
-        public async Task<WeatherData> GetWeatherAsync()
+        public async Task<WeatherModel> GetWeatherAsync()
         {
             try
             {
@@ -61,53 +61,53 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 response.EnsureSuccessStatusCode();
 
                 string requestJson = JsonSerializer.Serialize(response.RequestMessage);
-                LogInfoWrite(1, requestJson);
+                LogInfoWrite(requestJson);
 
                 string stringResult = await response.Content.ReadAsStringAsync();
                 WeatherResponse rawWeather = JsonSerializer.Deserialize<WeatherResponse>(stringResult);
 
-                var result = new WeatherData
+                var result = new WeatherModel
                 {
                     Temp = rawWeather.Main.Temp,
                     WindSpeed = rawWeather.Wind.Speed,
                 };
 
-                LogInfoWrite(2, stringResult);
+                LogInfoWrite(stringResult);
 
                 return result;
             }
             catch (HttpRequestException ex)
             {
-                LogErrorWrite(3, ex);
+                LogErrorWrite(ex);
                 throw ex;
             }
             catch (JsonException ex)
             {
-                LogErrorWrite(3, ex);
+                LogErrorWrite(ex);
                 throw ex;
             }
             catch (OperationCanceledException ex)
             {
-                LogErrorWrite(3, ex);
+                LogErrorWrite(ex);
                 throw new InvalidOperationException("Expected timeout exception");
             }
             catch (Exception ex)
             {
-                LogErrorWrite(3, ex);
+                LogErrorWrite(ex);
                 throw ex;
             }
         }
 
-        private void LogErrorWrite(int eventId, Exception ex)
+        private void LogErrorWrite(Exception ex)
         {
             if (logger != null)
-                logger.LogError(new EventId(eventId), ex, ex.Message);
+                logger.LogError(new EventId(4), ex, ex.Message);
         }
 
-        private void LogInfoWrite(int eventId, string message)
+        private void LogInfoWrite(string message)
         {
             if (logger != null)
-                logger.LogInformation(new EventId(eventId), message);
+                logger.LogInformation(new EventId(5), message);
         }
 
         #region dispose

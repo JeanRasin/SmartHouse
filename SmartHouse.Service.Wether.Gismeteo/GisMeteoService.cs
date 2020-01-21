@@ -6,14 +6,14 @@ namespace SmartHouse.Service.Weather.Gismeteo
 {
     public class GisMeteoService : IWeatherService
     {
-        public async Task<WeatherData> GetWeatherAsync()
+        public async Task<WeatherModel> GetWeatherAsync()
         {
             return await Task.Run(async () =>
             {
                 await Task.Delay(2000);
 
                 // Test data.
-                return new WeatherData(temp: 100, windSpeed: 15);
+                return new WeatherModel(temp: 100, windSpeed: 15);
             });
         }
     }

@@ -19,7 +19,7 @@ namespace TestBusiness
             {
                 return await Task.Run(() =>
                 {
-                    return new WeatherData
+                    return new WeatherModel
                     {
                         Temp = 5,
                         WindSpeed = 12
@@ -29,7 +29,7 @@ namespace TestBusiness
 
             var weatherWork = new WeatherWork(mock.Object);
 
-            WeatherData obj = weatherWork.GetWeather();
+            WeatherModel obj = weatherWork.GetWeather();
 
             Assert.NotNull(obj);
         }

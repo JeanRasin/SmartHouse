@@ -5,6 +5,6 @@ namespace SmartHouse.Domain.Interfaces.Weather
 {
     public interface IWeatherService
     {
-        Task<WeatherData> GetWeatherAsync();
+        Task<WeatherModel> GetWeatherAsync();
     }
 }

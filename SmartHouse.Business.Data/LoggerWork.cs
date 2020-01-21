@@ -4,22 +4,18 @@ using SmartHouse.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SmartHouse.Business.Data
 {
-    public interface ILoggerWork
-    {
-        List<LoggerModel> GetLogger();
-        bool WriteLog(string message);
-    }
+    //public interface ILoggerWork
+    //{
+    //    List<LoggerModel> GetLogger();
+    //    bool WriteLog(string message);
+    //}
 
-    //public class LoggerWork : ILoggerWork
     public class LoggerWork : ILogger
     {
         private readonly LoggerRepository<LoggerModel> repository;
-        //private static object _lock = new object();
-
         public LoggerWork(LoggerContext context)
         {
             repository = new LoggerRepository<LoggerModel>(context);
@@ -46,19 +42,10 @@ namespace SmartHouse.Business.Data
         {
             if (formatter != null)
             {
-                // lock (_lock)
-                // {
-                //File.AppendAllText(filePath, formatter(state, exception) + Environment.NewLine);
                 var msg = formatter(state, exception) + Environment.NewLine;
                 repository.Create(new LoggerModel(msg));
-                // }
             }
         }
 
-        //public bool WriteLog(string message)
-        //{
-        //    var result = repository.Create(new LoggerModel { Id = "5", Message = message });
-        //    return result; //todo:!!!
-        //}
     }
 }

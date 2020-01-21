@@ -5,20 +5,19 @@ using SmartHouse.Domain.Interfaces.Logger;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace SmartHouse.Infrastructure.Data
 {
     public class LoggerRepository<T> : ILoggerRepository<T> where T : MongoBaseModel
     {
-        private readonly LoggerContext dbContext;//todo:remove
+      //  private readonly LoggerContext dbContext;//todo:remove
 
         public IMongoCollection<T> Collection { get; private set; }
 
         public LoggerRepository(LoggerContext dbContext)
         {
-            this.dbContext = dbContext;
-            Collection = this.dbContext.DbSet<T>();
+          //  this.dbContext = dbContext;
+            Collection = dbContext.DbSet<T>();
         }
 
         public bool Create(T model)
@@ -32,7 +31,6 @@ namespace SmartHouse.Infrastructure.Data
             catch (Exception ex)
             {
                 return false;
-
             }
         }
 

@@ -26,8 +26,8 @@ namespace TestAPI
             {
                 context.Goals.RemoveRange(context.Goals.ToList());
 
-                context.Goals.Add(new Goal { Id = 1, Name = "One" });
-                context.Goals.Add(new Goal { Id = 2, Name = "Two" });
+                context.Goals.Add(new GoalModel { Id = 1, Name = "One" });
+                context.Goals.Add(new GoalModel { Id = 2, Name = "Two" });
                 context.SaveChanges();
 
                 var goalWork = new GoalWork(context);

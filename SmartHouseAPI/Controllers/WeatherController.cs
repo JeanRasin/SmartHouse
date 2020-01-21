@@ -19,7 +19,7 @@ namespace SmartHouseAPI.Controllers
         }
 
         [HttpGet("get")]
-        public WeatherData GetWeather()
+        public WeatherModel GetWeather()
         {
             var result = weatherWork.GetWeather();
 

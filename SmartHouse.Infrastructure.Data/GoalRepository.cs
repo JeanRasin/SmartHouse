@@ -1,13 +1,12 @@
-﻿using System;
+﻿using SmartHouse.Domain.Core;
+using SmartHouse.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using SmartHouse.Domain.Core;
-using SmartHouse.Domain.Interfaces;
 
 namespace SmartHouse.Infrastructure.Data
 {
-   public class GoalRepository : IGoalRepository
+    public class GoalRepository : IGoalRepository
     {
         private readonly GoalContext db;
 
@@ -16,7 +15,7 @@ namespace SmartHouse.Infrastructure.Data
             db = context;
         }
 
-        public IEnumerable<Goal> GetGoals()
+        public IEnumerable<GoalModel> GetGoals()
         {
             return db.Goals.ToList();
         }

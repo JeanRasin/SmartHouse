@@ -29,7 +29,7 @@ namespace SmartHouseAPI.Controllers
         }
 
         [HttpGet("get")]
-        public IEnumerable<Goal> GetGoals()
+        public IEnumerable<GoalModel> GetGoals()
         {
             //return db.Goals.ToList();
 

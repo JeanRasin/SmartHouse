@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace SmartHouse.Domain.Core
 {
     public class MongoBaseModel
     {
-        [Column("_id")]
+        [BsonElement("_id")]
         public string Id { get; set; }
     }
 }

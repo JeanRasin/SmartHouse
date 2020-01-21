@@ -8,7 +8,7 @@ namespace SmartHouse.Infrastructure.Data
     {
         private readonly string connectText;
 
-        public DbSet<Goal> Goals { get; set; }
+        public DbSet<GoalModel> Goals { get; set; }
 
         public GoalContext(DbContextOptions<GoalContext> options) : base(options)
         {
@@ -28,10 +28,10 @@ namespace SmartHouse.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Goal>().HasData(new Goal[] {
-                new Goal{Id=1,Name="iman"},
-                new Goal{Id=2,Name="Alex"},
-                new Goal{Id=3,Name="555"},
+            modelBuilder.Entity<GoalModel>().HasData(new GoalModel[] {
+                new GoalModel{Id=1,Name="iman"},
+                new GoalModel{Id=2,Name="Alex"},
+                new GoalModel{Id=3,Name="555"},
             });
         }
 

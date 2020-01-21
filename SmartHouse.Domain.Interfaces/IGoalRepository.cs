@@ -6,7 +6,7 @@ namespace SmartHouse.Domain.Interfaces
 {
     public interface IGoalRepository : IDisposable
     {
-        IEnumerable<Goal> GetGoals();
+        IEnumerable<GoalModel> GetGoals();
         void Save();
     }
 }

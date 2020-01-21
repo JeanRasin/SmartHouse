@@ -7,8 +7,8 @@ namespace SmartHouse.Infrastructure.Data
 {
     public class LoggerContext
     {
-        private MongoClient mongoClient;
-        private IMongoDatabase mongoDb;
+        private readonly MongoClient mongoClient;
+        private readonly IMongoDatabase mongoDb;
 
         public LoggerContext(string connection, string dbName)
         {
