@@ -29,7 +29,7 @@ namespace TestBusiness
 
             var weatherWork = new WeatherWork(mock.Object);
 
-            WeatherModel obj = weatherWork.GetWeather();
+            WeatherModel obj = weatherWork.GetWeatherAsync().Result;
 
             Assert.NotNull(obj);
         }
@@ -46,7 +46,7 @@ namespace TestBusiness
 
             var weatherWork = new WeatherWork(mock.Object);
 
-            Assert.Throws<Exception>(() => weatherWork.GetWeather());
+            Assert.ThrowsAsync<Exception>(() => weatherWork.GetWeatherAsync());
         }
 
         /*

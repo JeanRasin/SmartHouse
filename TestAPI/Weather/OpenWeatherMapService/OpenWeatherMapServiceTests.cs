@@ -17,9 +17,9 @@ namespace TestAPI
         private MockHttpMessageHandler mockHttp;
         private readonly Dictionary<string, string> parm = new Dictionary<string, string>
             {
-                { "url", "https://api.openweathermap.org" },
-                { "city", "Perm,ru" },
-                { "api", "f4c946ac33b35d68233bbcf83619eb58" }
+                { "Url", "https://api.openweathermap.org" },
+                { "City", "Perm,ru" },
+                { "Api", "f4c946ac33b35d68233bbcf83619eb58" }
             };
 
         [SetUp]

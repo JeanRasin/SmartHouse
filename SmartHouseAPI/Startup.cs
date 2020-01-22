@@ -1,20 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using SmartHouse.Infrastructure.Data;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Interfaces.Weather;
-using SmartHouse.Service.Weather.OpenWeatherMap;
+using SmartHouse.Infrastructure.Data;
 using SmartHouse.Service.Weather.Gismeteo;
+using System;
+using System.Collections.Generic;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Linq;
+using SmartHouseAPI.Helpers;
+using SmartHouse.Service.Weather.OpenWeatherMap;
 
 namespace SmartHouseAPI
 {
@@ -31,14 +33,23 @@ namespace SmartHouseAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddLogging(cfg => cfg.AddConsole());
+            // services.AddLogging(cfg => cfg.AddConsole());
 
-            var parm = new Dictionary<string, string>
+            services.AddSwaggerGen(c =>
             {
-                { "url", "https://api.openweathermap.org" },
-                { "city", "Perm,ru" },
-                { "api", "f4c946ac33b35d68233bbcf83619eb58" }
-            };
+                c.SwaggerDoc("V1", new OpenApiInfo { Title = "Api Docs", Version = "V1" });
+            });
+
+            services.AddControllersWithViews(options =>
+            {
+                var weatherCachingTime = Configuration["WeatherCachingTime"];
+
+                options.CacheProfiles.Add("WeatherCaching",
+                    new CacheProfile()
+                    {
+                        Duration = (int)TimeSpan.Parse(weatherCachingTime).TotalSeconds
+                    });
+            });
 
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
@@ -48,19 +59,41 @@ namespace SmartHouseAPI
             //services.AddControllersWithViews();
 
             services.AddTransient<IGoalWork, GoalWork>();
-            //services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)); // OpenWeatherMap service.
-            services.AddTransient<IWeatherService, GisMeteoService>(); // GisMeteo service.
+
+            IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
+            services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)); // OpenWeatherMap service.
+            //services.AddTransient<IWeatherService, GisMeteoService>(); // GisMeteo service.
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            if (env.IsProduction() || env.IsStaging() || env.IsEnvironment("Staging_2"))
+            {
+                app.UseExceptionHandler("/Error");
+            }
+
+            app.UseStaticFiles();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+                c.RoutePrefix = string.Empty;
+            });
+
             app.UseRouting();
+
+            MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+            var loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
+
+            loggerFactory.AddContext(loggerContext);
 
             app.UseAuthorization();
 
@@ -69,9 +102,9 @@ namespace SmartHouseAPI
                 endpoints.MapControllers();
 
                 // определение маршрутов
-               // endpoints.MapControllerRoute(
-                  //  name: "default",
-                 //   pattern: "{controller=Home}/{action=Index}/{id?}");
+                // endpoints.MapControllerRoute(
+                //  name: "default",
+                //   pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

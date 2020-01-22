@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartHouse.Infrastructure.Data;
 
-namespace ConsoleAPI
+namespace SmartHouseAPI.Helpers
 {
     public static class LoggerExtensions
     {

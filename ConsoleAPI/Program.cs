@@ -13,76 +13,50 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using ConsoleAPI.Helpers;
+using CommandLine;
 
 namespace ConsoleAPI
 {
-    /*
-    public interface ITestService
-    {
-        void Run();
-    }
-
-    class TestService : ITestService
-    {
-        private readonly ILogger<TestService> _logger;
-
-        public TestService(ILogger<TestService> logger)
-        {
-            _logger = logger;
-        }
-
-        public void Run()
-        {
-            _logger.LogWarning("Wow! We are now in the test service.");
-        }
-    }
-
-    public class App
-    {
-        private readonly ITestService _testService;
-        private readonly ILogger<App> _logger;
-
-        public App(ITestService testService,
-            ILogger<App> logger)
-        {
-            _testService = testService;
-            _logger = logger;
-        }
-
-        public void Run()
-        {
-            _logger.LogInformation($"This is a console application for {_config.Title}");
-            _testService.Run();
-            System.Console.ReadKey();
-        }
-    }
-
-    public class AppSettings
-    {
-        public string Title { get; set; }
-    }
-    */
+    //[Verb("add", HelpText = "Add file contents to the index.")]
+    //class AddOptions
+    //{
+    //    //normal options here
+    //}
+    //[Verb("commit", HelpText = "Record changes to the repository.")]
+    //class CommitOptions
+    //{
+    //    //commit options here
+    //}
+    //[Verb("clone", HelpText = "Clone a repository into a new directory.")]
+    //class CloneOptions
+    //{
+    //    //clone options here
+    //}
 
     class Program
     {
+        //public class Options
+        //{
+        //    [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
+        //    public bool Verbose { get; set; }
+        //}
+
         static void Main(string[] args)
         {
-            /*
+            
             var builder = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json");
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
 
             var configuration = builder.Build();
-            */
 
-            var parm = new Dictionary<string, string>
-            {
-                { "url", "https://api.openweathermap.org" },
-                { "city", "Perm,ru" },
-                { "api", "f4c946ac33b35d68233bbcf83619eb58" }
-            };
-            
-            var loggerContext = new LoggerContext("mongodb://localhost:27017", "smartHouseLogger");
+            var weatherCachingTime = configuration["WeatherCachingTime"];
+
+            IDictionary<string, string> parm = configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
+
+            MongoDbLoggerConnectionConfig logConfig = configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+            var loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
 
             var serviceProvider = new ServiceCollection()
             .AddLogging()
@@ -99,9 +73,9 @@ namespace ConsoleAPI
 
             var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
             loggerFactory.AddContext(loggerContext);
-          //  var logger = loggerFactory.CreateLogger("NewLogger");
+            //  var logger = loggerFactory.CreateLogger("NewLogger");
 
-            var connectStr = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres";
+            string connectStr = configuration.GetConnectionString("DefaultConnection");
             var postgreContext = new GoalContext(connectStr);
             var goalWork = new GoalWork(postgreContext);
 
@@ -112,13 +86,13 @@ namespace ConsoleAPI
 
             //
 
-          //  var logger = serviceProvider.GetService<ILogger>();
+            //  var logger = serviceProvider.GetService<ILogger>();
 
             // var log = new LoggerWork(loggerContext);
 
             //LoggerWork lw = (LoggerWork)logger;
 
-          //  logger.LogInformation("test_log_write");
+            //  logger.LogInformation("test_log_write");
 
             //var logItems = lw.GetLogger();
             //var logJson = JsonSerializer.Serialize(logItems);
@@ -130,13 +104,27 @@ namespace ConsoleAPI
 
             var weatherWork = new WeatherWork(ows);
 
-            var weather = weatherWork.GetWeather();
+            var weather = weatherWork.GetWeatherAsync();
             var weatherJson = JsonSerializer.Serialize(weather);
 
             Console.WriteLine($"Weather: {weatherJson}");
+            /*
+              Parser.Default.ParseArguments<Options>(args)
+                     .WithParsed<Options>(o =>
+                     {
+                         if (o.Verbose)
+                         {
+                             Console.WriteLine($"Verbose output enabled. Current Arguments: -v {o.Verbose}");
+                             Console.WriteLine("Quick Start Example! App is in Verbose mode!");
+                         }
+                         else
+                         {
+                             Console.WriteLine($"Current Arguments: -v {o.Verbose}");
+                             Console.WriteLine("Quick Start Example!");
+                         }
+                     });  */
 
-
-            Console.WriteLine("Exit");
+            //Console.WriteLine("Exit");
         }
     }
 }

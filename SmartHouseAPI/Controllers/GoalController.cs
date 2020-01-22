@@ -16,7 +16,7 @@ namespace SmartHouseAPI.Controllers
             goalWork = gw;
         }
 
-        [HttpGet("get")]
+        [HttpGet]
         public IEnumerable<GoalModel> GetGoals()
         {
             return goalWork.GetGoals();

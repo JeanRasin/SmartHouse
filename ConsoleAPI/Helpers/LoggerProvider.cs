@@ -2,7 +2,7 @@
 using SmartHouse.Business.Data;
 using SmartHouse.Infrastructure.Data;
 
-namespace ConsoleAPI
+namespace ConsoleAPI.Helpers
 {
     public class LoggerProvider : ILoggerProvider
     {

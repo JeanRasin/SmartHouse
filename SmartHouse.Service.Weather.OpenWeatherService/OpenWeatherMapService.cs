@@ -20,9 +20,9 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 
         private readonly string url;// = "https://api.openweathermap.org";
 
-        public OpenWeatherMapService(ILogger<OpenWeatherMapService> logger, Dictionary<string, string> parm, HttpMessageHandler handler = null)
+        public OpenWeatherMapService(ILogger<OpenWeatherMapService> logger, IDictionary<string, string> parm, HttpMessageHandler handler = null)
         {
-            string[] keys = { "city", "api", "url" };
+            string[] keys = { "City", "Api", "Url" };
             if (!keys.All(key => parm.ContainsKey(key)))
             {
                 throw new Exception("Not parameters.");
@@ -39,9 +39,9 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 
             client.Timeout = TimeSpan.FromMilliseconds(1000);
 
-            url = parm["url"];
-            city = parm["city"];
-            api = parm["api"];
+            url = parm["Url"];
+            city = parm["City"];
+            api = parm["Api"];
 
             this.logger = logger;
         }

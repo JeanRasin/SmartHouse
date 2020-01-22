@@ -12,7 +12,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap.Model
         public string Country { get; set; }
         [JsonPropertyName("sunrise")]
         public int Sunrise { get; set; }
-        [JsonPropertyName("Sunset")]
+        [JsonPropertyName("sunset")]
         public int Sunset { get; set; }
     }
 }

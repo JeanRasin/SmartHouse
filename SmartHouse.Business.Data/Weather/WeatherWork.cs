@@ -2,6 +2,7 @@
 using SmartHouse.Domain.Interfaces.Weather;
 using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SmartHouse.Business.Data.Weather
 {
@@ -20,7 +21,7 @@ namespace SmartHouse.Business.Data.Weather
            //CounterMax = counterMax;
         }
 
-        public WeatherModel GetWeather()
+        public async Task<WeatherModel> GetWeatherAsync()
         {
             //if (DateTime.Now.Hour < hour)
             //{
@@ -36,7 +37,7 @@ namespace SmartHouse.Business.Data.Weather
             WeatherModel result;
             try
             {
-                result = weatherService.GetWeatherAsync().Result;
+                result = await weatherService.GetWeatherAsync();
                // counter++;
 
             }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <con:soapui-project id="27d811cb-a663-452c-9da9-0a48eb147da6" activeEnvironment="Default" name="REST Smart House" resourceRoot="" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:interface xsi:type="con:RestService" id="70c69a5c-5753-475f-bdb8-44ed28ed775b" wadlVersion="http://wadl.dev.java.net/2009/02" name="http://localhost:555444" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
