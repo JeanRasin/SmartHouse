@@ -9,12 +9,10 @@ namespace SmartHouseAPI.Controllers
     [ApiController]
     public class WeatherController : ControllerBase
     {
-       // private readonly IWeatherService weatherService;
         private readonly WeatherWork weatherWork;
 
         public WeatherController(IWeatherService ws)
         {
-           // weatherService = ws;
             weatherWork = new WeatherWork(ws);
         }
 

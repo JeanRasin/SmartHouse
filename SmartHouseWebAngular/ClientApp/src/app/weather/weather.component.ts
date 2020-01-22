@@ -10,17 +10,19 @@ import { Weather } from 'src/app/weather'
 })
 export class WeatherComponent {
 
-  //public n: number = 150;
-  //public items: string[] = [];
-  public weatherData: Weather;
-  public temp: number;
+  weatherData: Weather;
+  error: any = null;
 
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
-
-    this.httpService.getWeather().subscribe((data: Weather) => this.temp = data.Temp);
-
+    this.httpService.getWeather().subscribe((data: Weather) => {
+      console.log(data);
+      this.weatherData = data;
+    }, error => {
+      this.error = error.message;
+      console.log(error);
+    });
   }
 }
 
