@@ -16,10 +16,16 @@
           
         }
 
-        public WeatherModel(double windSpeed, double temp)
+        public WeatherModel(int windSpeed, int windDeg, double temp, string city, int pressure, int humidity, string description, double feelsLike)
         {
             WindSpeed = windSpeed;
+            WindDeg = windDeg;
             Temp = temp;
+            City = city;
+            Pressure = pressure;
+            Humidity = humidity;
+            Description = description;
+            FeelsLike = feelsLike;
         }
     }
 }

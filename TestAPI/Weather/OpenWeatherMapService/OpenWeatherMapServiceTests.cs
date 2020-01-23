@@ -85,9 +85,9 @@ namespace TestAPI
 
             var parm = new Dictionary<string, string>
             {
-                { "url", "https://api.openweathermap.org" },
-                { "city", "Perm,ru" },
-                { "api", "0" }
+                { "Url", "https://api.openweathermap.org" },
+                { "City", "Perm,ru" },
+                { "Api", "0" }
             };
 
             var service = new OpenWeatherMapService(parm, mockHttp);

@@ -9,4 +9,10 @@
     <ProjectReference Include="..\SmartHouse.Infrastructure.Data\SmartHouse.Infrastructure.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="GoalWork.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
 </Project>

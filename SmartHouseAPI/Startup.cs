@@ -73,13 +73,15 @@ namespace SmartHouseAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            if (env.IsProduction() || env.IsStaging() || env.IsEnvironment("Staging_2"))
-            {
-                app.UseExceptionHandler("/Error");
-            }
+            //if (env.IsProduction() || env.IsStaging() || env.IsEnvironment("Staging_2"))
+            //{
+            //    app.UseExceptionHandler("/Error");
+            //}
 
             app.UseStaticFiles();
 
+            // обработка ошибок HTTP
+            app.UseStatusCodePages("text/plain", "Error. Status code : {0}");
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
@@ -88,6 +90,8 @@ namespace SmartHouseAPI
                 c.RoutePrefix = string.Empty;
             });
 
+           // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+
             app.UseRouting();
 
             MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
@@ -95,7 +99,8 @@ namespace SmartHouseAPI
 
             loggerFactory.AddContext(loggerContext);
 
-            app.UseAuthorization();
+
+            // app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

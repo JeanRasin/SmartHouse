@@ -13,7 +13,7 @@ namespace SmartHouse.Service.Weather.Gismeteo
                 await Task.Delay(2000);
 
                 // Test data.
-                return new WeatherModel(temp: 100, windSpeed: 15);
+                return new WeatherModel(temp: 100, windSpeed: 15, windDeg: 150, city: "Perm", pressure: 10, humidity: 14, description: "Snow", feelsLike: 0);
             });
         }
     }

@@ -44,10 +44,13 @@ namespace ConsoleAPI
 
         static void Main(string[] args)
         {
-            
+            string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+                .AddEnvironmentVariables();
 
             var configuration = builder.Build();
 
@@ -104,7 +107,7 @@ namespace ConsoleAPI
 
             var weatherWork = new WeatherWork(ows);
 
-            var weather = weatherWork.GetWeatherAsync();
+            var weather = weatherWork.GetWeatherAsync().Result;
             var weatherJson = JsonSerializer.Serialize(weather);
 
             Console.WriteLine($"Weather: {weatherJson}");

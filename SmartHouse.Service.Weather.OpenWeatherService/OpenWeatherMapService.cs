@@ -69,8 +69,15 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 var result = new WeatherModel
                 {
                     Temp = rawWeather.Main.Temp,
-                    WindSpeed = rawWeather.Wind.Speed,
+                    WindSpeed = (int)rawWeather.Wind.Speed,
+                    WindDeg = rawWeather.Wind.Deg,
+                    City = rawWeather.Name,
+                    FeelsLike = rawWeather.Main.FeelsLike,
+                    Pressure = rawWeather.Main.Pressure,
+                    Humidity = rawWeather.Main.Humidity
                 };
+
+                result.Description = rawWeather.Weather.Count() > 0 ? string.Join("; ", rawWeather.Weather.Select(s => s.Description)) : string.Empty;
 
                 LogInfoWrite(stringResult);
 
