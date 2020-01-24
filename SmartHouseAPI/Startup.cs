@@ -63,10 +63,13 @@ namespace SmartHouseAPI
             IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
             services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)); // OpenWeatherMap service.
             //services.AddTransient<IWeatherService, GisMeteoService>(); // GisMeteo service.
+
+            MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+            services.AddSingleton<ILoggerContext>(x => new LoggerContext(logConfig.Connection, logConfig.DbName)); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ILoggerContext loggerContext)
         {
             if (env.IsDevelopment())
             {
@@ -94,8 +97,8 @@ namespace SmartHouseAPI
 
             app.UseRouting();
 
-            MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
-            var loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
+            //MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+            //var loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
 
             loggerFactory.AddContext(loggerContext);
 

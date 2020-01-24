@@ -3,15 +3,15 @@ using SmartHouse.Domain.Core;
 using SmartHouse.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using EventId = Microsoft.Extensions.Logging.EventId;
 
 namespace SmartHouse.Business.Data
 {
     public class LoggerWork : ILogger
     {
         private readonly LoggerRepository<LoggerModel> repository;
-        public LoggerWork(LoggerContext context)
+        public LoggerWork(ILoggerContext context)
         {
             repository = new LoggerRepository<LoggerModel>(context);
         }
@@ -38,9 +38,8 @@ namespace SmartHouse.Business.Data
             if (formatter != null)
             {
                 var msg = formatter(state, exception) + Environment.NewLine;
-                repository.Create(new LoggerModel(msg));
+                repository.Create(new LoggerModel(logLevel, new Domain.Core.EventId(), msg));
             }
         }
-
     }
 }

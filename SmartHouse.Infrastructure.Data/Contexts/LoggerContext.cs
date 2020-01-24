@@ -5,7 +5,12 @@ using System.Reflection;
 
 namespace SmartHouse.Infrastructure.Data
 {
-    public class LoggerContext
+    public interface ILoggerContext
+    {
+        IMongoCollection<T> DbSet<T>() where T : MongoBaseModel;
+    }
+
+    public class LoggerContext : ILoggerContext
     {
         public readonly MongoClient mongoClient;
         public readonly IMongoDatabase mongoDb;

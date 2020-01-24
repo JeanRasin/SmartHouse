@@ -13,9 +13,9 @@ namespace SmartHouse.Infrastructure.Data
     {
         public IMongoCollection<T> Collection { get; private set; }
 
-        public LoggerRepository(LoggerContext dbContext)
+        public LoggerRepository(ILoggerContext context)
         {
-            Collection = dbContext.DbSet<T>();
+            Collection = context.DbSet<T>();
         }
 
         public bool Create(T model)
@@ -47,8 +47,6 @@ namespace SmartHouse.Infrastructure.Data
 
         public async Task<IEnumerable<T>> QueryAsync()
         {
-            //var result =  Collection.FindAsync<T>(FilterDefinition<T>.Empty).Result.ToList();
-            //var result = await Collection.FindAsync<T>(FilterDefinition<T>.Empty).Result.ToListAsync();
             var result = await Collection.FindAsync<T>(FilterDefinition<T>.Empty).GetAwaiter().GetResult().ToListAsync();
             return result;
         }

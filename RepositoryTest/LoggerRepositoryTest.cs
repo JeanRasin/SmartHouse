@@ -1,33 +1,28 @@
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Moq;
+using RepositoryTest.Helpers;
 using SmartHouse.Domain.Core;
 using SmartHouse.Infrastructure.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
-using RepositoryTest.Helpers;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
-using MongoDB.Bson;
 using System.Threading;
+using Xunit;
+using EventId = SmartHouse.Domain.Core.EventId;
 
 namespace RepositoryTest
 {
     public class LoggerRepositoryTest
     {
-        public LoggerRepositoryTest()
-        {
-
-        }
-
         [Fact]
         public void Repository_InsertOne_void()
         {
             var data = new LoggerModel
             {
                 Id = "1",
-                Message = "test"
+                EventId = new EventId(1),
+                LogLevel = LogLevel.Information,
+                Message = "test 1"
             };
 
             var collection = new Mock<IMongoCollection<LoggerModel>>();
@@ -48,12 +43,16 @@ namespace RepositoryTest
             var items = new List<LoggerModel> {
             new LoggerModel
             {
-                Id = "1",
-                Message = "test 1"
+                 Id = "1",
+                EventId = new EventId(1),
+                LogLevel = LogLevel.Information,
+                   Message = "test 1"
             },
             new LoggerModel
             {
                 Id = "2",
+                EventId = new EventId(1),
+                LogLevel = LogLevel.Information,
                 Message = "test 2"
             }};
 
@@ -78,16 +77,18 @@ namespace RepositoryTest
             var items = new List<LoggerModel> {
             new LoggerModel
             {
-                Id = "1",
+               Id = "1",
+                EventId = new EventId(1),
+                LogLevel = LogLevel.Information,
                 Message = "test 1"
             },
             new LoggerModel
             {
                 Id = "2",
+                EventId = new EventId(1),
+                LogLevel = LogLevel.Information,
                 Message = "test 2"
             }};
-
-            //Expression<Func<LoggerModel, bool>> filter = s => s.Message == "test 2";
 
             var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()))
@@ -98,27 +99,7 @@ namespace RepositoryTest
 
             var repository = new LoggerRepository<LoggerModel>(context.Object);
 
-            // var hh = new Expression<Func<LoggerModel, bool>>();
-
-            // Func<LoggerModel, bool> func = l => true;
-            //Expression<Func<LoggerModel, bool>> el = e => GetHHH(e);
-
-            //FilterDefinition<BsonDocument> filter = FilterDefinition<BsonDocument>.Empty;
-
-
-            //FindOptions<BsonDocument> options = new FindOptions<BsonDocument>
-            //{
-            //    BatchSize = 2,
-            //    NoCursorTimeout = false
-            //};
-
-            // var filter = Builders<LoggerModel>.Filter.Eq("Name", "Bill");
-
-            var query = repository.QueryAsync(s => s.Message == "test 2");
-
-            //var result = hh.ToList();
-
-            // List<LoggerModel> result = repository.QueryAsync(filter).Result.ToList();
+            var query = repository.QueryAsync(s => s.Id == "1");
 
             Assert.NotNull(query);
             Assert.Equal(items, query.Result);

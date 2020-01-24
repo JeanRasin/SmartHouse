@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using EventId = Microsoft.Extensions.Logging.EventId;
 
 namespace SmartHouse.Service.Weather.OpenWeatherMap
 {
