@@ -1,10 +1,10 @@
-﻿using SmartHouse.Domain.Core.Weather;
-using SmartHouse.Domain.Interfaces.Weather;
+﻿using SmartHouse.Domain.Core;
+using SmartHouse.Domain.Interfaces;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace SmartHouse.Business.Data.Weather
+namespace SmartHouse.Business.Data
 {
     public class WeatherWork
     {

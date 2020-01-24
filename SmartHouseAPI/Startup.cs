@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SmartHouse.Business.Data;
-using SmartHouse.Domain.Interfaces.Weather;
 using SmartHouse.Infrastructure.Data;
 using SmartHouse.Service.Weather.Gismeteo;
 using System;
@@ -17,6 +16,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Linq;
 using SmartHouseAPI.Helpers;
 using SmartHouse.Service.Weather.OpenWeatherMap;
+using SmartHouse.Domain.Interfaces;
 
 namespace SmartHouseAPI
 {

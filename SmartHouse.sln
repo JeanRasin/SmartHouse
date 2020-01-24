@@ -57,8 +57,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHouseWebAngular", "Sma
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SoapUI Services", "SoapUI Services", "{7CC36EDA-5501-4599-BEFC-C10750AF8801}"
 	ProjectSection(SolutionItems) = preProject
+		OpenWeatherMap-soapui-project.xml = OpenWeatherMap-soapui-project.xml
 		SoapUI-SmartHouse.xml = SoapUI-SmartHouse.xml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository", "Repository", "{34614C80-B14B-4D9B-9B30-E909FA7B73FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryTest", "RepositoryTest\RepositoryTest.csproj", "{2D4630FD-3221-438F-93EA-21B056EB797F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,6 +127,10 @@ Global
 		{1D788B56-B3C7-48CF-A781-0E0C1DEC88BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D788B56-B3C7-48CF-A781-0E0C1DEC88BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D788B56-B3C7-48CF-A781-0E0C1DEC88BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D4630FD-3221-438F-93EA-21B056EB797F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D4630FD-3221-438F-93EA-21B056EB797F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D4630FD-3221-438F-93EA-21B056EB797F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D4630FD-3221-438F-93EA-21B056EB797F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -146,6 +155,8 @@ Global
 		{964612C6-EA9F-4758-96B9-16C74A504763} = {A9C3FDF8-7F01-4581-A08C-8B6EE8E34421}
 		{1D788B56-B3C7-48CF-A781-0E0C1DEC88BA} = {9082F792-2578-400F-914B-2A38E5FCAA0D}
 		{7CC36EDA-5501-4599-BEFC-C10750AF8801} = {DF7506FB-7E64-461E-95A2-EB921476E4E9}
+		{34614C80-B14B-4D9B-9B30-E909FA7B73FA} = {AF0545F2-B894-4C1F-9E1B-020189E9AEC5}
+		{2D4630FD-3221-438F-93EA-21B056EB797F} = {34614C80-B14B-4D9B-9B30-E909FA7B73FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9277942-AB87-49EB-8D2D-082A2C092696}

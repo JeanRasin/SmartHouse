@@ -1,5 +1,4 @@
-﻿using System;
-using SmartHouse.Domain.Core;
+﻿using SmartHouse.Domain.Core;
 
 namespace SmartHouse.Services.Interfaces
 {

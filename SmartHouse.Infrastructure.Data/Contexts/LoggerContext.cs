@@ -7,8 +7,12 @@ namespace SmartHouse.Infrastructure.Data
 {
     public class LoggerContext
     {
-        private readonly MongoClient mongoClient;
-        private readonly IMongoDatabase mongoDb;
+        public readonly MongoClient mongoClient;
+        public readonly IMongoDatabase mongoDb;
+
+        public LoggerContext()//todo:не понятно как использовать для Moq
+        {
+        }
 
         public LoggerContext(string connection, string dbName)
         {
@@ -16,7 +20,7 @@ namespace SmartHouse.Infrastructure.Data
             mongoDb = mongoClient.GetDatabase(dbName);
         }
 
-        public IMongoCollection<T> DbSet<T>() where T : MongoBaseModel
+        public virtual IMongoCollection<T> DbSet<T>() where T : MongoBaseModel
         {
             var tableName = typeof(T).GetCustomAttribute<TableAttribute>(false).Name;
             var result = mongoDb.GetCollection<T>(tableName);

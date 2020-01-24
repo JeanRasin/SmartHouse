@@ -1,7 +1,7 @@
 using Moq;
-using SmartHouse.Business.Data.Weather;
-using SmartHouse.Domain.Core.Weather;
-using SmartHouse.Domain.Interfaces.Weather;
+using SmartHouse.Business.Data;
+using SmartHouse.Domain.Core;
+using SmartHouse.Domain.Interfaces;
 using System;
 using System.Threading.Tasks;
 using Xunit;

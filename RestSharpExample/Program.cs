@@ -1,4 +1,4 @@
-﻿using SmartHouse.Domain.Core.Weather;
+﻿using SmartHouse.Domain.Core;
 using SmartHouse.Service.Weather.OpenWeatherMap.Model;
 using System;
 using System.Collections.Generic;

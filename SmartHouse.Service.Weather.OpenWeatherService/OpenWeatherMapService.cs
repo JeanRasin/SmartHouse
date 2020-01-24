@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using SmartHouse.Domain.Core.Weather;
-using SmartHouse.Domain.Interfaces.Weather;
+using SmartHouse.Domain.Core;
+using SmartHouse.Domain.Interfaces;
 using SmartHouse.Service.Weather.OpenWeatherMap.Model;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
         private readonly ILogger<OpenWeatherMapService> logger;
         private readonly HttpClient client;
 
-        private readonly string url;// = "https://api.openweathermap.org";
+        private readonly string url;
 
         public OpenWeatherMapService(ILogger<OpenWeatherMapService> logger, IDictionary<string, string> parm, HttpMessageHandler handler = null)
         {

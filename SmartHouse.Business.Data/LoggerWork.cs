@@ -4,15 +4,10 @@ using SmartHouse.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmartHouse.Business.Data
 {
-    //public interface ILoggerWork
-    //{
-    //    List<LoggerModel> GetLogger();
-    //    bool WriteLog(string message);
-    //}
-
     public class LoggerWork : ILogger
     {
         private readonly LoggerRepository<LoggerModel> repository;
@@ -26,9 +21,9 @@ namespace SmartHouse.Business.Data
             return null;
         }
 
-        public List<LoggerModel> GetLogger()
+        public Task<IEnumerable<LoggerModel>> GetLoggerAsync()
         {
-            var result = repository.Query().ToList();
+            var result = repository.QueryAsync();
             return result;
         }
 

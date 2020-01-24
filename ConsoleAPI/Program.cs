@@ -3,9 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SmartHouse.Business.Data;
-using SmartHouse.Business.Data.Weather;
 using SmartHouse.Domain.Core;
-using SmartHouse.Domain.Interfaces.Weather;
 using SmartHouse.Infrastructure.Data;
 using SmartHouse.Service.Weather.Gismeteo;
 using SmartHouse.Service.Weather.OpenWeatherMap;
@@ -15,6 +13,7 @@ using System.IO;
 using System.Text.Json;
 using ConsoleAPI.Helpers;
 using CommandLine;
+using SmartHouse.Domain.Interfaces;
 
 namespace ConsoleAPI
 {

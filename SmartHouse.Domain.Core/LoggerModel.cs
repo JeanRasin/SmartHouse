@@ -9,6 +9,10 @@ namespace SmartHouse.Domain.Core
         [BsonElement("message")]
         public string Message { get; set; }
 
+        public LoggerModel()
+        {
+        }
+
         public LoggerModel(string message)
         {
             Message = message;

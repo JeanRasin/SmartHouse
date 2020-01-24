@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmartHouse.Business.Data.Weather;
-using SmartHouse.Domain.Core.Weather;
-using SmartHouse.Domain.Interfaces.Weather;
+using SmartHouse.Business.Data;
+using SmartHouse.Domain.Interfaces;
 using System.Threading.Tasks;
 
 namespace SmartHouseAPI.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class WeatherController : ControllerBase

@@ -1,4 +1,4 @@
-﻿namespace SmartHouse.Domain.Core.Weather
+﻿namespace SmartHouse.Domain.Core
 {
     public class WeatherModel
     {

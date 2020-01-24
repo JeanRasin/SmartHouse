@@ -1,5 +1,5 @@
-﻿using SmartHouse.Domain.Core.Weather;
-using SmartHouse.Domain.Interfaces.Weather;
+﻿using SmartHouse.Domain.Core;
+using SmartHouse.Domain.Interfaces;
 using System.Threading.Tasks;
 
 namespace SmartHouse.Service.Weather.Gismeteo

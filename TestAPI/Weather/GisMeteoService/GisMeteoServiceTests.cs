@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using SmartHouse.Domain.Core.Weather;
+using SmartHouse.Domain.Core;
 using SmartHouse.Service.Weather.Gismeteo;
 
 namespace TestAPI
