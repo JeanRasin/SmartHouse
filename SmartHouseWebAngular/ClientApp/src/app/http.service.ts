@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 
-import { Weather } from 'src/app/weather'
+//import { Weather } from 'src/app/weather'
 
 @Injectable()
 export class HttpService {

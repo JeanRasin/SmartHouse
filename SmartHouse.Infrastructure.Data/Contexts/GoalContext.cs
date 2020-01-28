@@ -31,7 +31,7 @@ namespace SmartHouse.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Randomizer.Seed = new Random(1338);
+           // Randomizer.Seed = new Random(1338);
 
             var goalModelFakes = new Faker<GoalModel>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
@@ -42,12 +42,6 @@ namespace SmartHouse.Infrastructure.Data
             modelBuilder
                 .Entity<GoalModel>()
                 .HasData(goalModel);
-
-            //modelBuilder.Entity<GoalModel>().HasData(new GoalModel[] {
-            //    new GoalModel{Id=1,Name="iman"},
-            //    new GoalModel{Id=2,Name="Alex"},
-            //    new GoalModel{Id=3,Name="555"},
-            //});
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

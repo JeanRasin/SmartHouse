@@ -29,20 +29,15 @@ namespace SmartHouse.Infrastructure.Data
             mongoClient = new MongoClient(connection);
             mongoDb = mongoClient.GetDatabase(dbName);
 
+#if (DEBUG)
+
             bool exist = mongoDb.ListCollections().Any();
             if (!exist)
             {
+                // Add test data to the logger table
                 InsertDefaultData(mongoDb, CreateDefaulLoggerModeltData(12));
-
-                //var tableName = GetTableName<LoggerModel>();
-                //var loggerModel = mongoDb.GetCollection<LoggerModel>(tableName);
-
-                //var items = CreateDefaulLoggerModeltData(12);
-                //foreach (var item in items)
-                //{
-                //    loggerModel.InsertOne(item);
-                //}
             }
+#endif
         }
 
         public virtual IMongoCollection<T> DbSet<T>() where T : MongoBaseModel
@@ -52,9 +47,9 @@ namespace SmartHouse.Infrastructure.Data
             return result;
         }
 
-        public List<LoggerModel> CreateDefaulLoggerModeltData(int count = 10)
+        private List<LoggerModel> CreateDefaulLoggerModeltData(int count = 10)
         {
-            Randomizer.Seed = new Random(1338);
+            // Randomizer.Seed = new Random(544);
 
             var eventIdFaker = new Faker<EventId>()
                  .RuleFor(o => o.StateId, f => f.Random.Int(1, 10))

@@ -17,14 +17,18 @@ using System.Linq;
 using SmartHouseAPI.Helpers;
 using SmartHouse.Service.Weather.OpenWeatherMap;
 using SmartHouse.Domain.Interfaces;
+using Bogus;
 
 namespace SmartHouseAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IWebHostEnvironment CurrentEnvironment { get; set; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            CurrentEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -51,8 +55,18 @@ namespace SmartHouseAPI
                     });
             });
 
+            // string envName = CurrentEnvironment.IsDevelopment;
+
+            if (CurrentEnvironment.IsDevelopment())
+            {
+                int randomizerSeed = Convert.ToInt32(Configuration["RandomizerSeed"]);
+                // Random const;
+                Randomizer.Seed = new Random(randomizerSeed);
+            }
+
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
+
             // добавляем контекст MobileContext в качестве сервиса в приложение
             services.AddDbContext<GoalContext>(options =>
                 options.UseNpgsql(connection));
@@ -65,7 +79,7 @@ namespace SmartHouseAPI
             //services.AddTransient<IWeatherService, GisMeteoService>(); // GisMeteo service.
 
             MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
-            services.AddSingleton<ILoggerContext>(x => new LoggerContext(logConfig.Connection, logConfig.DbName)); 
+            services.AddSingleton<ILoggerContext>(x => new LoggerContext(logConfig.Connection, logConfig.DbName));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,6 +95,7 @@ namespace SmartHouseAPI
             //    app.UseExceptionHandler("/Error");
             //}
 
+
             app.UseStaticFiles();
 
             // обработка ошибок HTTP
@@ -93,15 +108,11 @@ namespace SmartHouseAPI
                 c.RoutePrefix = string.Empty;
             });
 
-           // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseRouting();
 
-            //MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
-            //var loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
-
             loggerFactory.AddContext(loggerContext);
-
 
             // app.UseAuthorization();
 

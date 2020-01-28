@@ -32,26 +32,20 @@ namespace RepositoryTest
                 .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
                 .RuleFor(o => o.EventId, f => eventIdFaker.Generate())
                 .RuleFor(o => o.LogLevel, f => f.PickRandom<LogLevel>())
-                .RuleFor(o => o.Message, f => f.Random.Words());
+                .RuleFor(o => o.Message, f => f.Random.Words(20))
+                .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)));
         }
 
         [Fact]
         public void Repository_InsertOne_void()
         {
-            //var data = new LoggerModel
-            //{
-            //    Id = "1",
-            //    EventId = new EventId(1),
-            //    LogLevel = LogLevel.Information,
-            //    Message = "test 1"
-            //};
-
             var data = new Faker<LoggerModel>()
                 .StrictMode(true)
                 .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
                 .RuleFor(o => o.EventId, f => eventIdFaker.Generate())
                 .RuleFor(o => o.LogLevel, f => f.PickRandom<LogLevel>())
-                .RuleFor(o => o.Message, f => f.Random.Words());
+                .RuleFor(o => o.Message, f => f.Random.Words())
+                .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)));
 
             var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()));
@@ -68,22 +62,6 @@ namespace RepositoryTest
         [Fact]
         public void Repository_Query_data()
         {
-            //var items = new List<LoggerModel> {
-            //new LoggerModel
-            //{
-            //     Id = "1",
-            //    EventId = new EventId(1),
-            //    LogLevel = LogLevel.Information,
-            //       Message = "test 1"
-            //},
-            //new LoggerModel
-            //{
-            //    Id = "2",
-            //    EventId = new EventId(1),
-            //    LogLevel = LogLevel.Information,
-            //    Message = "test 2"
-            //}};
-
             var items = loggerModelFaker.Generate(2);
 
             var collection = new Mock<IMongoCollection<LoggerModel>>();
@@ -104,23 +82,14 @@ namespace RepositoryTest
         [Fact]
         public void Repository_QueryFilter_data()
         {
-            //var items = new List<LoggerModel> {
-            //new LoggerModel
-            //{
-            //   Id = "1",
-            //    EventId = new EventId(1),
-            //    LogLevel = LogLevel.Information,
-            //    Message = "test 1"
-            //},
-            //new LoggerModel
-            //{
-            //    Id = "2",
-            //    EventId = new EventId(1),
-            //    LogLevel = LogLevel.Information,
-            //    Message = "test 2"
-            //}};
+            var items = loggerModelFaker.Generate(2000);
 
-            var items = loggerModelFaker.Generate(2);
+            var serializeOptions = new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+            var str = System.Text.Json.JsonSerializer.Serialize(items, serializeOptions);
 
             var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()))
