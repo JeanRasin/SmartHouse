@@ -1,12 +1,16 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace SmartHouse.Domain.Core
 {
     public class EventId
     {
         [BsonElement("stateId")]
+        [BsonRepresentation(BsonType.Int32)]
         public int StateId { get; set; }
-        [BsonElement("Name")]
+        [BsonElement("name")]
+        [BsonRepresentation(BsonType.String)]
+        [BsonIgnoreIfNull]
         public string Name { get; set; }
 
         public EventId()

@@ -1,3 +1,4 @@
+using Bogus;
 using Moq;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
@@ -13,17 +14,26 @@ namespace TestBusiness
         [Fact]
         public void Data_Get_Success()
         {
+            Randomizer.Seed = new Random(1338);
+            var wetaherDataFaker = new Faker<WeatherModel>()
+                .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000))
+                .RuleFor(o => o.WindDeg, f => f.Random.UShort(0, 360))
+                .RuleFor(o => o.Temp, f => f.Random.Float(-100, 100))
+                .RuleFor(o => o.City, f => f.Address.City())
+                .RuleFor(o => o.Pressure, f => f.Random.Float(0, 1000))
+                .RuleFor(o => o.Humidity, f => f.Random.Float(0, 1000))
+                .RuleFor(o => o.Description, f => f.Random.Words(5))
+                .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000));
+
+            var wetaherData = wetaherDataFaker.Generate();
+
             var mock = new Mock<IWeatherService>();
 
             mock.Setup(m => m.GetWeatherAsync()).Returns(async () =>
             {
                 return await Task.Run(() =>
                 {
-                    return new WeatherModel
-                    {
-                        Temp = 5,
-                        WindSpeed = 12
-                    };
+                    return wetaherData;
                 });
             });
 

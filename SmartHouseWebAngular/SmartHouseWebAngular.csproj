@@ -9,6 +9,8 @@
     <None Remove="ClientApp\src\app\data.service.ts" />
     <None Remove="ClientApp\src\app\hello.component.ts" />
     <None Remove="ClientApp\src\app\http.service.ts" />
+    <None Remove="ClientApp\src\app\logger.ts" />
+    <None Remove="ClientApp\src\app\logger\logger.component.ts" />
     <None Remove="ClientApp\src\app\weather.ts" />
   </ItemGroup>
 

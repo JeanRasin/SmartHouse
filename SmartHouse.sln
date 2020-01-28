@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAPI", "ConsoleAPI\Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AF0545F2-B894-4C1F-9E1B-020189E9AEC5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestServices", "TestAPI\TestServices.csproj", "{BD9F72AC-34D4-4655-972A-0DCC7AB3292A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServicesTest", "TestAPI\ServicesTest.csproj", "{BD9F72AC-34D4-4655-972A-0DCC7AB3292A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{DF7506FB-7E64-461E-95A2-EB921476E4E9}"
 EndProject
@@ -39,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{2C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{A27952EC-6C9C-4EBE-9B83-39B53BC1572A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBusiness", "TestBusiness\TestBusiness.csproj", "{7BFD3BBA-77F4-4E02-B2E4-5D09504A0CE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessTest", "TestBusiness\BusinessTest.csproj", "{7BFD3BBA-77F4-4E02-B2E4-5D09504A0CE9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{9082F792-2578-400F-914B-2A38E5FCAA0D}"
 EndProject
@@ -63,7 +63,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SoapUI Services", "SoapUI S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository", "Repository", "{34614C80-B14B-4D9B-9B30-E909FA7B73FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryTest", "RepositoryTest\RepositoryTest.csproj", "{2D4630FD-3221-438F-93EA-21B056EB797F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryTest", "RepositoryTest\RepositoryTest.csproj", "{2D4630FD-3221-438F-93EA-21B056EB797F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BogusTest", "BogusTest\BogusTest.csproj", "{7CE0EA3C-2174-4B73-A311-E4CE03EC2E94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +133,10 @@ Global
 		{2D4630FD-3221-438F-93EA-21B056EB797F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D4630FD-3221-438F-93EA-21B056EB797F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D4630FD-3221-438F-93EA-21B056EB797F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CE0EA3C-2174-4B73-A311-E4CE03EC2E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CE0EA3C-2174-4B73-A311-E4CE03EC2E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CE0EA3C-2174-4B73-A311-E4CE03EC2E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CE0EA3C-2174-4B73-A311-E4CE03EC2E94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +163,7 @@ Global
 		{7CC36EDA-5501-4599-BEFC-C10750AF8801} = {DF7506FB-7E64-461E-95A2-EB921476E4E9}
 		{34614C80-B14B-4D9B-9B30-E909FA7B73FA} = {AF0545F2-B894-4C1F-9E1B-020189E9AEC5}
 		{2D4630FD-3221-438F-93EA-21B056EB797F} = {34614C80-B14B-4D9B-9B30-E909FA7B73FA}
+		{7CE0EA3C-2174-4B73-A311-E4CE03EC2E94} = {DF7506FB-7E64-461E-95A2-EB921476E4E9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9277942-AB87-49EB-8D2D-082A2C092696}

@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-header" *ngIf="error == null; else errorBlock">
+    Logs
+  </div>
+  <!--<div class="card-header" *ngIf="error != null; else errorBlock">
+    Wetaher error...
+  </div>-->
+  <div class="card-body" *ngIf="error == null">
+    <h5 class="card-title">Table logs</h5>
+    <p class="card-text">
+      logger:{{model[0].id}}
+    </p>
+    <!--<a href="#" class="btn btn-primary">Go somewhere</a>
+    -->
+  </div>
+</div>

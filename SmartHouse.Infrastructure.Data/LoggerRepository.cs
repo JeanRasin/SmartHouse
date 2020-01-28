@@ -22,7 +22,7 @@ namespace SmartHouse.Infrastructure.Data
         {
             try
             {
-                model.Id = Guid.NewGuid().ToString().Replace("-", "");
+                model.Id = Guid.NewGuid().ToString("N");//.Replace("-", "");
                 Collection.InsertOne(model);
                 return true;
             }
