@@ -1,4 +1,5 @@
 ﻿using SmartHouse.Domain.Core;
+using SmartHouse.Domain.Interfaces;
 using SmartHouse.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
@@ -6,11 +7,6 @@ using System.Linq;
 
 namespace SmartHouse.Business.Data
 {
-   public interface IGoalWork
-    {
-        List<GoalModel> GetGoals();
-    }
-
     public class GoalWork : IGoalWork, IDisposable
     {
         private readonly GoalRepository repository;

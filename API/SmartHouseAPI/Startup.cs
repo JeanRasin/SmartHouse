@@ -87,14 +87,13 @@ namespace SmartHouseAPI
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/error-local-development");
             }
-
-            //if (env.IsProduction() || env.IsStaging() || env.IsEnvironment("Staging_2"))
-            //{
-            //    app.UseExceptionHandler("/Error");
-            //}
-
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
 
             app.UseStaticFiles();
 

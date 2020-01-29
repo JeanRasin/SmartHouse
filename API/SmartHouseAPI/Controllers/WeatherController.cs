@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Interfaces;
+using System;
 using System.Threading.Tasks;
 
 namespace SmartHouseAPI.Controllers
@@ -17,18 +18,27 @@ namespace SmartHouseAPI.Controllers
             weatherWork = new WeatherWork(ws);
         }
 
+        // GET api/weather
         [HttpGet]
+        [Produces("application/json")]
         [ResponseCache(CacheProfileName = "WeatherCaching")]
         public async Task<IActionResult> GetWeatherAsync()
         {
-            var result = await weatherWork.GetWeatherAsync();
-
-            if (result == null)
+            try
             {
-                return NotFound();
-            }
+                var result = await weatherWork.GetWeatherAsync();
 
-            return Ok(result);
+                if (result == null)
+                {
+                    throw new Exception("Not data.");
+                }
+
+                return new ObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         /*
         // GET api/values/5

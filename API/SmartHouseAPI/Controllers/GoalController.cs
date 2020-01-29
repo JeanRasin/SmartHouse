@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
+using SmartHouse.Domain.Interfaces;
 using System.Collections.Generic;
 
 namespace SmartHouseAPI.Controllers
