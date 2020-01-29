@@ -1,41 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <con:soapui-project id="27d811cb-a663-452c-9da9-0a48eb147da6" activeEnvironment="Default" name="REST Smart House" resourceRoot="" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
-  <con:interface xsi:type="con:RestService" id="70c69a5c-5753-475f-bdb8-44ed28ed775b" wadlVersion="http://wadl.dev.java.net/2009/02" name="http://localhost:555444" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <con:settings/>
-    
-    <con:definitionCache type="TEXT" rootPart=""/><con:endpoints>
-      <con:endpoint>http://localhost:5544</con:endpoint>
-    </con:endpoints>
-    <con:resource name="" path="" id="4b4fe883-b74c-4706-954e-860a5d3c0e15">
-      <con:settings/>
-      <con:parameters/>
-      <con:method name="1" id="beafefd6-cd3b-4eaf-9cec-68fcdc365602" method="GET">
-        <con:settings/>
-        <con:parameters/>
-        <con:representation type="RESPONSE">
-          <con:mediaType xsi:nil="true"/>
-          <con:status>0</con:status>
-          <con:params/>
-          <con:element>data</con:element>
-        </con:representation>
-        <con:request name="Request 1" id="af8e3b82-2d3a-4553-9a09-7292797244e0" mediaType="application/json">
-          <con:settings>
-            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
-          </con:settings>
-          <con:endpoint>http://localhost:5544</con:endpoint>
-          <con:request/>
-          <con:originalUri>http://localhost/</con:originalUri>
-          <con:credentials>
-            <con:authType>No Authorization</con:authType>
-          </con:credentials>
-          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
-          <con:jmsPropertyConfig/>
-          <con:parameters/>
-        </con:request>
-      </con:method>
-    </con:resource>
-  </con:interface>
+  
   <con:restMockService id="342b5d39-9d9b-44bf-b964-610ade00f286" port="5544" path="/" host="DESKTOP-9N46IGL" name="REST Mock HTTP Smart House" docroot="">
     <con:settings/>
     <con:properties/>
