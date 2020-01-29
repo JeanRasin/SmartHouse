@@ -42,7 +42,7 @@ export class LoggerComponent implements OnInit {
   dataSource: MatTableDataSource<Logger>;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  pageSize = 10;
+  pageSize: number = 10;
 
   ngOnInit() {
     this.httpService.getLogger().subscribe((data: Logger[]) => {
@@ -50,8 +50,8 @@ export class LoggerComponent implements OnInit {
       data.sort(function (a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
-        //return Math.abs(new Date(b.Date).getTime() - new Date(a.Date).getTime());
-        return new Date(b.Date) - new Date(a.Date);
+       return new Date(b.date).getTime() - new Date(a.date).getTime();//Math.abs()
+        // return new Date(b.Date) - new Date(a.Date);
       });
 
       console.log(data);
