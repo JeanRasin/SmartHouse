@@ -2,7 +2,7 @@ using NUnit.Framework;
 using SmartHouse.Domain.Core;
 using SmartHouse.Service.Weather.Gismeteo;
 
-namespace TestAPI
+namespace TestService
 {
     public class GisMeteoServiceTests
     {

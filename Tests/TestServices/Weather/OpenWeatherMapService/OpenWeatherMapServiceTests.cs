@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace TestAPI
+namespace TestService
 {
     public class OpenWeatherMapServiceTests
     {

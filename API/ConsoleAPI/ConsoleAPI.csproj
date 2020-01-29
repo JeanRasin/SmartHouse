@@ -43,10 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SmartHouse.Business.Data\SmartHouse.Business.Data.csproj" />
-    <ProjectReference Include="..\SmartHouse.Infrastructure.Data\SmartHouse.Infrastructure.Data.csproj" />
-    <ProjectReference Include="..\SmartHouse.Service.Weather.OpenWeatherService\SmartHouse.Service.Weather.OpenWeatherMap.csproj" />
-    <ProjectReference Include="..\SmartHouse.Service.Wether.Gismeteo\SmartHouse.Service.Wetaher.GisMeteo.csproj" />
+    <ProjectReference Include="..\..\SmartHouse.Business.Data\SmartHouse.Business.Data.csproj" />
+    <ProjectReference Include="..\..\SmartHouse.Infrastructure.Data\SmartHouse.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\..\SmartHouse.Service.Weather.OpenWeatherService\SmartHouse.Service.Weather.OpenWeatherMap.csproj" />
+    <ProjectReference Include="..\..\SmartHouse.Service.Wether.Gismeteo\SmartHouse.Service.Wetaher.GisMeteo.csproj" />
   </ItemGroup>
 
   <ItemGroup>
