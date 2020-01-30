@@ -4,6 +4,7 @@ using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -12,36 +13,51 @@ namespace TestBusiness
     public class WeatherWorkTest
     {
         [Fact]
-        public void Data_Get_Success()
+        public async void Data_Get_Success_Async()
         {
             Randomizer.Seed = new Random(1338);
-            var wetaherDataFaker = new Faker<WeatherModel>()
-                .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000))
-                .RuleFor(o => o.WindDeg, f => f.Random.UShort(0, 360))
-                .RuleFor(o => o.Temp, f => f.Random.Float(-100, 100))
-                .RuleFor(o => o.City, f => f.Address.City())
-                .RuleFor(o => o.Pressure, f => f.Random.Float(0, 1000))
-                .RuleFor(o => o.Humidity, f => f.Random.Float(0, 1000))
-                .RuleFor(o => o.Description, f => f.Random.Words(5))
-                .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000));
 
-            var wetaherData = wetaherDataFaker.Generate();
-
-            var mock = new Mock<IWeatherService>();
-
-            mock.Setup(m => m.GetWeatherAsync()).Returns(async () =>
+            async static Task<WeatherModel> MoqGetWeatherAsync(CancellationTokenSource tokenSource, int sec)
             {
+                CancellationToken token = tokenSource.Token;
+
+                await Task.Delay(sec * 1000);
+
+                if (token.IsCancellationRequested)
+                {
+                    throw new OperationCanceledException();
+                }
+
                 return await Task.Run(() =>
                 {
+                    WeatherModel wetaherData = new Faker<WeatherModel>()
+                    .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000))
+                    .RuleFor(o => o.WindDeg, f => f.Random.UShort(0, 360))
+                    .RuleFor(o => o.Temp, f => f.Random.Float(-100, 100))
+                    .RuleFor(o => o.City, f => f.Address.City())
+                    .RuleFor(o => o.Pressure, f => f.Random.Float(0, 1000))
+                    .RuleFor(o => o.Humidity, f => f.Random.Float(0, 1000))
+                    .RuleFor(o => o.Description, f => f.Random.Words(5))
+                    .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000))
+                    .Generate();
+
                     return wetaherData;
                 });
+            }
+
+            var tokenSource = new CancellationTokenSource();
+            var mock = new Mock<IWeatherService>();
+
+            mock.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(() =>
+            {
+                return MoqGetWeatherAsync(tokenSource: tokenSource, sec: 2);
             });
 
-            var weatherWork = new WeatherWork(mock.Object);
+            var weatherWork = new WeatherWork(weatherService: mock.Object, timeOutSec: 4);
 
-            WeatherModel obj = weatherWork.GetWeatherAsync().Result;
+            WeatherModel weather = await weatherWork.GetWeatherAsync(tokenSource);
 
-            Assert.NotNull(obj);
+            Assert.NotNull(weather);
         }
 
         [Fact]
@@ -49,68 +65,45 @@ namespace TestBusiness
         {
             var mock = new Mock<IWeatherService>();
 
-            mock.Setup(m => m.GetWeatherAsync()).Returns(() =>
+            mock.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(() =>
             {
                 throw new Exception();
             });
 
             var weatherWork = new WeatherWork(mock.Object);
 
-            Assert.ThrowsAsync<Exception>(() => weatherWork.GetWeatherAsync());
+            Assert.ThrowsAsync<Exception>(weatherWork.GetWeatherAsync);
         }
 
-        /*
         [Fact]
-        public void Data_get_httpRequestException_unauthorized_401()
+        public async void Data_TimeOut_OperationCanceledException_Async()
         {
-            var mock = new Mock<IWeatherService>();
-
-            mock.Setup(m => m.GetWeather()).Returns(() =>
+            async static Task<WeatherModel> MoqGetWeatherAsync(CancellationTokenSource tokenSource, int sec)
             {
-                throw new HttpRequestException("Response status code does not indicate success: 401 (Unauthorized).");
+                CancellationToken token = tokenSource.Token;
+
+                while (true)
+                {
+                    await Task.Delay(sec * 1000);
+
+                    if (token.IsCancellationRequested)
+                    {
+                        throw new OperationCanceledException();
+                    }
+                }
+            }
+
+            var mock = new Mock<IWeatherService>();
+            var tokenSource = new CancellationTokenSource();
+
+            mock.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(() =>
+            {
+                return MoqGetWeatherAsync(tokenSource: tokenSource, sec: 3);
             });
 
-            var weatherWork = new WeatherWork(mock.Object, 500);
+            var weatherWork = new WeatherWork(weatherService: mock.Object, timeOutSec: 2);
 
-            Assert.Throws<HttpRequestException>(() => weatherWork.GetWeather());
+            await Assert.ThrowsAsync<OperationCanceledException>(() => weatherWork.GetWeatherAsync(tokenSource));
         }
-        */
-
-        //[Fact]
-        //public void Data_get_exception_counterMax()
-        //{
-        //    var mock = new Mock<IWeatherService>();
-
-        //    mock.Setup(m => m.GetWeather()).Returns(async () =>
-        //    {
-        //        return await Task.Run(() =>
-        //        {
-        //            return new WeatherData
-        //            {
-        //                Temp = 5,
-        //                WindSpeed = 12
-        //            };
-        //        });
-        //    });
-
-        //    var weatherWork = new WeatherWork(mock.Object, 3);
-
-        //    Exception ex = Assert.Throws<Exception>(() =>
-        //    {
-        //        for (var i = 0; i < 5; i++)
-        //        {
-        //            weatherWork.GetWeather();
-        //        }
-
-        //    });
-
-        //    Assert.Equal("The number of requests per day exceeded.", ex.Message);
-        //}
-
-        //[Fact]
-        //public void Data_get_httpRequestException_serviceUnavailable_503()
-        //{
-
-        //}
     }
 }

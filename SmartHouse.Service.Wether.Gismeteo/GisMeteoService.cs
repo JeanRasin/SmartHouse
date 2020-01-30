@@ -1,12 +1,13 @@
 ﻿using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmartHouse.Service.Weather.Gismeteo
 {
     public class GisMeteoService : IWeatherService
     {
-        public async Task<WeatherModel> GetWeatherAsync()
+        public async Task<WeatherModel> GetWeatherAsync(CancellationToken token = default)
         {
             return await Task.Run(async () =>
             {

@@ -2,66 +2,86 @@
 using SmartHouse.Domain.Interfaces;
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmartHouse.Business.Data
 {
     public class WeatherWork
     {
-        public int CounterMax { get; }
+        public int TimeOutSec { get; }
 
         private readonly IWeatherService weatherService;
-        //private int counter = 0;
-        //private int hour = int.MaxValue;
 
-        //        public WeatherWork(IWeatherService weatherService, int counterMax)
-        public WeatherWork(IWeatherService weatherService)
+        public WeatherWork(IWeatherService weatherService, int timeOutSec = 30)
         {
             this.weatherService = weatherService;
-           //CounterMax = counterMax;
+            TimeOutSec = timeOutSec * 1000;
         }
 
         public async Task<WeatherModel> GetWeatherAsync()
         {
-            //if (DateTime.Now.Hour < hour)
-            //{
-            //    hour = DateTime.Now.Hour;
-            //    counter = 0;
-            //}
+            var cts = new CancellationTokenSource();
+            return await GetWeatherAsync(cts);
+        }
 
-            //if (counter > CounterMax)
-            //{
-            //    throw new Exception("The number of requests per day exceeded.");
-            //}
+        public async Task<WeatherModel> GetWeatherAsync(CancellationTokenSource tokenSource = default)
+        {
+            CancellationToken token = tokenSource.Token;
 
-            WeatherModel result;
+          //  WeatherModel result;
             try
             {
-                result = await weatherService.GetWeatherAsync();
-               // counter++;
+                //Task t0()
+                //{
+                //    return Task.Run(async () =>
+                //    {
+                //        await Task.Delay(TimeOutSec);
+                //        tokenSource.Cancel();
+                //    });
+                //}
+
+                //Task<WeatherModel> t1 = Task.Run(async() =>
+                //{
+                //  await Task.Delay(TimeOutSec);
+                //    tokenSource.Cancel();
+                //    return new WeatherModel();
+                //});
+
+                Task< WeatherModel> task = Task.Run(() =>
+                {
+                    return weatherService.GetWeatherAsync(token);
+                });
+
+                //var tt = await Task.WhenAny(new[] { t1, t2 });
+
+                Task.WaitAll(new[] { task }, TimeOutSec);
+                tokenSource.Cancel();
+                return await task;
+
+                //Task.Run(async () =>
+                //{
+                //    await Task.Delay(TimeOutSec);
+                //    tokenSource.Cancel();
+                //});
+
+                //  result = await weatherService.GetWeatherAsync(token);
 
             }
             catch (HttpRequestException ex)
             {
-                //if (ex.InnerException is WebException webException && webException.Status == WebExceptionStatus.NameResolutionFailure)
-                //{
-                //    // return true;
-                //}
-
-                //if (ex.Message == "Response status code does not indicate success: 503 (Service Unavailable).") //todo:!!!
-                //{
-                //    System.Threading.Thread.Sleep(2000);
-                //    result = GetWeather();
-                //}
-
                 throw ex;
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException("Timed out.");
             }
             catch (Exception ex)
             {
                 throw ex;
             }
 
-            return result;
+          //  return result;
         }
     }
 }

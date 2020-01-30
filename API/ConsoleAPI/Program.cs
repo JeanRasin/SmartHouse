@@ -12,36 +12,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using ConsoleAPI.Helpers;
-using CommandLine;
 using SmartHouse.Domain.Interfaces;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace ConsoleAPI
 {
-    //[Verb("add", HelpText = "Add file contents to the index.")]
-    //class AddOptions
-    //{
-    //    //normal options here
-    //}
-    //[Verb("commit", HelpText = "Record changes to the repository.")]
-    //class CommitOptions
-    //{
-    //    //commit options here
-    //}
-    //[Verb("clone", HelpText = "Clone a repository into a new directory.")]
-    //class CloneOptions
-    //{
-    //    //clone options here
-    //}
-
     class Program
     {
-        //public class Options
-        //{
-        //    [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
-        //    public bool Verbose { get; set; }
-        //}
+        public static IWeatherService WeatherService { get; set; }
+        public static WeatherWork Weather { get; set; }
 
-        static void Main(string[] args)
+        public static GoalContext PostgreContext { get; set; }
+        public static GoalWork Goal { get; set; }
+
+        public static LoggerWork Logger { get; set; }
+
+        static async Task Main(string[] args)
         {
             string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -53,12 +41,9 @@ namespace ConsoleAPI
 
             var configuration = builder.Build();
 
-            var weatherCachingTime = configuration["WeatherCachingTime"];
+            //var weatherCachingTime = configuration["WeatherCachingTime"];
 
             IDictionary<string, string> parm = configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
-
-            MongoDbLoggerConnectionConfig logConfig = configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
-            var loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
 
             var serviceProvider = new ServiceCollection()
             .AddLogging()
@@ -73,60 +58,123 @@ namespace ConsoleAPI
 
            .BuildServiceProvider();
 
-            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-            loggerFactory.AddContext(loggerContext);
-            //  var logger = loggerFactory.CreateLogger("NewLogger");
 
-            string connectStr = configuration.GetConnectionString("DefaultConnection");
-            var postgreContext = new GoalContext(connectStr);
-            var goalWork = new GoalWork(postgreContext);
 
-            List<GoalModel> items = goalWork.GetGoals();
+            Console.WriteLine("Hello.");
 
-            string jsonStr = JsonSerializer.Serialize(items);
-            Console.WriteLine(jsonStr);
+            string command;
+            bool quitNow = false;
+            while (!quitNow)
+            {
+                command = Console.ReadLine();
+                switch (command)
+                {
+                    case "/help":
+                        Console.WriteLine("This should be help.");
+                        break;
+
+                    case "/version":
+                        Console.WriteLine("This should be version.");
+                        break;
+
+                    case "/quit":
+                        quitNow = true;
+                        break;
+
+                    case "/q":
+                        quitNow = true;
+                        break;
+
+                    case "/w":
+
+                        if (WeatherService == null)
+                        {
+                            WeatherService = serviceProvider.GetService<IWeatherService>();
+                        }
+
+                        if (Weather == null)
+                        {
+                            Weather = new WeatherWork(WeatherService);
+                        }
+
+                        var weather = await Weather.GetWeatherAsync();
+                        var weatherJson = JsonSerializer.Serialize(weather);
+
+                        Console.WriteLine($"Weather: {weatherJson}");
+
+                        break;
+
+                    case "/g":
+                        if (PostgreContext == null)
+                        {
+                            string connectStr = configuration.GetConnectionString("DefaultConnection");
+                            PostgreContext = new GoalContext(connectStr);
+                        }
+
+                        if (Goal == null)
+                        {
+                            Goal = new GoalWork(PostgreContext);
+                        }
+
+                        List<GoalModel> goalItems = Goal.GetGoals();
+
+                        string goalJson = JsonSerializer.Serialize(goalItems);
+                        Console.WriteLine(goalJson);
+                        break;
+
+                    case "/lw":
+
+                        if (Logger == null)
+                        {
+                            MongoDbLoggerConnectionConfig logConfig = configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+                            var loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
+
+                            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+                            loggerFactory.AddContext(loggerContext);
+                            //  var logger = loggerFactory.CreateLogger("NewLogger");
+
+                            var loggerService = serviceProvider.GetService<ILogger>();
+                            Logger = new LoggerWork(loggerContext);
+                        }
+
+                        Logger.LogInformation("Log test.");
+                        Console.WriteLine("The data is written to the log.");
+                        //LoggerWork lw = (LoggerWork)logger;
+                        //var logItems = lw.GetLogger();
+                        break;
+
+                        //default:
+                        //    Console.WriteLine("Unknown Command " + command);
+                        //    break;
+                }
+
+                if (Regex.IsMatch(command, @"^lg\s+\d+$", RegexOptions.IgnoreCase))
+                {
+                    if (Logger == null)
+                    {
+                        MongoDbLoggerConnectionConfig logConfig = configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+                        var loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
+
+                        var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+                        loggerFactory.AddContext(loggerContext);
+                        //  var logger = loggerFactory.CreateLogger("NewLogger");
+
+                        var loggerService = serviceProvider.GetService<ILogger>();
+                        Logger = new LoggerWork(loggerContext);
+                    }
+
+                    var logs = (await Logger.GetLoggerAsync()).Take(2);
+                    string json = JsonSerializer.Serialize(logs);
+                    Console.WriteLine(json);
+                }
+            }
+
 
             //
-
-            //  var logger = serviceProvider.GetService<ILogger>();
-
-            // var log = new LoggerWork(loggerContext);
-
-            //LoggerWork lw = (LoggerWork)logger;
-
-            //  logger.LogInformation("test_log_write");
-
-            //var logItems = lw.GetLogger();
             //var logJson = JsonSerializer.Serialize(logItems);
             //Console.WriteLine($"Log: {logJson}");
 
-            //
-
-            var ows = serviceProvider.GetService<IWeatherService>();
-
-            var weatherWork = new WeatherWork(ows);
-
-            var weather = weatherWork.GetWeatherAsync().Result;
-            var weatherJson = JsonSerializer.Serialize(weather);
-
-            Console.WriteLine($"Weather: {weatherJson}");
-            /*
-              Parser.Default.ParseArguments<Options>(args)
-                     .WithParsed<Options>(o =>
-                     {
-                         if (o.Verbose)
-                         {
-                             Console.WriteLine($"Verbose output enabled. Current Arguments: -v {o.Verbose}");
-                             Console.WriteLine("Quick Start Example! App is in Verbose mode!");
-                         }
-                         else
-                         {
-                             Console.WriteLine($"Current Arguments: -v {o.Verbose}");
-                             Console.WriteLine("Quick Start Example!");
-                         }
-                     });  */
-
-            //Console.WriteLine("Exit");
         }
     }
 }
+

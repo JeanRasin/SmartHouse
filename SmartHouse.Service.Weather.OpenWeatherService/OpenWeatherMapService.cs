@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using EventId = Microsoft.Extensions.Logging.EventId;
 
@@ -14,12 +15,11 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 {
     public class OpenWeatherMapService : IWeatherService, IDisposable
     {
-        private readonly string city;
-        private readonly string api;
-        private readonly ILogger<OpenWeatherMapService> logger;
-        private readonly HttpClient client;
-
-        private readonly string url;
+        protected readonly string url;
+        protected readonly string city;
+        protected readonly string api;
+        protected readonly ILogger<OpenWeatherMapService> logger;
+        protected readonly HttpClient client;
 
         public OpenWeatherMapService(ILogger<OpenWeatherMapService> logger, IDictionary<string, string> parm, HttpMessageHandler handler = null)
         {
@@ -38,11 +38,12 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 client = new HttpClient(handler);
             }
 
-            client.Timeout = TimeSpan.FromMilliseconds(1000);
-
             url = parm["Url"];
             city = parm["City"];
             api = parm["Api"];
+
+            client.BaseAddress = new Uri(url);
+            client.Timeout = TimeSpan.FromMilliseconds(1000);
 
             this.logger = logger;
         }
@@ -53,11 +54,15 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
         }
 
 
-        public async Task<WeatherModel> GetWeatherAsync()
+        public async Task<WeatherModel> GetWeatherAsync(CancellationToken token = default)
         {
+            if (token.IsCancellationRequested)
+            {
+                throw new OperationCanceledException("Operation aborted by token.");
+            }
+
             try
             {
-                client.BaseAddress = new Uri(url);
                 var response = await client.GetAsync($"/data/2.5/weather?q={city}&APPID={api}&units=metric");
                 response.EnsureSuccessStatusCode();
 
@@ -87,6 +92,8 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
             catch (HttpRequestException ex)
             {
                 LogErrorWrite(ex);
+
+                await GetWeatherAsync(token);
                 throw ex;
             }
             catch (JsonException ex)
