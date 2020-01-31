@@ -21,10 +21,12 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
         protected readonly ILogger<OpenWeatherMapService> logger;
         protected readonly HttpClient client;
 
+        protected readonly string[] keys = { "city", "api", "url" };
+
         public OpenWeatherMapService(ILogger<OpenWeatherMapService> logger, IDictionary<string, string> parm, HttpMessageHandler handler = null)
         {
-            string[] keys = { "City", "Api", "Url" };
-            if (!keys.All(key => parm.ContainsKey(key)))
+            //if (!keys.All(key => parm.ContainsKey(key)))
+            if (!keys.All(key => parm.Any(s => s.Key.ToLower() == key)))
             {
                 throw new Exception("Not parameters.");
             }
@@ -38,9 +40,9 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 client = new HttpClient(handler);
             }
 
-            url = parm["Url"];
-            city = parm["City"];
-            api = parm["Api"];
+            url = parm["url"];
+            city = parm["city"];
+            api = parm["api"];
 
             client.BaseAddress = new Uri(url);
             client.Timeout = TimeSpan.FromMilliseconds(1000);
@@ -53,10 +55,15 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 
         }
 
-
-        public async Task<WeatherModel> GetWeatherAsync(CancellationToken token = default)
+        public async Task<WeatherModel> GetWeatherAsync()
         {
-            if (token.IsCancellationRequested)
+            return await GetWeatherAsync(null);
+        }
+
+        public async Task<WeatherModel> GetWeatherAsync(CancellationToken? token)
+        {
+            var IsCancellationRequested = token.GetValueOrDefault().IsCancellationRequested;
+            if (IsCancellationRequested == true)
             {
                 throw new OperationCanceledException("Operation aborted by token.");
             }
@@ -93,8 +100,12 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
             {
                 LogErrorWrite(ex);
 
+                if (token != null)
+                {
+                    throw ex;
+                }
+
                 await GetWeatherAsync(token);
-                throw ex;
             }
             catch (JsonException ex)
             {
@@ -111,6 +122,8 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 LogErrorWrite(ex);
                 throw ex;
             }
+
+            return null;
         }
 
         private void LogErrorWrite(Exception ex)

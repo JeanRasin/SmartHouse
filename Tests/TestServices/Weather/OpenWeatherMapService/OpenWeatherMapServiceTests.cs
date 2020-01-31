@@ -1,13 +1,16 @@
+using Bogus;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
 using SmartHouse.Service.Weather.OpenWeatherMap;
+using SmartHouse.Service.Weather.OpenWeatherMap.Model;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TestService
@@ -17,15 +20,68 @@ namespace TestService
         private MockHttpMessageHandler mockHttp;
         private readonly Dictionary<string, string> parm = new Dictionary<string, string>
             {
-                { "Url", "https://api.openweathermap.org" },
-                { "City", "Perm,ru" },
-                { "Api", "f4c946ac33b35d68233bbcf83619eb58" }
+                { "url", "https://api.openweathermap.org" },
+                { "city", "Perm,ru" },
+                { "api", "f4c946ac33b35d68233bbcf83619eb58" }
             };
 
         [SetUp]
         public void Setup()
         {
             mockHttp = new MockHttpMessageHandler();
+            Randomizer.Seed = new Random(1338);
+        }
+
+        private static WeatherResponse GetWeatherResponse()
+        {
+            var coord = new Faker<Coord>()
+                .RuleFor(o => o.Lon, f => f.Random.Float(0, 1000))
+                .RuleFor(o => o.Lat, f => f.Random.Float(0, 1000));
+
+            var weather = new Faker<Weather>()
+                .RuleFor(o => o.Id, f => f.Random.Number(int.MaxValue))
+                 .RuleFor(o => o.Main, f => f.Random.Word())
+                  .RuleFor(o => o.Description, f => f.Random.Word())
+                   .RuleFor(o => o.Icon, f => f.Random.Word());
+
+            var main = new Faker<Main>()
+                 .RuleFor(o => o.Temp, f => f.Random.Float(-30, 30))
+                 .RuleFor(o => o.FeelsLike, f => f.Random.Float(-30, 30))
+                 .RuleFor(o => o.TempMin, f => f.Random.Float(-30, 30))
+                 .RuleFor(o => o.TempMax, f => f.Random.Float(-30, 30))
+                  .RuleFor(o => o.Pressure, f => f.Random.Float(700, 750))
+                   .RuleFor(o => o.Humidity, f => f.Random.Float(10, 99));
+
+            var wind = new Faker<Wind>()
+                 .RuleFor(o => o.Speed, f => f.Random.Float(0, 15))
+                 .RuleFor(o => o.Deg, f => f.Random.UShort(0, 360));
+
+            var clouds = new Faker<Clouds>()
+                .RuleFor(o => o.All, f => f.Random.Number(1));
+
+            var sys = new Faker<Sys>()
+                  .RuleFor(o => o.Type, f => f.Random.Number(1))
+                  .RuleFor(o => o.Id, f => f.Random.Number(int.MaxValue))
+                  .RuleFor(o => o.Country, f => f.Address.Country())
+                  .RuleFor(o => o.Sunrise, f => f.Random.Number(int.MaxValue))
+                  .RuleFor(o => o.Sunset, f => f.Random.Number(int.MaxValue));
+
+            WeatherResponse wetaherData = new Faker<WeatherResponse>()
+                  .RuleFor(o => o.Coord, f => coord.Generate())
+                   .RuleFor(o => o.Weather, f => weather.Generate(3))
+                 .RuleFor(o => o.WeatherBase, f => f.Random.Word())
+                   .RuleFor(o => o.Main, f => main.Generate())
+                  .RuleFor(o => o.Visibility, f => f.Random.Number(10))
+                  .RuleFor(o => o.Wind, f => wind.Generate())
+                  .RuleFor(o => o.Clouds, f => clouds.Generate())
+                  .RuleFor(o => o.Dt, f => f.Random.Number(int.MaxValue))
+                   .RuleFor(o => o.Sys, f => sys.Generate())
+                   .RuleFor(o => o.TimeZone, f => f.Random.Number(int.MaxValue))
+                    .RuleFor(o => o.Id, f => f.Random.Number(int.MaxValue))
+                    .RuleFor(o => o.Name, f => f.Address.City())
+                    .RuleFor(o => o.Cod, f => f.Random.Number(int.MaxValue))
+                  .Generate();
+            return wetaherData;
         }
 
         [Test]
@@ -33,17 +89,15 @@ namespace TestService
         {
             mockHttp.Fallback.Respond("application/json", "");
 
-            Assert.Throws<NullReferenceException>(() => new OpenWeatherMapService(null, mockHttp));
+            Assert.Throws<ArgumentNullException>(() => new OpenWeatherMapService(null, mockHttp));
         }
 
         [Test]
         public void Check_ParamNot_Exception()
         {
-            var parm = new Dictionary<string, string>();
-
             mockHttp.Fallback.Respond("application/json", "{'name' : 'Test McGee'}");
 
-            var ex = Assert.Throws<Exception>(() => new OpenWeatherMapService(parm, mockHttp));
+            var ex = Assert.Throws<Exception>(() => new OpenWeatherMapService(new Dictionary<string, string>(), mockHttp));
             Assert.AreEqual("Not parameters.", ex.Message);
         }
 
@@ -54,7 +108,7 @@ namespace TestService
 
             var service = new OpenWeatherMapService(parm, mockHttp);
 
-            Assert.ThrowsAsync<JsonException>(async () => await service.GetWeatherAsync());
+            Assert.ThrowsAsync<JsonException>(service.GetWeatherAsync);
         }
 
         [Test]
@@ -62,20 +116,20 @@ namespace TestService
         {
             mockHttp.Fallback.Respond(HttpStatusCode.ServiceUnavailable);
 
-            //mockHttp.Fallback.Respond(()=>
-            //{
-            //    throw new HttpRequestException(HttpStatusCode.ServiceUnavailable.ToString(), new WebException("", WebExceptionStatus));
-            //});
+            var tokenSource = new CancellationTokenSource();
+            CancellationToken token = tokenSource.Token;
+
+            Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+                tokenSource.Cancel();
+            });
 
             var service = new OpenWeatherMapService(parm, mockHttp);
 
-            var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await service.GetWeatherAsync());
-            //if (ex.InnerException is WebException webException && webException.Status == WebExceptionStatus.NameResolutionFailure)
-            //{
-            //    Assert.Pass();
-            //}
+            var ex = Assert.ThrowsAsync<HttpRequestException>(() => service.GetWeatherAsync(token));
 
-            Assert.AreEqual("Response status code does not indicate success: 503 (Service Unavailable).", ex.Message);//todo:!!!
+            Assert.AreEqual("Response status code does not indicate success: 503 (Service Unavailable).", ex.Message);
         }
 
         [Test]
@@ -85,14 +139,23 @@ namespace TestService
 
             var parm = new Dictionary<string, string>
             {
-                { "Url", "https://api.openweathermap.org" },
-                { "City", "Perm,ru" },
-                { "Api", "0" }
+                { "url", "https://api.openweathermap.org" },
+                { "city", "Perm,ru" },
+                { "api", "0" }
             };
+
+            var tokenSource = new CancellationTokenSource();
+            CancellationToken token = tokenSource.Token;
+
+            Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+                tokenSource.Cancel();
+            });
 
             var service = new OpenWeatherMapService(parm, mockHttp);
 
-            var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await service.GetWeatherAsync());
+            var ex = Assert.ThrowsAsync<HttpRequestException>(() => service.GetWeatherAsync(token));
             Assert.AreEqual("Response status code does not indicate success: 401 (Unauthorized).", ex.Message);
         }
 
@@ -103,7 +166,7 @@ namespace TestService
 
             var service = new OpenWeatherMapService(parm, mockHttp);
 
-            Assert.ThrowsAsync<Exception>(async () => await service.GetWeatherAsync());
+            Assert.ThrowsAsync<Exception>(service.GetWeatherAsync);
         }
 
         [Test]
@@ -115,7 +178,7 @@ namespace TestService
 
             var service = new OpenWeatherMapService(logger, parm, mockHttp);
 
-            Assert.ThrowsAsync<Exception>(async () => await service.GetWeatherAsync());
+            Assert.ThrowsAsync<Exception>(service.GetWeatherAsync);
         }
 
         [Test]
@@ -124,29 +187,32 @@ namespace TestService
             mockHttp.Fallback.Respond(async () =>
             {
                 await Task.Delay(2000);
-                //System.Threading.Thread.Sleep(2000);// todo:!!!
 
                 return await Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
             });
 
             var service = new OpenWeatherMapService(parm, mockHttp);
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.GetWeatherAsync());
+            Assert.ThrowsAsync<InvalidOperationException>(service.GetWeatherAsync);
         }
 
         [Test]
-        public void Http_Request_Success()
+        public async Task Http_Request_Success()
         {
-            var responseJson = @"{'coord':{'lon':56.29,'lat':58.02},'weather':[{'id':600,'main':'Snow','description':'light snow','icon':'13n'}],'base':'model','main':{'temp':-3.87,'feels_like':-10.16,'temp_min':-3.87,'temp_max':-3.87,'pressure':994,'humidity':91,'sea_level':994,'grnd_level':973},'wind':{'speed':5.24,'deg':228},'snow':{'3h':0.31},'clouds':{'all':100},'dt':1578921976,'sys':{'country':'RU','sunrise':1578891106,'sunset':1578916455},'timezone':18000,'id':511196,'name':'Perm','cod':200}"
-                    .Replace('\'', '"');
+            WeatherResponse wetaherData = GetWeatherResponse();
 
-            // Setup a respond for the user api (including a wildcard in the URL)
-            // mockHttp.When(url).Respond("application/json", responseJson); todo:!!!
+            var serializeOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+            var responseJson = JsonSerializer.Serialize(wetaherData, serializeOptions);
+
             mockHttp.Fallback.Respond("application/json", responseJson);
 
             var service = new OpenWeatherMapService(parm, mockHttp);
 
-            var result = service.GetWeatherAsync().Result;
+            var result = await service.GetWeatherAsync();
             Assert.IsNotNull(result);
         }
     }

@@ -7,7 +7,7 @@ namespace SmartHouse.Service.Weather.Gismeteo
 {
     public class GisMeteoService : IWeatherService
     {
-        public async Task<WeatherModel> GetWeatherAsync(CancellationToken token = default)
+        public async Task<WeatherModel> GetWeatherAsync(CancellationToken? token = null)
         {
             return await Task.Run(async () =>
             {

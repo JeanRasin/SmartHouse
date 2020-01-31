@@ -29,44 +29,16 @@ namespace SmartHouse.Business.Data
         {
             CancellationToken token = tokenSource.Token;
 
-          //  WeatherModel result;
             try
             {
-                //Task t0()
-                //{
-                //    return Task.Run(async () =>
-                //    {
-                //        await Task.Delay(TimeOutSec);
-                //        tokenSource.Cancel();
-                //    });
-                //}
-
-                //Task<WeatherModel> t1 = Task.Run(async() =>
-                //{
-                //  await Task.Delay(TimeOutSec);
-                //    tokenSource.Cancel();
-                //    return new WeatherModel();
-                //});
-
-                Task< WeatherModel> task = Task.Run(() =>
-                {
-                    return weatherService.GetWeatherAsync(token);
-                });
-
-                //var tt = await Task.WhenAny(new[] { t1, t2 });
+                Task<WeatherModel> task = Task.Run(() =>
+               {
+                   return weatherService.GetWeatherAsync(token);
+               });
 
                 Task.WaitAll(new[] { task }, TimeOutSec);
                 tokenSource.Cancel();
                 return await task;
-
-                //Task.Run(async () =>
-                //{
-                //    await Task.Delay(TimeOutSec);
-                //    tokenSource.Cancel();
-                //});
-
-                //  result = await weatherService.GetWeatherAsync(token);
-
             }
             catch (HttpRequestException ex)
             {
@@ -80,8 +52,6 @@ namespace SmartHouse.Business.Data
             {
                 throw ex;
             }
-
-          //  return result;
         }
     }
 }

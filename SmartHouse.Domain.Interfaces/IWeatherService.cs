@@ -6,6 +6,6 @@ namespace SmartHouse.Domain.Interfaces
 {
     public interface IWeatherService
     {
-        Task<WeatherModel> GetWeatherAsync(CancellationToken token = default);
+        Task<WeatherModel> GetWeatherAsync(CancellationToken? token = null);
     }
 }

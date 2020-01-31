@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 using EventId = SmartHouse.Domain.Core.EventId;
 
@@ -60,7 +61,7 @@ namespace RepositoryTest
         }
 
         [Fact]
-        public void Repository_Query_data()
+        public async Task Repository_Query_data()
         {
             var items = loggerModelFaker.Generate(2);
 
@@ -73,14 +74,14 @@ namespace RepositoryTest
             context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
 
             var repository = new LoggerRepository<LoggerModel>(context.Object);
-            List<LoggerModel> result = repository.QueryAsync().Result.ToList();
+            List<LoggerModel> result = (await repository.QueryAsync()).ToList();
 
             Assert.NotNull(result);
             Assert.Equal(items, result);
         }
 
         [Fact]
-        public void Repository_QueryFilter_data()
+        public async Task Repository_QueryFilter_data()
         {
             var items = loggerModelFaker.Generate(2000);
 
@@ -100,10 +101,10 @@ namespace RepositoryTest
 
             var repository = new LoggerRepository<LoggerModel>(context.Object);
 
-            var query = repository.QueryAsync(s => s.Id == "1");
+            var query = await repository.QueryAsync(s => s.Id == "1");
 
             Assert.NotNull(query);
-            Assert.Equal(items, query.Result);
+            Assert.Equal(items, query);
         }
     }
 }
