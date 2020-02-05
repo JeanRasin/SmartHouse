@@ -13,6 +13,9 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
+
+// ≈сть проблемы с токеном из-за потери кода.
+
 namespace TestService
 {
     public class OpenWeatherMapServiceTests
@@ -29,9 +32,15 @@ namespace TestService
         public void Setup()
         {
             mockHttp = new MockHttpMessageHandler();
+
+            // Random constant.
             Randomizer.Seed = new Random(1338);
         }
 
+        /// <summary>
+        /// Generate random data.
+        /// </summary>
+        /// <returns></returns>
         private static WeatherResponse GetWeatherResponse()
         {
             var coord = new Faker<Coord>()
@@ -84,6 +93,9 @@ namespace TestService
             return wetaherData;
         }
 
+        /// <summary>
+        /// Parameters is null.
+        /// </summary>
         [Test]
         public void Check_ParamNull_NullReferenceException()
         {
@@ -92,6 +104,9 @@ namespace TestService
             Assert.Throws<ArgumentNullException>(() => new OpenWeatherMapService(null, mockHttp));
         }
 
+        /// <summary>
+        /// No parameters.
+        /// </summary>
         [Test]
         public void Check_ParamNot_Exception()
         {
@@ -101,6 +116,9 @@ namespace TestService
             Assert.AreEqual("Not parameters.", ex.Message);
         }
 
+        /// <summary>
+        /// Incorrect answer. Error json conversion.
+        /// </summary>
         [Test]
         public void Http_Request_WrongResponseJsonException()
         {
@@ -111,6 +129,9 @@ namespace TestService
             Assert.ThrowsAsync<JsonException>(service.GetWeatherAsync);
         }
 
+        /// <summary>
+        /// Server error 503. Repeat requests for a certain time then cause interruption with a token. !!!
+        /// </summary>
         [Test]
         public void Http_Request_Status503()
         {
@@ -132,6 +153,9 @@ namespace TestService
             Assert.AreEqual("Response status code does not indicate success: 503 (Service Unavailable).", ex.Message);
         }
 
+        /// <summary>
+        /// Server error 401. Repeat requests for a certain time then cause interruption with a token. !!!
+        /// </summary>
         [Test]
         public void Http_Request_Status401()
         {
@@ -159,6 +183,9 @@ namespace TestService
             Assert.AreEqual("Response status code does not indicate success: 401 (Unauthorized).", ex.Message);
         }
 
+        /// <summary>
+        /// Raise on exception.
+        /// </summary>
         [Test]
         public void Http_Request_Exception()
         {
@@ -169,6 +196,9 @@ namespace TestService
             Assert.ThrowsAsync<Exception>(service.GetWeatherAsync);
         }
 
+        /// <summary>
+        /// Write log.
+        /// </summary>
         [Test]
         public void Http_RequestException_WriteLogger()
         {
@@ -176,11 +206,14 @@ namespace TestService
 
             var logger = Mock.Of<ILogger<OpenWeatherMapService>>();
 
-            var service = new OpenWeatherMapService(logger, parm, mockHttp);
+            var service = new OpenWeatherMapService(parm, handler: mockHttp, logger: logger);
 
             Assert.ThrowsAsync<Exception>(service.GetWeatherAsync);
         }
 
+        /// <summary>
+        /// !!!
+        /// </summary>
         [Test]
         public void Http_Request_TimeOut()
         {
@@ -196,6 +229,10 @@ namespace TestService
             Assert.ThrowsAsync<InvalidOperationException>(service.GetWeatherAsync);
         }
 
+        /// <summary>
+        /// Successful request.
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task Http_Request_Success()
         {

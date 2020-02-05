@@ -58,8 +58,8 @@ namespace ConsoleAPI
               //}))
               //  .AddLogging(cfg => cfg.Services.AddSingleton<ILogger>(x => new LoggerWork(loggerContext)))
               //.AddSingleton<ILogger>(x=> new LoggerWork(loggerContext)) // GisMeteo service.
-              .AddSingleton<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)) // OpenWeatherMap service.
-                                                                                                                                           //.AddSingleton<IWeatherService, GisMeteoService>() // GisMeteo service.
+              .AddSingleton<IWeatherService>(x => new OpenWeatherMapService(parm, logger: x.GetRequiredService<ILogger<OpenWeatherMapService>>())) // OpenWeatherMap service.
+                                                                                                                                                   //.AddSingleton<IWeatherService, GisMeteoService>() // GisMeteo service.
 
            .BuildServiceProvider();
         }
@@ -110,22 +110,22 @@ namespace ConsoleAPI
                         break;
 
                     case "/g":
-                        if (PostgreContext == null)
-                        {
-                            string connectStr = Configuration.GetConnectionString("DefaultConnection");
-                            PostgreContext = new GoalContext(connectStr);
-                        }
+                        //if (PostgreContext == null)
+                        //{
+                        //    string connectStr = Configuration.GetConnectionString("DefaultConnection");
+                        //    PostgreContext = new GoalContext(connectStr);
+                        //}
 
-                        if (Goal == null)
-                        {
-                            Goal = new GoalWork(PostgreContext);
-                        }
+                        //if (Goal == null)
+                        //{
+                        //    Goal = new GoalWork(PostgreContext);
+                        //}
 
-                        List<GoalModel> goalItems = Goal.GetGoals();
+                        //List<GoalModel> goalItems = Goal.GetGoals();
 
-                        string goalJson = JsonSerializer.Serialize(goalItems);
-                        Console.WriteLine(goalJson);
-                        break;
+                        //string goalJson = JsonSerializer.Serialize(goalItems);
+                        //Console.WriteLine(goalJson);
+                        //break;
 
                     case "/lw":
 

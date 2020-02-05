@@ -18,6 +18,7 @@ using SmartHouseAPI.Helpers;
 using SmartHouse.Service.Weather.OpenWeatherMap;
 using SmartHouse.Domain.Interfaces;
 using Bogus;
+using SmartHouse.Domain.Core;
 
 namespace SmartHouseAPI
 {
@@ -80,12 +81,14 @@ namespace SmartHouseAPI
                 });
             //services.AddControllersWithViews();
 
-            services.AddTransient<IGoalWork, GoalWork>();
+            // services.AddTransient<IGoalWork<GoalWork>, GoalWork>();
+
+            services.AddTransient<IGoalWork<GoalModel>, GoalWork>();
 
             IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
 
             // OpenWeatherMap service.
-            services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)); 
+            services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(parm, logger: x.GetRequiredService<ILogger<OpenWeatherMapService>>()));
             //services.AddTransient<IWeatherService, GisMeteoService>(); // GisMeteo service.
             
             services.AddSingleton(loggerContext);

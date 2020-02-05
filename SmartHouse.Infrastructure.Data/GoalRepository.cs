@@ -33,7 +33,13 @@ namespace SmartHouse.Infrastructure.Data
         {
             var goal = db.Goals.Find(id);
             if (goal != null)
+            {
                 db.Remove(goal);
+            }
+            else
+            {
+                throw new Exception($"Record with id:{id} not found");
+            }
         }
 
         public void Update(GoalModel data)

@@ -19,11 +19,16 @@ namespace SmartHouse.Domain.Core
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime DateCreate { get; set; } = DateTime.UtcNow;
         [Required]
-        [Column("Date_Create", Order = 3)]
+        [Column("Date_Update", Order = 3)]
         public DateTime DateUpdate { get; set; }
         [Required]
-        [Column("Date_Create", Order = 4)]
+        [Column("Done", Order = 4)]
         public bool Done { get; set; }
+
+        public GoalModel()
+        {
+
+        }
 
         public GoalModel(string name)
         {

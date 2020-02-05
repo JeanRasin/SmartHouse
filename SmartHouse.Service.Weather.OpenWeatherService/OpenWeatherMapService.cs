@@ -15,17 +15,17 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 {
     public class OpenWeatherMapService : IWeatherService, IDisposable
     {
-        protected readonly string url;
-        protected readonly string city;
-        protected readonly string api;
+        protected readonly (string url, string city, string api) data;
+
         protected readonly ILogger<OpenWeatherMapService> logger;
         protected readonly HttpClient client;
 
         protected readonly string[] keys = { "city", "api", "url" };
 
-        public OpenWeatherMapService(ILogger<OpenWeatherMapService> logger, IDictionary<string, string> parm, HttpMessageHandler handler = null)
+        public OpenWeatherMapService(IDictionary<string, string> parm, HttpMessageHandler handler = null, ILogger<OpenWeatherMapService> logger = null)
         {
-            //if (!keys.All(key => parm.ContainsKey(key)))
+            parm = new Dictionary<string, string>(parm, StringComparer.OrdinalIgnoreCase);
+
             if (!keys.All(key => parm.Any(s => s.Key.ToLower() == key)))
             {
                 throw new Exception("Not parameters.");
@@ -40,20 +40,18 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 client = new HttpClient(handler);
             }
 
-            url = parm["url"];
-            city = parm["city"];
-            api = parm["api"];
+            data = (parm["url"], parm["city"], parm["api"]);
 
-            client.BaseAddress = new Uri(url);
+            client.BaseAddress = new Uri(data.url);
             client.Timeout = TimeSpan.FromMilliseconds(1000);
 
             this.logger = logger;
         }
 
-        public OpenWeatherMapService(Dictionary<string, string> parm, HttpMessageHandler handler = null) : this(null, parm, handler)
-        {
+        //public OpenWeatherMapService(Dictionary<string, string> parm, HttpMessageHandler handler = null) : this(null, parm, handler)
+        //{
 
-        }
+        //}
 
         public async Task<WeatherModel> GetWeatherAsync()
         {
@@ -70,7 +68,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 
             try
             {
-                var response = await client.GetAsync($"/data/2.5/weather?q={city}&APPID={api}&units=metric");
+                var response = await client.GetAsync($"/data/2.5/weather?q={data.city}&APPID={data.api}&units=metric");
                 response.EnsureSuccessStatusCode();
 
                 string requestJson = JsonSerializer.Serialize(response.RequestMessage);
@@ -106,11 +104,6 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 }
 
                 await GetWeatherAsync(token);
-            }
-            catch (JsonException ex)
-            {
-                LogErrorWrite(ex);
-                throw ex;
             }
             catch (OperationCanceledException ex)
             {

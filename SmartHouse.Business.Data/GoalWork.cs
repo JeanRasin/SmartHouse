@@ -15,38 +15,37 @@ namespace SmartHouse.Business.Data
         {
             repository = new GoalRepository(context);
         }
-        public List<GoalModel> GetGoalAll()
+        public IEnumerable<GoalModel> GetGoalAll()
         {
-            return repository
+            var items = repository
                   .GetGoals()
-                  .OrderByDescending(p=>p.DateUpdate)
-                  .ToList();
+                  .OrderByDescending(p => p.DateUpdate);
+            return items;
         }
 
-        public List<GoalModel> GetGoals()
+        public IEnumerable<GoalModel> GetGoals()
         {
-            return repository
+            var items = repository
                   .GetGoals()
                   .Where(p => p.Done == false)
-                  .OrderByDescending(p => p.DateUpdate)
-                  .ToList();
+                  .OrderByDescending(p => p.DateUpdate);
+
+            return items;
         }
 
         public GoalModel GetGoal(Guid id)
         {
-            //GoalModel item = repository
-            //      .GetGoals()
-            //      .Where(p => p.Id == id)
-            //      .Single();
-
-            return repository.GetGoal(id);
+            var item = repository.GetGoal(id);
+            return item;
         }
 
-        public void Create(string name)
+        public GoalModel Create(string name)
         {
             var item = new GoalModel(name);
             repository.Create(item);
             repository.Save();
+
+            return item;
         }
 
         public void Update(GoalModel goal)
@@ -71,6 +70,7 @@ namespace SmartHouse.Business.Data
             item.Done = true;
 
             repository.Update(item);
+            repository.Save();
         }
 
         #region dispose
