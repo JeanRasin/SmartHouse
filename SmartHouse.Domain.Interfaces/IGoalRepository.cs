@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using SmartHouse.Domain.Core;
 
 namespace SmartHouse.Domain.Interfaces
 {
-    public interface IGoalRepository : IDisposable
+    public interface IGoalRepository<T> : IDisposable where T: class
     {
-        IEnumerable<GoalModel> GetGoals();
+        IEnumerable<T> GetGoals();
+        T GetGoal(Guid id);
+        void Create(T data);
+        void Remove(Guid id);
+        void Update(T data);
         void Save();
     }
 }

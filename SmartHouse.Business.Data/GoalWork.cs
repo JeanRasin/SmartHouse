@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SmartHouse.Business.Data
 {
-    public class GoalWork : IGoalWork, IDisposable
+    public class GoalWork : IGoalWork<GoalModel>
     {
         private readonly GoalRepository repository;
 
@@ -15,10 +15,62 @@ namespace SmartHouse.Business.Data
         {
             repository = new GoalRepository(context);
         }
+        public List<GoalModel> GetGoalAll()
+        {
+            return repository
+                  .GetGoals()
+                  .OrderByDescending(p=>p.DateUpdate)
+                  .ToList();
+        }
 
         public List<GoalModel> GetGoals()
         {
-            return repository.GetGoals().ToList();
+            return repository
+                  .GetGoals()
+                  .Where(p => p.Done == false)
+                  .OrderByDescending(p => p.DateUpdate)
+                  .ToList();
+        }
+
+        public GoalModel GetGoal(Guid id)
+        {
+            //GoalModel item = repository
+            //      .GetGoals()
+            //      .Where(p => p.Id == id)
+            //      .Single();
+
+            return repository.GetGoal(id);
+        }
+
+        public void Create(string name)
+        {
+            var item = new GoalModel(name);
+            repository.Create(item);
+            repository.Save();
+        }
+
+        public void Update(GoalModel goal)
+        {
+            repository.Update(goal);
+            repository.Save();
+        }
+
+        public void Delete(Guid id)
+        {
+            repository.Remove(id);
+            repository.Save();
+        }
+
+        public void Done(Guid id)
+        {
+            GoalModel item = repository
+                 .GetGoals()
+                 .Where(p => p.Id == id)
+                 .Single();
+
+            item.Done = true;
+
+            repository.Update(item);
         }
 
         #region dispose
@@ -41,6 +93,7 @@ namespace SmartHouse.Business.Data
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         #endregion
     }
 }

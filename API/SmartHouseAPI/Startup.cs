@@ -67,19 +67,28 @@ namespace SmartHouseAPI
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
 
+            MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+            ILoggerContext loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
+
             // добавляем контекст MobileContext в качестве сервиса в приложение
-            services.AddDbContext<GoalContext>(options =>
-                options.UseNpgsql(connection));
+            services.AddDbContext<GoalContext>(options => {
+                options.UseNpgsql(connection);
+
+                //ILoggerFactory loggerFactory = Helpers.LoggerExtensions.AddContext(loggerContext);
+
+               //options.UseLoggerFactory(loggerFactory);
+                });
             //services.AddControllersWithViews();
 
             services.AddTransient<IGoalWork, GoalWork>();
 
             IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
-            services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)); // OpenWeatherMap service.
-            //services.AddTransient<IWeatherService, GisMeteoService>(); // GisMeteo service.
 
-            MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
-            services.AddSingleton<ILoggerContext>(x => new LoggerContext(logConfig.Connection, logConfig.DbName));
+            // OpenWeatherMap service.
+            services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)); 
+            //services.AddTransient<IWeatherService, GisMeteoService>(); // GisMeteo service.
+            
+            services.AddSingleton(loggerContext);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

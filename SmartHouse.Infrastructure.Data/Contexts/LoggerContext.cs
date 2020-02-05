@@ -10,11 +10,6 @@ using System.Threading.Tasks;
 
 namespace SmartHouse.Infrastructure.Data
 {
-    public interface ILoggerContext//todo: перенести в другое место
-    {
-        IMongoCollection<T> DbSet<T>() where T : MongoBaseModel;
-    }
-
     public class LoggerContext : ILoggerContext
     {
         public readonly MongoClient mongoClient;

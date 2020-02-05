@@ -19,17 +19,22 @@ using System.Threading.Tasks;
 
 namespace ConsoleAPI
 {
-    class Program
+
+    class Work
     {
-        public static IWeatherService WeatherService { get; set; }
-        public static WeatherWork Weather { get; set; }
+        public IWeatherService WeatherService { get; set; }
+        public WeatherWork Weather { get; set; }
 
-        public static GoalContext PostgreContext { get; set; }
-        public static GoalWork Goal { get; set; }
+        public GoalContext PostgreContext { get; set; }
+        public GoalWork Goal { get; set; }
 
-        public static LoggerWork Logger { get; set; }
+        public LoggerWork Logger { get; set; }
 
-        static async Task Main(string[] args)
+        public ServiceProvider ServiceProvider { get; set; }
+
+        public IConfigurationRoot Configuration { get; set; }
+
+        public Work()
         {
             string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -39,13 +44,13 @@ namespace ConsoleAPI
                 .AddJsonFile($"appsettings.{environmentName}.json", true, true)
                 .AddEnvironmentVariables();
 
-            var configuration = builder.Build();
+            Configuration = builder.Build();
 
             //var weatherCachingTime = configuration["WeatherCachingTime"];
 
-            IDictionary<string, string> parm = configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
+            IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
 
-            var serviceProvider = new ServiceCollection()
+            ServiceProvider = new ServiceCollection()
             .AddLogging()
               //.AddLogging(cfg => cfg.Services.AddSingleton<ILogger>(x => {
               //    // x.GetService<ILoggerFactory>().AddContext(loggerContext);
@@ -57,11 +62,11 @@ namespace ConsoleAPI
                                                                                                                                            //.AddSingleton<IWeatherService, GisMeteoService>() // GisMeteo service.
 
            .BuildServiceProvider();
+        }
 
 
-
-            Console.WriteLine("Hello.");
-
+       public async void DataAsync()
+        {
             string command;
             bool quitNow = false;
             while (!quitNow)
@@ -89,7 +94,7 @@ namespace ConsoleAPI
 
                         if (WeatherService == null)
                         {
-                            WeatherService = serviceProvider.GetService<IWeatherService>();
+                            WeatherService = ServiceProvider.GetService<IWeatherService>();
                         }
 
                         if (Weather == null)
@@ -107,7 +112,7 @@ namespace ConsoleAPI
                     case "/g":
                         if (PostgreContext == null)
                         {
-                            string connectStr = configuration.GetConnectionString("DefaultConnection");
+                            string connectStr = Configuration.GetConnectionString("DefaultConnection");
                             PostgreContext = new GoalContext(connectStr);
                         }
 
@@ -126,14 +131,14 @@ namespace ConsoleAPI
 
                         if (Logger == null)
                         {
-                            MongoDbLoggerConnectionConfig logConfig = configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+                            MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
                             var loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
 
-                            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+                            var loggerFactory = ServiceProvider.GetService<ILoggerFactory>();
                             loggerFactory.AddContext(loggerContext);
                             //  var logger = loggerFactory.CreateLogger("NewLogger");
 
-                            var loggerService = serviceProvider.GetService<ILogger>();
+                            var loggerService = ServiceProvider.GetService<ILogger>();
                             Logger = new LoggerWork(loggerContext);
                         }
 
@@ -152,14 +157,14 @@ namespace ConsoleAPI
                 {
                     if (Logger == null)
                     {
-                        MongoDbLoggerConnectionConfig logConfig = configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+                        MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
                         var loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
 
-                        var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+                        var loggerFactory = ServiceProvider.GetService<ILoggerFactory>();
                         loggerFactory.AddContext(loggerContext);
                         //  var logger = loggerFactory.CreateLogger("NewLogger");
 
-                        var loggerService = serviceProvider.GetService<ILogger>();
+                        var loggerService = ServiceProvider.GetService<ILogger>();
                         Logger = new LoggerWork(loggerContext);
                     }
 
@@ -168,7 +173,57 @@ namespace ConsoleAPI
                     Console.WriteLine(json);
                 }
             }
+        }
 
+    }
+
+    class Program
+    {
+        //public static IWeatherService WeatherService { get; set; }
+        //public static WeatherWork Weather { get; set; }
+
+        //public static GoalContext PostgreContext { get; set; }
+        //public static GoalWork Goal { get; set; }
+
+        //public static LoggerWork Logger { get; set; }
+
+        static async Task Main(string[] args)
+        {
+           // string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+           // var builder = new ConfigurationBuilder()
+           //     .SetBasePath(Directory.GetCurrentDirectory())
+           //     .AddJsonFile("appsettings.json")
+           //     .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+           //     .AddEnvironmentVariables();
+
+           // var configuration = builder.Build();
+
+           // //var weatherCachingTime = configuration["WeatherCachingTime"];
+
+           // IDictionary<string, string> parm = configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
+
+           // var serviceProvider = new ServiceCollection()
+           // .AddLogging()
+           //   //.AddLogging(cfg => cfg.Services.AddSingleton<ILogger>(x => {
+           //   //    // x.GetService<ILoggerFactory>().AddContext(loggerContext);
+           //   //    return new LoggerWork(loggerContext);
+           //   //}))
+           //   //  .AddLogging(cfg => cfg.Services.AddSingleton<ILogger>(x => new LoggerWork(loggerContext)))
+           //   //.AddSingleton<ILogger>(x=> new LoggerWork(loggerContext)) // GisMeteo service.
+           //   .AddSingleton<IWeatherService>(x => new OpenWeatherMapService(x.GetRequiredService<ILogger<OpenWeatherMapService>>(), parm)) // OpenWeatherMap service.
+           //                                                                                                                                //.AddSingleton<IWeatherService, GisMeteoService>() // GisMeteo service.
+
+           //.BuildServiceProvider();
+
+            Console.WriteLine("Hello.");
+
+          
+
+
+            var work = new Work();
+
+            work.DataAsync();
 
             //
             //var logJson = JsonSerializer.Serialize(logItems);

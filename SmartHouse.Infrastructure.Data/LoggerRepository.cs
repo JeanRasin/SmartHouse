@@ -20,16 +20,16 @@ namespace SmartHouse.Infrastructure.Data
 
         public bool Create(T model)
         {
-            try
-            {
-                model.Id = Guid.NewGuid().ToString("N");//.Replace("-", "");
+            //try
+            //{
+                model.Id = Guid.NewGuid().ToString("N");
                 Collection.InsertOne(model);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            //}
+            //catch (Exception)
+            //{
+            //    return false;
+            //}
         }
 
         //public T Find(object id)

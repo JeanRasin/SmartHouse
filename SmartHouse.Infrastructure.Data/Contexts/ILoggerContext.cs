@@ -3,7 +3,7 @@ using SmartHouse.Domain.Core;
 
 namespace SmartHouse.Infrastructure.Data
 {
-    public interface ILoggerContext//todo: перенести в другое место
+    public interface ILoggerContext
     {
         IMongoCollection<T> DbSet<T>() where T : MongoBaseModel;
     }
