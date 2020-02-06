@@ -40,7 +40,7 @@ namespace SmartHouse.Infrastructure.Data
                 .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                 .RuleFor(o => o.Done, f => f.Random.Bool());
 
-            List<GoalModel> goalModel = goalModelFakes.Generate(5);
+            List<GoalModel> goalModel = goalModelFakes.Generate(40);
 
             modelBuilder
                 .Entity<GoalModel>()
