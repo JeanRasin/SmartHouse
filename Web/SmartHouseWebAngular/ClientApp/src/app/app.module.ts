@@ -41,6 +41,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree'
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -48,6 +50,8 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { WeatherComponent } from './weather/weather.component';
 import { LoggerComponent } from './logger/logger.component'
+import { GoalComponent } from './goal/goal.component'
+import { WindowDialogComponent } from './window-dialog/window-dialog.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +61,9 @@ import { LoggerComponent } from './logger/logger.component'
     CounterComponent,
     FetchDataComponent,
     WeatherComponent,
-    LoggerComponent
+    LoggerComponent,
+    GoalComponent,
+    WindowDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -99,15 +105,20 @@ import { LoggerComponent } from './logger/logger.component'
     MatTreeModule,
     HttpClientModule,
     FormsModule,
+    FontAwesomeModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'weather', component: WeatherComponent },
-      { path: 'logger', component: LoggerComponent }
+      { path: 'logger', component: LoggerComponent },
+      { path: 'goal', component: GoalComponent },
     ])
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [//todo:???
+    WindowDialogComponent
+  ]
 })
 export class AppModule { }

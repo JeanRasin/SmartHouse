@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+
+<mat-dialog-content>
+  <p>
+    {{data.description}}
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="exit()">
+    Close
+  </button>
+  <button class="mat-raised-button" (click)="ok()">
+    Ok
+  </button>
+</mat-dialog-actions>
