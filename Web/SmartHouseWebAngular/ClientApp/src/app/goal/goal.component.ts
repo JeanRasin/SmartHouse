@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef, MatButtonToggleGroup } from '@angular/material';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faTrashAlt, faCheckCircle, faCircle, IconDefinition } from '@fortawesome/free-solid-svg-icons';
@@ -27,14 +27,24 @@ export class GoalComponent implements OnInit {
   displayedColumns: string[] = ['check', 'name', 'dateCreate', 'remove'];
   dataSource: MatTableDataSource<Goal>;
 
+  @ViewChild(MatButtonToggleGroup, { static: true }) group: MatButtonToggleGroup;
+ // group.   this.group.value = 'all';
+  //@ViewChildren(MatButtonToggle) toggles: QueryList<MatButtonToggle>;
+
+  //toggleGroup: {
+  //  value: 'all'
+  //}
+
   faTrashAlt = faTrashAlt;
   faCheckCircle = faCheckCircle;
   faCircle = faCircle;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  //@ViewChild(MatPaginator, { static: true })
+  paginator: MatPaginator;// = 'goals';
   pageSize: number = 10;
 
   ngOnInit() {
+    this.group.value = 'goals';
     this.httpService.getGoal().subscribe((data: Goal[]) => {
       //console.log(data);
       this.dataSource = new MatTableDataSource<Goal>(data);
@@ -45,10 +55,35 @@ export class GoalComponent implements OnInit {
     });
   }
 
+  onValChange(value) {
+    switch (value) {
+      case 'goals':
+        this.httpService.getGoal().subscribe((data: Goal[]) => {
+          //console.log(data);
+          this.dataSource = new MatTableDataSource<Goal>(data);
+          this.dataSource.paginator = this.paginator;
+        }, error => {
+          console.log(error);
+          // this.error = error;
+        });
+        break
+      case 'all':
+        this.httpService.getGoalAll().subscribe((data: Goal[]) => {
+          //console.log(data);
+          this.dataSource = new MatTableDataSource<Goal>(data);
+          this.dataSource.paginator = this.paginator;
+        }, error => {
+          console.log(error);
+          // this.error = error;
+        });
+        break
+    }
+  }
+
   onDelete(id: string) {
     let dialogConfig: MatDialogConfig = {
       width: '400px',
-      height: '200px',
+      height: '180px',
       data: DialogType.Delete
     };
 
@@ -91,7 +126,9 @@ export class GoalComponent implements OnInit {
   onCreate() {
     const dialogConfig: MatDialogConfig = {
       width: '450px',
-      height: '300px',
+      height: '260px',
+      autoFocus: true,
+     // disableClose :true,
       data: {
         type: OperationEnum.Create,
         name: null
@@ -110,7 +147,7 @@ export class GoalComponent implements OnInit {
   onUpdate(id: string, done: boolean) {
     let dialogConfig: MatDialogConfig = {
       width: '450px',
-      height: '300px',
+      height: '260px',
       data: {
         type: OperationEnum.Update,
         name: null,

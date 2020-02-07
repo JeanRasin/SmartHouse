@@ -23,6 +23,10 @@ export class HttpService {
     return this.http.get(`${this.url}/goal`);
   }
 
+  getGoalAll() {
+    return this.http.get(`${this.url}/goal/getAll`);
+  }
+
   deleteGoal(id: string) {
     return this.http.delete(`${this.url}/goal/${id}`);
   }

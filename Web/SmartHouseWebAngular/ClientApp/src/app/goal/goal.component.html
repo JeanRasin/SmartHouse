@@ -2,47 +2,54 @@
   <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
 </button>
   <fa-icon [icon]="faCoffee"></fa-icon>-->
-<button mat-raised-button color="primary" (click)="onCreate()">
-  Create goal
-</button>
-<!--{{faCheckCircle.icon["IconPathData"]}}-->
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <ng-container matColumnDef="check">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element">
-        <!----><button mat-mini-fab color="primary" focusable="false">
+
+  <p>
+    <mat-button-toggle-group name="Goal table" aria-label="Goal table" #toggleGroup="matButtonToggleGroup">
+      <mat-button-toggle value="goals" (change)="onValChange($event.value)">Goals</mat-button-toggle>
+      <mat-button-toggle value="all" (change)="onValChange($event.value)">All</mat-button-toggle>
+    </mat-button-toggle-group>
+    <button mat-raised-button color="primary" (click)="onCreate()">
+      Add
+    </button>
+<p>
+  <!--{{faCheckCircle.icon["IconPathData"]}}-->
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="check">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <!--<button mat-mini-fab color="primary" focusable="false"></button>-->
           <!--(click)="check(element.id)"-->
           <!--<fa-icon [icon]=['far','faCheckCircle']></fa-icon>-->
-          <fa-icon fontSet="far" [icon]="element.done?faCheckCircle:faCircle" size="lg" (click)="onCheck(element.id, element.done)"></fa-icon>
-        </button>
-      </td>
-    </ng-container>
+          <fa-icon fontSet="far" fa-check-circle [icon]="element.done?faCheckCircle:faCircle" size="2x" (click)="onCheck(element.id, element.done)"></fa-icon>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element" (dblclick)="onUpdate(element.id, element.done)">{{element.name}} </td>
-    </ng-container>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="dateCreate">
-      <th mat-header-cell *matHeaderCellDef> Date create </th>
-      <td mat-cell *matCellDef="let element"> {{element.dateCreate | date:"dd.MM.yyyy"}} </td>
-    </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element" (dblclick)="onUpdate(element.id, element.done)">{{element.name}} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="remove">
-      <th mat-header-cell *matHeaderCellDef> Remove </th>
-      <td mat-cell *matCellDef="let element">
-        <!-- <td mat-cell *matCellDef="let element;  let j = index;"> <i class="fas fa-trash-alt"></i>
-        <button mat-raised-button color="warn" focusable="false" (click)="deleteTicket(j)">-->
-        <button mat-raised-button color="warn" focusable="false" (click)="onDelete(element.id)">
-          <fa-icon [icon]="faTrashAlt"></fa-icon>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="dateCreate">
+        <th mat-header-cell *matHeaderCellDef> Date create </th>
+        <td mat-cell *matCellDef="let element"> {{element.dateCreate | date:"dd.MM.yyyy"}} </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <ng-container matColumnDef="remove">
+        <th mat-header-cell *matHeaderCellDef> Remove </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- <td mat-cell *matCellDef="let element;  let j = index;"> <i class="fas fa-trash-alt"></i>
+          <button mat-raised-button color="warn" focusable="false" (click)="deleteTicket(j)">-->
+          <!--<button mat-raised-button color="warn" focusable="false" (click)="onDelete(element.id)"></button>-->
+            <fa-icon fa-trash-alt fontSet="far" [icon]="faTrashAlt" size="lg" (click)="onDelete(element.id)"></fa-icon>
+          
+        </td>
+      </ng-container>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="pageSize" showFirstLastButtons></mat-paginator>
-</div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="pageSize" showFirstLastButtons></mat-paginator>
+  </div>

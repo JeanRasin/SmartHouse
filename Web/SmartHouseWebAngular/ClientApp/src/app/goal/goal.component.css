@@ -1,2 +1,22 @@
-﻿body {
+table {
+  width: 100%;
+}
+
+button {
+  margin: 16px 8px;
+}
+
+mat-button-toggle-group
+{
+    float:right;
+}
+
+fa-icon[fa-check-circle] {
+  color: #673ab7;
+  cursor: pointer;
+}
+
+fa-icon[fa-trash-alt] {
+  color: #f44336;
+  cursor:pointer;
 }

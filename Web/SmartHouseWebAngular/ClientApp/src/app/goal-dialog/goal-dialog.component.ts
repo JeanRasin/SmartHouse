@@ -37,11 +37,11 @@ export class GoalDialogComponent implements OnInit {
     }
 
     this.name = data.name;
-    this.done = data.done;
+    //this.done = data.done;
 
     this.form = fb.group({
       name: [this.name, Validators.required],
-      done: [this.done],
+     // done: [this.done],
     });
   }
 
