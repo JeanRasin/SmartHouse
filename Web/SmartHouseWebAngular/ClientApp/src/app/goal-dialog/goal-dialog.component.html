@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+
+<mat-dialog-content [formGroup]="form">
+  <p>
+    {{data.description}}
+  </p>
+  <mat-form-field>
+    <!--<input matInput min="0" max="100" required placeholder="Text goal" formControlName="goalTask" value="{{goalTask}}">
+  <input type="checkbox" value="{{done}}" />-->
+
+    <mat-checkbox matInput class="example-margin" formControlName="done" [checked]="done">
+      Performed
+    </mat-checkbox>
+
+    <textarea matInput min="0" max="100" required placeholder="Text goal" formControlName="name" value="{{name}}"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onExit()">Close</button>
+  <button mat-button  color="primary" (click)="onSave()">Save</button>
+
+  <!--<button class="mat-raised-button" (click)="onExit()">
+    Close
+  </button>
+  <button class="mat-raised-button" (click)="onSave()">
+    Save
+  </button>-->
+</mat-dialog-actions>

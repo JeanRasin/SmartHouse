@@ -27,7 +27,16 @@ export class HttpService {
     return this.http.delete(`${this.url}/goal/${id}`);
   }
 
-  checkGoal(id: string) {
-    return this.http.put(`${this.url}/goal/done/${id}`, null);
+  checkGoal(id: string, done: boolean) {
+  //  return this.http.put(`${this.url}/goal/done/${id}`, { id: id, done: done }); //Todo: verify
+    return this.http.put(`${this.url}/goal/done/`, { id: id, done: done });
+  }
+
+  createGoal(name: string) {
+    return this.http.post(`${this.url}/goal/`, { name: name });
+  }
+
+  editGoal(name: string) {
+    return this.http.put(`${this.url}/goal/`, { name: name });
   }
 }

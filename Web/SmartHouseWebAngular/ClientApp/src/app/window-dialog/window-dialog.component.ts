@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { DialogData } from '../DialogData';
+import { DialogType } from '../DialogTypeEnum';
 
 @Component({//todo:@ ???
   selector: 'window-dialog',
@@ -23,17 +24,17 @@ export class WindowDialogComponent {
 
   constructor(private dialogRef: MatDialogRef<WindowDialogComponent>, @Inject(MAT_DIALOG_DATA) data: DialogType) {
     switch (data) {
-      case DialogType.Delete: this.data = this.masTexts[0];
-      case DialogType.Uncheck: this.data = this.masTexts[1];
-  }
-      
+      case DialogType.Delete: this.data = this.masTexts[0]; break;
+      case DialogType.Uncheck: this.data = this.masTexts[1]; break;
+    }
+
   }
 
-  ok() {
+  onOk() {
     this.dialogRef.close(true);
   }
 
-  exit() {
+  onExit() {
     this.dialogRef.close(false);
   }
-} 
+}

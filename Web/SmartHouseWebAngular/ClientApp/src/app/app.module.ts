@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -52,6 +52,7 @@ import { WeatherComponent } from './weather/weather.component';
 import { LoggerComponent } from './logger/logger.component'
 import { GoalComponent } from './goal/goal.component'
 import { WindowDialogComponent } from './window-dialog/window-dialog.component';
+import { GoalDialogComponent } from './goal-dialog/goal-dialog.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { WindowDialogComponent } from './window-dialog/window-dialog.component';
     WeatherComponent,
     LoggerComponent,
     GoalComponent,
-    WindowDialogComponent
+    WindowDialogComponent,
+    GoalDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -105,6 +107,7 @@ import { WindowDialogComponent } from './window-dialog/window-dialog.component';
     MatTreeModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     FontAwesomeModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -118,7 +121,8 @@ import { WindowDialogComponent } from './window-dialog/window-dialog.component';
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [//todo:???
-    WindowDialogComponent
+    WindowDialogComponent,
+    GoalDialogComponent
   ]
 })
 export class AppModule { }

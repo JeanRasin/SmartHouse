@@ -32,7 +32,6 @@ export class GoalComponent implements OnInit {
   pageSize: number = 10;
 
   ngOnInit() {
-
     this.httpService.getGoal().subscribe((data: Goal[]) => {
 
       console.log(data);
@@ -45,7 +44,7 @@ export class GoalComponent implements OnInit {
     });
   }
 
-  delete(id: string) {
+  onDelete(id: string) {
     // console.log('delete');
 
     const dialogConfig = new MatDialogConfig();
@@ -84,9 +83,9 @@ export class GoalComponent implements OnInit {
     });
   }
 
-  check(id: string) {
+  onCheck(id: string, done: boolean) {
     console.log('check');
-    this.httpService.checkGoal(id).subscribe(() => {
+    this.httpService.checkGoal(id, done).subscribe(() => {
 
       let data = this.dataSource.data.filter(d => d.id === id)[0];
       data.done = true;

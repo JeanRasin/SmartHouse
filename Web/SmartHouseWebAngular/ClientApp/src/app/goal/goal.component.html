@@ -2,8 +2,8 @@
   <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
 </button>
   <fa-icon [icon]="faCoffee"></fa-icon>-->
-<button mat-raised-button color="primary" (click)="removeSelectedRows()">
-  Remove Selected Rows
+<button mat-raised-button color="primary" (click)="onCreate()">
+  Create goal
 </button>
 <!--{{faCheckCircle.icon["IconPathData"]}}-->
 <div class="mat-elevation-z8">
@@ -14,14 +14,14 @@
         <!----><button mat-mini-fab color="primary" focusable="false">
           <!--(click)="check(element.id)"-->
           <!--<fa-icon [icon]=['far','faCheckCircle']></fa-icon>-->
-          <fa-icon fontSet="far" [icon]="element.done?faCheckCircle:faCircle" size="lg" (click)="check(element.id)"></fa-icon>
+          <fa-icon fontSet="far" [icon]="element.done?faCheckCircle:faCircle" size="lg" (click)="onCheck(element.id, element.done)"></fa-icon>
         </button>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element">{{element.name}} </td>
+      <td mat-cell *matCellDef="let element" (dblclick)="onUpdate(element.id, element.done)">{{element.name}} </td>
     </ng-container>
 
     <ng-container matColumnDef="dateCreate">
@@ -34,7 +34,7 @@
       <td mat-cell *matCellDef="let element">
         <!-- <td mat-cell *matCellDef="let element;  let j = index;"> <i class="fas fa-trash-alt"></i>
         <button mat-raised-button color="warn" focusable="false" (click)="deleteTicket(j)">-->
-        <button mat-raised-button color="warn" focusable="false" (click)="delete(element.id)">
+        <button mat-raised-button color="warn" focusable="false" (click)="onDelete(element.id)">
           <fa-icon [icon]="faTrashAlt"></fa-icon>
         </button>
       </td>
