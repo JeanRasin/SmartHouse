@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -46,26 +46,31 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { WeatherComponent } from './weather/weather.component';
+//import { CounterComponent } from './counter/counter.component';
+//import { FetchDataComponent } from './fetch-data/fetch-data.component';
+//import { WeatherComponent } from './weather/weather.component';
 import { LoggerComponent } from './logger/logger.component'
-import { GoalComponent } from './goal/goal.component'
-import { WindowDialogComponent } from './window-dialog/window-dialog.component';
-import { GoalDialogComponent } from './goal-dialog/goal-dialog.component';
+import { SharedModule } from './shared';
+import { GoalModule } from './goal/goal.module';
+import { WeatherModule } from './weather/weather.module';
+//import { HomeModule } from './home/home.module';
+import { WindowDialogComponent } from './shared/window-dialog';
+
+const rootRouting: ModuleWithProviders = RouterModule.forRoot([], { useHash: true });
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
+    //HomeModule,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
-    WeatherComponent,
+    //CounterComponent,
+    //FetchDataComponent,
+   // WeatherComponent,
     LoggerComponent,
-    GoalComponent,
+   // GoalComponent,
     WindowDialogComponent,
-    GoalDialogComponent
+   // GoalDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -109,20 +114,24 @@ import { GoalDialogComponent } from './goal-dialog/goal-dialog.component';
     FormsModule,
     ReactiveFormsModule,
     FontAwesomeModule,
+    SharedModule,
+    GoalModule,
+    WeatherModule,
+   // HomeModule,
+    //RouterModule.forRoot([])
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'weather', component: WeatherComponent },
-      { path: 'logger', component: LoggerComponent },
-      { path: 'goal', component: GoalComponent },
+      //{ path: 'counter', component: CounterComponent },
+      //{ path: 'fetch-data', component: FetchDataComponent },
+      //{ path: 'weather', component: WeatherComponent },
+      //{ path: 'logger', component: LoggerComponent },
+     // { path: 'goal', m},  //, component: GoalModule 
     ])
   ],
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [//todo:???
     WindowDialogComponent,
-    GoalDialogComponent
   ]
 })
 export class AppModule { }

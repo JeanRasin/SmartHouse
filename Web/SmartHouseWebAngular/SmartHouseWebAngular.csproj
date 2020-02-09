@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Remove="ClientApp\src\app\EventId.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\GoalService.ts" />
   </ItemGroup>
 
   <ItemGroup>

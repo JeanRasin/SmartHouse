@@ -1,25 +1,24 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { WindowDialogComponent } from '../window-dialog/window-dialog.component';
-import { DialogData } from '../DialogData';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { OperationEnum } from '../OperationEnum'
+import { OperationEnum } from '../enums';
+import { DialogData } from '../models';
 
 @Component({
   selector: 'goal-dialog',
   templateUrl: './goal-dialog.component.html',
-  styleUrls: ['./goal-dialog.component.css']
+  styleUrls: ['./goal-dialog.component.scss']
 })
 export class GoalDialogComponent implements OnInit {
 
   masTexts: DialogData[] = [
     {
       title: 'Add goal',
-      description: 'Enter goal description'
+      description: 'Enter goal description.'
     },
     {
       title: 'Edit goal',
-      description: 'Enter goal description'
+      description: 'Enter goal description.'
     }
   ];
   data: DialogData;
@@ -28,7 +27,7 @@ export class GoalDialogComponent implements OnInit {
   form: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
+    fb: FormBuilder,
     private dialogRef: MatDialogRef<GoalDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any) {
     switch (data.type) {
@@ -37,11 +36,8 @@ export class GoalDialogComponent implements OnInit {
     }
 
     this.name = data.name;
-    //this.done = data.done;
-
     this.form = fb.group({
       name: [this.name, Validators.required],
-     // done: [this.done],
     });
   }
 
@@ -58,5 +54,4 @@ export class GoalDialogComponent implements OnInit {
   onExit() {
     this.dialogRef.close(null);
   }
-
 }

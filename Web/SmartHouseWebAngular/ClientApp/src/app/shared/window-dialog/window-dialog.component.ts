@@ -1,12 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { DialogData } from '../DialogData';
-import { DialogType } from '../DialogTypeEnum';
+import { DialogTypeEnum } from '../enums';
+import { DialogData } from '../models';
 
-@Component({//todo:@ ???
+@Component({
   selector: 'window-dialog',
   templateUrl: 'window-dialog.component.html',
-  styleUrls: ['window-dialog.component.css']
+  styleUrls: ['window-dialog.component.scss']
 })
 export class WindowDialogComponent {
 
@@ -22,12 +22,11 @@ export class WindowDialogComponent {
   ];
   data: DialogData;
 
-  constructor(private dialogRef: MatDialogRef<WindowDialogComponent>, @Inject(MAT_DIALOG_DATA) data: DialogType) {
+  constructor(private dialogRef: MatDialogRef<WindowDialogComponent>, @Inject(MAT_DIALOG_DATA) data: DialogTypeEnum) {
     switch (data) {
-      case DialogType.Delete: this.data = this.masTexts[0]; break;
-      case DialogType.Uncheck: this.data = this.masTexts[1]; break;
+      case DialogTypeEnum.Delete: this.data = this.masTexts[0]; break;
+      case DialogTypeEnum.Uncheck: this.data = this.masTexts[1]; break;
     }
-
   }
 
   onOk() {
