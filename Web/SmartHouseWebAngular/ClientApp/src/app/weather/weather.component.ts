@@ -1,27 +1,26 @@
 import { Component } from '@angular/core'
-
-import { HttpService } from 'src/app/http.service'
-import { Weather } from 'src/app/weather'
+import { Weather } from '../shared';
+import { HttpWeatherService } from '../shared/services';
 
 @Component({
   selector: 'weather-component',
   templateUrl: './weather.component.html',
-  providers: [HttpService]
+  providers: [HttpWeatherService]
 })
 export class WeatherComponent {
 
   weatherData: Weather;
   error: any = null;
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpWeatherService) { }
 
   ngOnInit() {
-    this.httpService.getWeather().subscribe((data: Weather) => {
-      console.log(data);
+    this.httpService.get().subscribe((data: Weather) => {
+      //console.log(data);
       this.weatherData = data;
     }, error => {
       this.error = error.message;
-      console.log(error);
+      //console.log(error);
     });
   }
 }

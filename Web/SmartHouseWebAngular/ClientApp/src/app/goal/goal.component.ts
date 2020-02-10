@@ -3,24 +3,24 @@ import { MatButtonToggleGroup, MatDialog, MatDialogConfig } from '@angular/mater
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { faCheckCircle, faCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { HttpService } from 'src/app/http.service';
 import { Goal } from '../shared/models';
 import { OperationEnum, DialogTypeEnum } from '../shared/enums';
 import { GoalDialogComponent } from '../shared/goal-helpers';
 import { WindowDialogComponent } from '../shared/window-dialog';
+import { HttpGoalService } from '../shared/services';
 
 @Component({
   selector: 'goal-component',
   templateUrl: './goal.component.html',
   styleUrls: ['./goal.component.scss'],
-  providers: [HttpService]
+  providers: [HttpGoalService]
 })
 export class GoalComponent implements OnInit {
   displayedColumns: string[] = ['check', 'name', 'dateCreate', 'remove'];
   dataSource: MatTableDataSource<Goal>;
 
   @ViewChild(MatButtonToggleGroup, { static: true }) group: MatButtonToggleGroup;
- 
+
   faTrashAlt = faTrashAlt;
   faCheckCircle = faCheckCircle;
   faCircle = faCircle;
@@ -28,11 +28,11 @@ export class GoalComponent implements OnInit {
   paginator: MatPaginator;
   pageSize: number = 5;
 
-  constructor(private httpService: HttpService, private dialog: MatDialog) { }
+  constructor(private httpService: HttpGoalService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.group.value = 'goals';
-    this.httpService.goal.get().subscribe((data: Goal[]) => {
+    this.httpService.get().subscribe((data: Goal[]) => {
       this.dataSource = new MatTableDataSource<Goal>(data);
       this.dataSource.paginator = this.paginator;
     }, error => {
@@ -43,7 +43,7 @@ export class GoalComponent implements OnInit {
   onValChange(value) {
     switch (value) {
       case 'goals':
-        this.httpService.goal.get().subscribe((data: Goal[]) => {
+        this.httpService.get().subscribe((data: Goal[]) => {
           this.dataSource = new MatTableDataSource<Goal>(data);
           this.dataSource.paginator = this.paginator;
         }, error => {
@@ -52,7 +52,7 @@ export class GoalComponent implements OnInit {
         });
         break
       case 'all':
-        this.httpService.goal.getAll().subscribe((data: Goal[]) => {
+        this.httpService.getAll().subscribe((data: Goal[]) => {
           this.dataSource = new MatTableDataSource<Goal>(data);
           this.dataSource.paginator = this.paginator;
         }, error => {
@@ -146,7 +146,7 @@ export class GoalComponent implements OnInit {
   }
 
   private delete(id: string) {
-    this.httpService.goal.delete(id).subscribe(() => {
+    this.httpService.delete(id).subscribe(() => {
       let index = this.dataSource.data.findIndex(d => d.id === id);
       this.dataSource.data.splice(index, 1);
       this.dataSource = new MatTableDataSource<Goal>(this.dataSource.data);
@@ -158,7 +158,7 @@ export class GoalComponent implements OnInit {
   }
 
   private check(id: string, done: boolean) {
-    this.httpService.goal.check(id, done).subscribe(() => {
+    this.httpService.check(id, done).subscribe(() => {
       this.setDataSource(id, undefined, done);
     }, error => {
       console.log(error);
@@ -167,7 +167,7 @@ export class GoalComponent implements OnInit {
   }
 
   private create(name: string) {
-    this.httpService.goal.create(name).subscribe((data: Goal) => {
+    this.httpService.create(name).subscribe((data: Goal) => {
 
       this.dataSource.data.push(data);
       this.dataSource = new MatTableDataSource<Goal>(this.dataSource.data);
@@ -180,7 +180,7 @@ export class GoalComponent implements OnInit {
   }
 
   private update(id: string, name: string, done: boolean) {
-    this.httpService.goal.edit(name).subscribe(() => {
+    this.httpService.edit(name).subscribe(() => {
       this.setDataSource(id, name, done);
     }, error => {
       console.log(error);

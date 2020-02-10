@@ -1,20 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-
-import { Logger } from 'src/app/logger';
-import { HttpService } from 'src/app/http.service';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { Logger } from '../shared/models';
+import { HttpLoggerService } from '../shared/services';
 
 @Component({
   selector: 'logger-component',
   templateUrl: './logger.component.html',
   styleUrls: ['logger.component.css'],
-  providers: [HttpService]
+  providers: [HttpLoggerService]
 })
 export class LoggerComponent implements OnInit {
   error: any = null;
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpLoggerService) { }
 
   displayedColumns: string[] = ['date', 'logLevel', 'eventId', 'message'];
   dataSource: MatTableDataSource<Logger>;
@@ -23,15 +21,14 @@ export class LoggerComponent implements OnInit {
   pageSize: number = 10;
 
   ngOnInit() {
-    this.httpService.getLogger().subscribe((data: Logger[]) => {
+    this.httpService.get().subscribe((data: Logger[]) => {
 
       data.sort(function (a, b) {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
       });
 
-      console.log(data);
+      //console.log(data);
       this.dataSource = new MatTableDataSource<Logger>(data);
-
       this.dataSource.paginator = this.paginator;
     }, error => {
       console.log(error);

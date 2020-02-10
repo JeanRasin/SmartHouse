@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { HomeComponent } from '../home/home.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { WeatherModule } from '../weather/weather.module';
 
 const goalRouting: ModuleWithProviders = RouterModule.forChild([
   {
@@ -16,7 +17,8 @@ const goalRouting: ModuleWithProviders = RouterModule.forChild([
   imports: [
     goalRouting,
     BrowserModule,
-    FormsModule
+    FormsModule,
+    WeatherModule
   ],
   exports: [
     FormsModule
@@ -24,9 +26,5 @@ const goalRouting: ModuleWithProviders = RouterModule.forChild([
   declarations: [
     HomeComponent
   ],
-  //bootstrap: [HomeComponent],
-  //entryComponents: [
-  //  HomeComponent,
-  //]
 })
 export class HomeModule { }

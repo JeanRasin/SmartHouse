@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RouterModule } from '@angular/router';
 import { GoalDialogComponent } from './goal-helpers';
-import { MatInputModule } from '@angular/material';
+import { NavMenuComponent } from './nav-menu';
 
 //import { ArticleListComponent, ArticleMetaComponent, ArticlePreviewComponent } from './article-helpers';
 //import { FavoriteButtonComponent, FollowButtonComponent } from './buttons';
@@ -17,15 +18,16 @@ import { MatInputModule } from '@angular/material';
   imports: [
     MatFormFieldModule,
     MatDialogModule,
+    MatInputModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    MatInputModule
   ],
   declarations: [
     GoalDialogComponent,
+    NavMenuComponent
     //ArticleMetaComponent,
     //ArticlePreviewComponent,
     //FavoriteButtonComponent,
@@ -38,6 +40,7 @@ import { MatInputModule } from '@angular/material';
     //ArticleMetaComponent,
     //ArticlePreviewComponent,
     CommonModule,
+    NavMenuComponent,
     //FavoriteButtonComponent,
     //FollowButtonComponent,
     FormsModule,
