@@ -18,13 +18,12 @@ export class HttpGoalService {
     return this.http.delete(`${this.baseUrl}/api/goal/${id}`);
   }
   check(id: string, done: boolean) {
-    //  return this.http.put(`${this.url}/goal/done/${id}`, { id: id, done: done }); //Todo: verify
-    return this.http.put(`${this.baseUrl}/api/api/goal/done/`, { id: id, done: done });
+    return this.http.put(`${this.baseUrl}/api/goal/done`, { id: id, done: done });
   }
   create(name: string) {
-    return this.http.post(`${this.baseUrl}/api/goal/`, { name: name });
+    return this.http.post(`${this.baseUrl}/api/goal`, { name: name });
   }
-  edit(name: string) {
-    return this.http.put(`${this.baseUrl}/api/goal/`, { name: name });
+  edit(id: string, name: string) {
+    return this.http.put(`${this.baseUrl}/api/goal`, { id: id, name: name });
   }
 }

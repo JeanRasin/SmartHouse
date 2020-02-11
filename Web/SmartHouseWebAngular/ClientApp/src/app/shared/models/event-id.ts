@@ -1,4 +1,4 @@
 ﻿export class EventId {
-    StateId: number;
-    Name: string;
+    stateId: number;
+    name: string;
 }

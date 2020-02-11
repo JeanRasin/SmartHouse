@@ -140,7 +140,7 @@ export class GoalComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       data => {
         if (data != null) {
-          this.update(id, data.name, data.done);
+          this.update(id, data.name);
         }
       });
   }
@@ -179,9 +179,9 @@ export class GoalComponent implements OnInit {
     });
   }
 
-  private update(id: string, name: string, done: boolean) {
-    this.httpService.edit(name).subscribe(() => {
-      this.setDataSource(id, name, done);
+  private update(id: string, name: string) {
+    this.httpService.edit(id, name).subscribe(() => {
+      this.setDataSource(id, name);
     }, error => {
       console.log(error);
       // this.error = error;
