@@ -7,7 +7,7 @@ import { HttpWeatherService } from "src/app/shared";
 import { RouterModule } from '@angular/router';
 
 
-describe('Weather component', () => {
+describe('Weather component !!!', () => {
 
   const goalRouting: ModuleWithProviders = RouterModule.forChild([
     {
@@ -31,22 +31,22 @@ describe('Weather component', () => {
     ],
     
     //exports: [WeatherComponent],
-    declarations: [
-      WeatherComponent
-    ],
-   // schemas:      [ NO_ERRORS_SCHEMA ]
-   // providers : [HttpWeatherService]
+    // declarations: [
+    //   WeatherComponent
+    // ],
+    // schemas:      [ NO_ERRORS_SCHEMA ],
+    // providers : [HttpWeatherService]
     }).compileComponents();
   }));
   
 });
 
-it('should create the wheare component', () => {
- // debugger;
-  const fixture = TestBed.createComponent(WeatherComponent);
-  const app = fixture.debugElement.componentInstance;
-  expect(app).toBeTruthy();
-});
+// it('should create the wheare component', () => {
+//  // debugger;
+//   const fixture = TestBed.createComponent(WeatherComponent);
+//   const app = fixture.debugElement.componentInstance;
+//   expect(app).toBeTruthy();
+// });
 
 
 /*

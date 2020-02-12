@@ -8,7 +8,7 @@ using EventId = Microsoft.Extensions.Logging.EventId;
 
 namespace SmartHouse.Business.Data
 {
-    public class LoggerWork : ILogger
+    public class LoggerWork : ILoggerWork, ILogger
     {
         private readonly LoggerRepository<LoggerModel> repository;
         public LoggerWork(ILoggerContext context)

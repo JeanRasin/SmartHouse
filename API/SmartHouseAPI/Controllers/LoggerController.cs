@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SmartHouse.Business.Data;
-using SmartHouse.Infrastructure.Data;
+using SmartHouse.Domain.Core;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SmartHouseAPI.Controllers
@@ -9,20 +12,38 @@ namespace SmartHouseAPI.Controllers
     [ApiController]
     public class LoggerController : ControllerBase
     {
-        private readonly LoggerWork loggerWork;
+        private readonly ILoggerWork loggerWork;
 
-        public LoggerController(ILoggerContext loggerContext)
+        public LoggerController(ILoggerWork loggerWork)
         {
-            loggerWork = new LoggerWork(loggerContext);
+            this.loggerWork = loggerWork;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetLogger()
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetLoggerAsync()
         {
-            var result = await loggerWork.GetLoggerAsync();
+            try
+            {
+                IEnumerable<LoggerModel> result = await loggerWork.GetLoggerAsync();
 
-            return Ok(result);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // error log
+                return StatusCode(500);
+            }
+
         }
-       
+
     }
 }

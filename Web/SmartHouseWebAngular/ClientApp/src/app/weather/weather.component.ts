@@ -9,15 +9,15 @@ import { HttpWeatherService } from '../shared/services';
 })
 export class WeatherComponent {
 
-  weatherData: Weather;
+  weatherData: Weather= new Weather();
   error: any = null;
 
   constructor(private httpService: HttpWeatherService) { }
 
   ngOnInit() {
     this.httpService.get().subscribe((data: Weather) => {
-      //console.log(data);
-      this.weatherData = data;
+      this.weatherData = data;  
+      console.log(this.weatherData);
     }, error => {
       this.error = error.message;
       //console.log(error);

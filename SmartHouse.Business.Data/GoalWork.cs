@@ -17,7 +17,7 @@ namespace SmartHouse.Business.Data
         }
         public IEnumerable<GoalModel> GetGoalAll()
         {
-            var items = repository
+            IOrderedEnumerable<GoalModel> items = repository
                   .GetGoals()
                   .OrderByDescending(p => p.DateUpdate);
             return items;
@@ -25,7 +25,7 @@ namespace SmartHouse.Business.Data
 
         public IEnumerable<GoalModel> GetGoals()
         {
-            var items = repository
+            IOrderedEnumerable<GoalModel> items = repository
                   .GetGoals()
                   .Where(p => p.Done == false)
                   .OrderByDescending(p => p.DateUpdate);
@@ -35,7 +35,7 @@ namespace SmartHouse.Business.Data
 
         public GoalModel GetGoal(Guid id)
         {
-            var item = repository.GetGoal(id);
+            GoalModel item = repository.GetGoal(id);
             return item;
         }
 
@@ -48,26 +48,47 @@ namespace SmartHouse.Business.Data
             return item;
         }
 
-        public void Update(GoalModel goal)
+        public void Update(Guid id, string name)
         {
-            repository.Update(goal);
+            GoalModel item = repository.GetGoal(id);
+
+            if (item == null)
+            {
+                throw new KeyNotFoundException($"Record id:{id} not found");
+            }
+
+            item.Name = name;
+
+            repository.Update(item);
             repository.Save();
         }
 
         public void Delete(Guid id)
         {
+            GoalModel item = repository.GetGoal(id);
+
+            if (item == null)
+            {
+                throw new KeyNotFoundException($"Record id:{id} not found");
+            }
+
             repository.Remove(id);
             repository.Save();
         }
 
-        public void Done(Guid id)
+        public void Done(Guid id, bool done)
         {
             GoalModel item = repository
                  .GetGoals()
                  .Where(p => p.Id == id)
-                 .Single();
+                 .FirstOrDefault();
 
-            item.Done = true;
+            if (item == null)
+            {
+                throw new KeyNotFoundException($"Record id:{id} not found");
+            }
+
+            item.Done = done;
 
             repository.Update(item);
             repository.Save();

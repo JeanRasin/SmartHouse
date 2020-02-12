@@ -8,14 +8,14 @@ export class WeatherServiceTest {
   static test() {
     describe('Http wetaher service test', () => {
       const dataWeather: Weather = {
-        WindSpeed: 300,
-        WindDeg: 290,
-        Temp: -1,
-        City: 'Perm',
-        Pressure: 977,
-        Humidity: 100,
-        Description: 'light snow; mist',
-        FeelsLike: -5.23
+        windSpeed: 300,
+        windDeg: 290,
+        temp: -1,
+        city: 'Perm',
+        pressure: 977,
+        humidity: 100,
+        description: 'light snow; mist',
+        feelsLike: -5.23
       };
 
       beforeEach(async () => {

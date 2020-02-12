@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmartHouse.Business.Data
 {
-    public class WeatherWork
+    public class WeatherWork : IWeatherWork
     {
         public int TimeOutSec { get; }
 

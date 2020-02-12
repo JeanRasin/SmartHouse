@@ -1,69 +1,48 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SmartHouse.Business.Data;
-using SmartHouse.Domain.Interfaces;
+using SmartHouse.Domain.Core;
 using System;
 using System.Threading.Tasks;
 
 namespace SmartHouseAPI.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class WeatherController : ControllerBase
     {
-        private readonly WeatherWork weatherWork;
+        private readonly IWeatherWork weatherWork;
 
-        public WeatherController(IWeatherService ws)
+        public WeatherController(IWeatherWork weatherWork)
         {
-            weatherWork = new WeatherWork(ws);
+            this.weatherWork = weatherWork;
         }
 
         // GET api/weather
         [HttpGet]
         [Produces("application/json")]
         [ResponseCache(CacheProfileName = "WeatherCaching")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetWeatherAsync()
         {
             try
             {
-                var result = await weatherWork.GetWeatherAsync();
+                WeatherModel result = await weatherWork.GetWeatherAsync();
 
                 if (result == null)
                 {
-                    throw new Exception("Not data.");
+                    return NotFound();
                 }
 
-                return new ObjectResult(result);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                throw ex;
+                // error log
+                return StatusCode(500);
             }
         }
-        /*
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }*/
     }
 }

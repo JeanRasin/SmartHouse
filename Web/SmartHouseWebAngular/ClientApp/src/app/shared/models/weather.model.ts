@@ -1,10 +1,10 @@
 export class Weather {
-  WindSpeed: number;
-  WindDeg: number;
-  Temp: number;
-  City: string;
-  Pressure: number;
-  Humidity: number;
-  Description: string;
-  FeelsLike: number
+  windSpeed: number;
+  windDeg: number;
+  temp: number;
+  city: string;
+  pressure: number;
+  humidity: number;
+  description: string;
+  feelsLike: number
 }
