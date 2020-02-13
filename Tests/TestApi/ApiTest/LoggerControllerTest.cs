@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -15,6 +16,7 @@ namespace ApiTest
     public class LoggerControllerTest
     {
         readonly IEnumerable<LoggerModel> loggerList;
+        readonly ILogger log;
 
         public LoggerControllerTest()
         {
@@ -33,19 +35,19 @@ namespace ApiTest
                 .RuleFor(o => o.Message, f => f.Random.Words(20))
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                 .Generate(10);
+
+            log = Mock.Of<ILogger<LoggerController>>();
         }
 
+        #region GetLoggerAsync
         [Fact]
-        public void GetLoggerAsync_WhenCalled_Returnsresult()
+        public void GetLoggerAsync_WhenCalled_ReturnsResult()
         {
             var mockLogger = new Mock<ILoggerWork>();
 
-            mockLogger.Setup(m => m.GetLoggerAsync()).Returns(() =>
-            {
-                return Task.FromResult(loggerList);
-            });
+            mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult(loggerList));
 
-            var logController = new LoggerController(mockLogger.Object);
+            var logController = new LoggerController(mockLogger.Object, log);
             var result = logController.GetLoggerAsync().Result as OkObjectResult;
 
             Assert.IsAssignableFrom<IEnumerable<LoggerModel>>(result.Value);
@@ -57,16 +59,13 @@ namespace ApiTest
         {
             var mockLogger = new Mock<ILoggerWork>();
 
-            mockLogger.Setup(m => m.GetLoggerAsync()).Returns(() =>
-            {
-                return Task.FromResult<IEnumerable<LoggerModel>>(null);
-            });
+            mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult<IEnumerable<LoggerModel>>(null));
 
-            var loggerController = new LoggerController(mockLogger.Object);
+            var loggerController = new LoggerController(mockLogger.Object, log);
             var result = loggerController.GetLoggerAsync().Result as NotFoundResult;
 
             Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(404, result.StatusCode);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         [Fact]
@@ -76,11 +75,12 @@ namespace ApiTest
 
             mockLogger.Setup(m => m.GetLoggerAsync()).Throws<Exception>();
 
-            var loggerController = new LoggerController(mockLogger.Object);
+            var loggerController = new LoggerController(mockLogger.Object, log);
             var result = loggerController.GetLoggerAsync().Result as StatusCodeResult;
 
             Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(500, result.StatusCode);
+            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
+        #endregion
     }
 }

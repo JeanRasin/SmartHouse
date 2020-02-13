@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
 using System;
@@ -13,10 +14,12 @@ namespace SmartHouseAPI.Controllers
     public class LoggerController : ControllerBase
     {
         private readonly ILoggerWork loggerWork;
+        private readonly ILogger log;
 
-        public LoggerController(ILoggerWork loggerWork)
+        public LoggerController(ILoggerWork loggerWork, ILogger log)
         {
             this.loggerWork = loggerWork;
+            this.log = log;
         }
 
         [HttpGet]
@@ -32,6 +35,7 @@ namespace SmartHouseAPI.Controllers
 
                 if (result == null)
                 {
+                    log.LogError("Logger result null.");
                     return NotFound();
                 }
 
@@ -39,8 +43,8 @@ namespace SmartHouseAPI.Controllers
             }
             catch (Exception ex)
             {
-                // error log
-                return StatusCode(500);
+                log.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
         }

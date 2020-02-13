@@ -1,42 +1,38 @@
 ﻿using Bogus;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Logging;
 using Moq;
-using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using SmartHouseAPI.Controllers;
 using SmartHouseAPI.Helpers;
-using SmartHouseAPI.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ApiTest
 {
     public class GoalControllerTest
     {
+        readonly GoalModel goalDataItem;
+        readonly List<GoalModel> goalDataItems;
+        readonly ILogger log;
 
         public GoalControllerTest()
         {
-
-            //Randomizer.Seed = new Random(1338);
-
-            //List<GoalModel> data = new Faker<GoalModel>()
-            //            .StrictMode(true)
-            //            .RuleFor(o => o.Id, f => f.Random.Uuid())
-            //            .RuleFor(o => o.Name, f => f.Random.Words(3))
-            //            .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-            //            .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-            //            .RuleFor(o => o.Done, f => f.Random.Bool()).Generate(10);
-        }
-
-        [Fact]
-        public void GetGoalAll_WhenCalled_ReturnsAllItems()
-        {
             Randomizer.Seed = new Random(1338);
 
-            List<GoalModel> goalItems = new Faker<GoalModel>()
+            goalDataItem = new Faker<GoalModel>()
+                       .StrictMode(true)
+                       .RuleFor(o => o.Id, f => f.Random.Uuid())
+                       .RuleFor(o => o.Name, f => f.Random.Words(3))
+                       .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
+                       .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
+                       .RuleFor(o => o.Done, f => f.Random.Bool()).Generate();
+
+            goalDataItems = new Faker<GoalModel>()
                         .StrictMode(true)
                         .RuleFor(o => o.Id, f => f.Random.Uuid())
                         .RuleFor(o => o.Name, f => f.Random.Words(3))
@@ -44,217 +40,184 @@ namespace ApiTest
                         .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                         .RuleFor(o => o.Done, f => f.Random.Bool()).Generate(10);
 
-            var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
+            log = Mock.Of<ILogger<GoalController>>();
+        }
 
+        #region GetGoalAll
+        [Fact]
+        public void GetGoalAll_WhenCalled_ReturnsAllItems()
+        {
+            var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.GetGoalAll()).Returns(() =>
             {
-                return goalItems;
+                return goalDataItems;
             });
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.GetGoalAll() as OkObjectResult;
 
             Assert.IsType<List<GoalModel>>(result.Value);
-            Assert.Equal(result.Value, goalItems);
+            Assert.Equal(result.Value, goalDataItems);
         }
 
         [Fact]
         public void GetGoalAll_WhenCalled_ReturnsStatus500()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-
             mockGoalWork.Setup(m => m.GetGoalAll()).Throws<Exception>();
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.GetGoalAll() as StatusCodeResult;
 
             Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(500, result.StatusCode);
+            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
+        #endregion
 
+        #region GetGoals
         [Fact]
         public void GetGoals_WhenCalled_ReturnsAllItems()
         {
-            Randomizer.Seed = new Random(1338);
-
-            List<GoalModel> goalItems = new Faker<GoalModel>()
-                        .StrictMode(true)
-                        .RuleFor(o => o.Id, f => f.Random.Uuid())
-                        .RuleFor(o => o.Name, f => f.Random.Words(3))
-                        .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                        .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                        .RuleFor(o => o.Done, f => f.Random.Bool()).Generate(10);
-
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-
             mockGoalWork.Setup(m => m.GetGoals()).Returns(() =>
             {
-                return goalItems;
+                return goalDataItems;
             });
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.GetGoals() as OkObjectResult;
 
             Assert.IsType<List<GoalModel>>(result.Value);
-            Assert.Equal(result.Value, goalItems);
+            Assert.Equal(result.Value, goalDataItems);
         }
 
         [Fact]
         public void GetGoals_WhenCalled_ReturnsStatus500()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-
             mockGoalWork.Setup(m => m.GetGoals()).Throws<Exception>();
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.GetGoals() as StatusCodeResult;
 
             Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(500, result.StatusCode);
+            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
+        #endregion
 
+        #region GetGoal
         [Fact]
         public void GetGoal_WhenCalled_Return()
         {
-            Randomizer.Seed = new Random(1338);
-
-            GoalModel goalItem = new Faker<GoalModel>()
-                        .StrictMode(true)
-                        .RuleFor(o => o.Id, f => f.Random.Uuid())
-                        .RuleFor(o => o.Name, f => f.Random.Words(3))
-                        .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                        .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                        .RuleFor(o => o.Done, f => f.Random.Bool()).Generate();
-
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-
             mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns(() =>
             {
-                return goalItem;
+                return goalDataItem;
             });
 
-            var goalController = new GoalController(mockGoalWork.Object);
-            var result = goalController.GetGoal(goalItem.Id) as OkObjectResult;
+            var goalController = new GoalController(mockGoalWork.Object, log);
+            var result = goalController.GetGoal(goalDataItem.Id) as OkObjectResult;
 
             Assert.IsType<GoalModel>(result.Value);
-            Assert.Equal(result.Value, goalItem);
+            Assert.Equal(result.Value, goalDataItem);
         }
 
         [Fact]
         public void GetGoal_WhenCalled_ReturnsStatus404()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-
             mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns(() =>
             {
                 return null;
             });
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.GetGoal(Guid.NewGuid()) as NotFoundResult;
 
             Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(404, result.StatusCode);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         [Fact]
         public void GetGoal_WhenCalled_ReturnsStatus500()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-
             mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Throws<Exception>();
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.GetGoal(Guid.NewGuid()) as StatusCodeResult;
 
             Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(500, result.StatusCode);
+            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
+        #endregion
 
+        #region Create
         [Fact]
-        public void Create_WhenCalled_Success()
+        public void Create_WhenCalled_Success201()
         {
-            Randomizer.Seed = new Random(1338);
-
-            GoalModel goalItem = new Faker<GoalModel>()
-                        .StrictMode(true)
-                        .RuleFor(o => o.Id, f => f.Random.Uuid())
-                        .RuleFor(o => o.Name, f => f.Random.Words(3))
-                        .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                        .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                        .RuleFor(o => o.Done, f => f.Random.Bool()).Generate();
-
-            var inputParam = new GoalCreateInput(goalItem.Name);
+            var inputParam = new GoalCreateInput(goalDataItem.Name);
 
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-
             mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(() =>
             {
-                return goalItem;
+                return goalDataItem;
             });
 
-            var goalController = new GoalController(mockGoalWork.Object);
-            var result = goalController.Create(inputParam) as OkObjectResult;
+            var mockUrlHelper = new Mock<IUrlHelper>();
+            mockUrlHelper
+                .Setup(x => x.RouteUrl(It.IsAny<UrlRouteContext>()))
+                .Returns($"http://localhost:5555/api/goal/{goalDataItem.Id}");
+
+            var goalController = new GoalController(mockGoalWork.Object, log)
+            {
+                Url = mockUrlHelper.Object
+            };
+
+            var result = goalController.Create(inputParam) as CreatedResult;
 
             Assert.IsType<GoalModel>(result.Value);
-            Assert.Equal(result.Value, goalItem);
+            Assert.Equal(result.Value, goalDataItem);
+            Assert.Equal(StatusCodes.Status201Created, result.StatusCode);
         }
 
         [Fact]
         public void Create_WhenCalled_ReturnsStatus500()
         {
-            Randomizer.Seed = new Random(1338);
-
-            GoalModel goalItem = new Faker<GoalModel>()
-                        .StrictMode(true)
-                        .RuleFor(o => o.Id, f => f.Random.Uuid())
-                        .RuleFor(o => o.Name, f => f.Random.Words(3))
-                        .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                        .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                        .RuleFor(o => o.Done, f => f.Random.Bool()).Generate();
-
-            var inputParam = new GoalCreateInput(goalItem.Name);
+            var inputParam = new GoalCreateInput(goalDataItem.Name);
 
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-
             mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Throws<Exception>();
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.Create(inputParam) as StatusCodeResult;
 
             Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(500, result.StatusCode);
+            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
 
         [Fact]
         public void Create_WhenCalled_ReturnsStatus400()
         {
-            Randomizer.Seed = new Random(1338);
-
-            GoalModel goalItem = new Faker<GoalModel>()
-                        .StrictMode(true)
-                        .RuleFor(o => o.Id, f => f.Random.Uuid())
-                        .RuleFor(o => o.Name, f => f.Random.Words(3))
-                        .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                        .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                        .RuleFor(o => o.Done, f => f.Random.Bool()).Generate();
-
             var inputParam = new GoalCreateInput();
 
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-
             mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(() =>
             {
-                return goalItem;
+                return goalDataItem;
             });
 
-            var goalController = new GoalController(mockGoalWork.Object);
-            var result = goalController.Create(inputParam) as StatusCodeResult;
+            var goalController = new GoalController(mockGoalWork.Object, log);
+            goalController.ModelState.AddModelError("key", "error message");
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(400, result.StatusCode);
+            var result = goalController.Create(inputParam) as BadRequestObjectResult;
+
+            Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
         }
+        #endregion
 
+        #region Update
         [Fact]
         public void Update_WhenCalled_Success()
         {
@@ -263,58 +226,62 @@ namespace ApiTest
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>()));
 
-            var goalController = new GoalController(mockGoalWork.Object);
-            var result = goalController.Update(inputData) as StatusCodeResult;
+            var goalController = new GoalController(mockGoalWork.Object, log);
+            var result = goalController.Update(inputData) as NoContentResult;
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(200, result.StatusCode);
+            Assert.IsType<NoContentResult>(result);
+            Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
         }
 
         [Fact]
         public void Update_WhenCalled_ReturnsStatus400()
         {
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "");
-            var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
 
+            var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>()));
 
-            var goalController = new GoalController(mockGoalWork.Object);
-            var result = goalController.Update(inputData) as StatusCodeResult;
+            var goalController = new GoalController(mockGoalWork.Object, log);
+            goalController.ModelState.AddModelError("key", "error message");
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(400, result.StatusCode);
+            var result = goalController.Update(inputData) as BadRequestObjectResult;
+
+            Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
         }
 
         [Fact]
         public void Update_WhenCalled_ReturnsStatus404()
         {
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "test text");
-            var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
 
+            var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>())).Throws<KeyNotFoundException>();
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.Update(inputData) as NotFoundResult;
 
             Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(404, result.StatusCode);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         [Fact]
         public void Update_WhenCalled_ReturnsStatus500()
         {
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "test text");
-            var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
 
+            var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>())).Throws<Exception>();
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.Update(inputData) as StatusCodeResult;
 
             Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(500, result.StatusCode);
+            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
+        #endregion
 
+        #region Delete
         [Fact]
         public void Delete_WhenCalled_Success()
         {
@@ -323,26 +290,26 @@ namespace ApiTest
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>()));
 
-            var goalController = new GoalController(mockGoalWork.Object);
-            var result = goalController.Delete(id) as StatusCodeResult;
+            var goalController = new GoalController(mockGoalWork.Object, log);
+            var result = goalController.Delete(id) as NoContentResult;
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(200, result.StatusCode);
+            Assert.IsType<NoContentResult>(result);
+            Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
         }
 
         [Fact]
         public void Delete_WhenCalled_ReturnsStatus404()
         {
             var id = new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21");
-            var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
 
+            var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>())).Throws<KeyNotFoundException>();
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.Delete(id) as NotFoundResult;
 
             Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(404, result.StatusCode);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         [Fact]
@@ -353,11 +320,11 @@ namespace ApiTest
 
             mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>())).Throws<Exception>();
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.Delete(id) as StatusCodeResult;
 
             Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(500, result.StatusCode);
+            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
 
         [Fact]
@@ -368,13 +335,15 @@ namespace ApiTest
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>()));
 
-            var goalController = new GoalController(mockGoalWork.Object);
-            var result = goalController.Done(inputData) as StatusCodeResult;
+            var goalController = new GoalController(mockGoalWork.Object, log);
+            var result = goalController.Done(inputData) as NoContentResult;
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(200, result.StatusCode);
+            Assert.IsType<NoContentResult>(result);
+            Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
         }
+        #endregion
 
+        #region Done
         [Fact]
         public void Done_WhenCalled_ReturnsStatus404()
         {
@@ -383,11 +352,11 @@ namespace ApiTest
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.Done(inputData) as NotFoundResult;
 
             Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(404, result.StatusCode);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         [Fact]
@@ -398,11 +367,12 @@ namespace ApiTest
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<Exception>();
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.Done(inputData) as StatusCodeResult;
 
             Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(500, result.StatusCode);
+            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
+        #endregion
     }
 }

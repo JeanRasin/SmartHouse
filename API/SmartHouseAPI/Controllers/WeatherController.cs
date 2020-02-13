@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
 using System;
@@ -12,10 +13,12 @@ namespace SmartHouseAPI.Controllers
     public class WeatherController : ControllerBase
     {
         private readonly IWeatherWork weatherWork;
+        private readonly ILogger log;
 
-        public WeatherController(IWeatherWork weatherWork)
+        public WeatherController(IWeatherWork weatherWork, ILogger log)
         {
             this.weatherWork = weatherWork;
+            this.log = log;
         }
 
         // GET api/weather
@@ -33,6 +36,7 @@ namespace SmartHouseAPI.Controllers
 
                 if (result == null)
                 {
+                    log.LogError("Weather result null.");
                     return NotFound();
                 }
 
@@ -40,8 +44,8 @@ namespace SmartHouseAPI.Controllers
             }
             catch (Exception ex)
             {
-                // error log
-                return StatusCode(500);
+                log.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

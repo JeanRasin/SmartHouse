@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using SmartHouseAPI.Helpers;
-using SmartHouseAPI.ViewModel;
 using System;
 using System.Collections.Generic;
 
@@ -15,10 +15,12 @@ namespace SmartHouseAPI.Controllers
     public class GoalController : ControllerBase
     {
         private readonly IGoalWork<GoalModel> goalWork;
+        private readonly ILogger log;
 
-        public GoalController(IGoalWork<GoalModel> goalWork)
+        public GoalController(IGoalWork<GoalModel> goalWork, ILogger log)
         {
             this.goalWork = goalWork;
+            this.log = log;
         }
 
         // GET: api/goal/getAll
@@ -30,13 +32,12 @@ namespace SmartHouseAPI.Controllers
             try
             {
                 IEnumerable<GoalModel> result = goalWork.GetGoalAll();
-
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                // error log
-                return StatusCode(500);
+                log.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -49,13 +50,12 @@ namespace SmartHouseAPI.Controllers
             try
             {
                 IEnumerable<GoalModel> result = goalWork.GetGoals();
-
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                // error log
-                return StatusCode(500);
+                log.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -72,6 +72,7 @@ namespace SmartHouseAPI.Controllers
 
                 if (result == null)
                 {
+                    log.LogError($"Goal object id:{id} not found.");
                     return NotFound();
                 }
 
@@ -79,111 +80,112 @@ namespace SmartHouseAPI.Controllers
             }
             catch (Exception ex)
             {
-                // error log
-                return StatusCode(500);
+                log.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         // POST: api/goal
         [HttpPost()]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Create(GoalCreateInput data)
         {
-            if (string.IsNullOrEmpty(data.Name))
+            if (!ModelState.IsValid)
             {
-                return StatusCode(400);
+                log.LogError("Goal model is not valid.");
+                return BadRequest(ModelState);
             }
 
             try
             {
                 GoalModel result = goalWork.Create(data.Name);
-
-                return Ok(result);
+                return Created(Url.RouteUrl(result.Id), result);
             }
-            catch (Exception ex) //
+            catch (Exception ex)
             {
-                // error log
-                return StatusCode(500);
+                log.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
-
         }
 
         // PUT: api/goal
         [HttpPut()]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Update(GoalUpdateInput data)
         {
-            if (string.IsNullOrEmpty(data.Name))
+            if (!ModelState.IsValid)
             {
-                return StatusCode(400);
+                log.LogError("Goal model is not valid.");
+                return BadRequest(ModelState);
             }
 
             try
             {
                 goalWork.Update(data.Id, data.Name);
-
-                return StatusCode(200);
+                return NoContent();
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
-                // error log
+                log.LogError($"Goal object id:{data.Id} not found.");
                 return NotFound();
             }
             catch (Exception ex)
             {
-                // error log
-                return StatusCode(500);
+                log.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         // DELETE: api/goal/{id}
         [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Delete(Guid id)
         {
             try
             {
                 goalWork.Delete(id);
-
-                return StatusCode(200);
+                return NoContent();
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
-                // error log
+                log.LogError($"Goal object id:{id} not found.");
                 return NotFound();
             }
             catch (Exception ex)
             {
-                // error log
-                return StatusCode(500);
+                log.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         // PUT: api/goal/done/
         [HttpPut("done")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Done(GoalDoneInput data)
         {
             try
             {
                 goalWork.Done(data.Id, data.Done);
-
-                return StatusCode(200);
+                return NoContent();
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
-                // error log
+                log.LogError($"Goal object id:{data.Id} not found.");
                 return NotFound();
             }
             catch (Exception ex)
             {
-                // error log
-                return StatusCode(500);
+                log.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 

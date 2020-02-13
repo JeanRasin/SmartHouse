@@ -19,7 +19,7 @@ namespace SmartHouseAPI.Controllers
 
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
 
-            return Problem(detail: context.Error.StackTrace, title: context.Error.Message);
+            return base.Problem(detail: context.Error?.StackTrace, title: context.Error.Message);
         }
 
         [Route("/error")]
