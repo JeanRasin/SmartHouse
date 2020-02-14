@@ -15,12 +15,10 @@ namespace SmartHouseAPI.Controllers
     public class GoalController : ControllerBase
     {
         private readonly IGoalWork<GoalModel> goalWork;
-        private readonly ILogger log;
 
-        public GoalController(IGoalWork<GoalModel> goalWork, ILogger log)
+        public GoalController(IGoalWork<GoalModel> goalWork)
         {
             this.goalWork = goalWork;
-            this.log = log;
         }
 
         // GET: api/goal/getAll
@@ -29,16 +27,8 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoalAll()
         {
-            //try
-            //{
-                IEnumerable<GoalModel> result = goalWork.GetGoalAll();
-                return Ok(result);
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.LogError(ex, ex.Message);
-            //    return StatusCode(StatusCodes.Status500InternalServerError);
-            //}
+            IEnumerable<GoalModel> result = goalWork.GetGoalAll();
+            return Ok(result);
         }
 
         // GET: api/goal
@@ -47,16 +37,8 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoals()
         {
-            //try
-            //{
-                IEnumerable<GoalModel> result = goalWork.GetGoals();
-                return Ok(result);
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.LogError(ex, ex.Message);
-            //    return StatusCode(StatusCodes.Status500InternalServerError);
-            //}
+            IEnumerable<GoalModel> result = goalWork.GetGoals();
+            return Ok(result);
         }
 
         // GET: api/goal/{id}
@@ -66,25 +48,14 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoal(Guid id)
         {
-            //try
-            //{
-                GoalModel result = goalWork.GetGoal(id);
+            GoalModel result = goalWork.GetGoal(id);
 
-                if (result == null)
-                {
+            if (result == null)
+            {
                 throw new NotFoundException($"Goal object id:{id} not found.");
+            }
 
-                //log.LogError($"Goal object id:{id} not found.");
-                //    return NotFound();
-                }
-
-                return Ok(result);
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.LogError(ex, ex.Message);
-            //    return StatusCode(StatusCodes.Status500InternalServerError);
-            //}
+            return Ok(result);
         }
 
         // POST: api/goal
@@ -96,22 +67,11 @@ namespace SmartHouseAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                //log.LogError("Goal model is not valid.");
-               // return BadRequest(ModelState);
-
                 throw new ModelStateException("Goal model is not valid.", ModelState);
             }
 
-            //try
-            //{
-                GoalModel result = goalWork.Create(data.Name);
-                return Created(Url.RouteUrl(result.Id), result);
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.LogError(ex, ex.Message);
-            //    return StatusCode(StatusCodes.Status500InternalServerError);
-            //}
+            GoalModel result = goalWork.Create(data.Name);
+            return Created(Url.RouteUrl(result.Id), result);
         }
 
         // PUT: api/goal
@@ -125,8 +85,6 @@ namespace SmartHouseAPI.Controllers
             if (!ModelState.IsValid)
             {
                 throw new ModelStateException("Goal model is not valid.", ModelState);
-                //log.LogError("Goal model is not valid.");
-                //return BadRequest(ModelState);
             }
 
             try
@@ -136,16 +94,8 @@ namespace SmartHouseAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                //log.LogError($"Goal object id:{data.Id} not found.");
-                //return NotFound();
-
                 throw new NotFoundException($"Goal object id:{data.Id} not found.");
             }
-            //catch (Exception ex)
-            //{
-            //    log.LogError(ex, ex.Message);
-            //    return StatusCode(StatusCodes.Status500InternalServerError);
-            //}
         }
 
         // DELETE: api/goal/{id}
@@ -155,23 +105,15 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Delete(Guid id)
         {
-            //try
-            //{
+            try
+            {
                 goalWork.Delete(id);
                 return NoContent();
-            //}
-            //catch (KeyNotFoundException)
-            //{
-                //log.LogError($"Goal object id:{id} not found.");
-                //return NotFound();
-
+            }
+            catch (KeyNotFoundException)
+            {
                 throw new NotFoundException($"Goal object id:{id} not found.");
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.LogError(ex, ex.Message);
-            //    return StatusCode(StatusCodes.Status500InternalServerError);
-            //}
+            }
         }
 
         // PUT: api/goal/done/
@@ -188,17 +130,8 @@ namespace SmartHouseAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                //log.LogError($"Goal object id:{data.Id} not found.");
-                //return NotFound();
-
                 throw new NotFoundException($"Goal object id:{data.Id} not found.");
             }
-            //catch (Exception ex)
-            //{
-            //    log.LogError(ex, ex.Message);
-            //    return StatusCode(StatusCodes.Status500InternalServerError);
-            //}
         }
-
     }
 }
