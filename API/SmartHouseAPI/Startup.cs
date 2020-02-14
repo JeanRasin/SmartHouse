@@ -19,6 +19,7 @@ using SmartHouse.Service.Weather.OpenWeatherMap;
 using SmartHouse.Domain.Interfaces;
 using Bogus;
 using SmartHouse.Domain.Core;
+using SmartHouseAPI.Middleware;
 
 namespace SmartHouseAPI
 {
@@ -72,13 +73,14 @@ namespace SmartHouseAPI
             ILoggerContext loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
 
             // добавляем контекст MobileContext в качестве сервиса в приложение
-            services.AddDbContext<GoalContext>(options => {
+            services.AddDbContext<GoalContext>(options =>
+            {
                 options.UseNpgsql(connection);
 
                 //ILoggerFactory loggerFactory = Helpers.LoggerExtensions.AddContext(loggerContext);
 
-               //options.UseLoggerFactory(loggerFactory);
-                });
+                //options.UseLoggerFactory(loggerFactory);
+            });
             //services.AddControllersWithViews();
 
             // services.AddTransient<IGoalWork<GoalWork>, GoalWork>();
@@ -111,6 +113,8 @@ namespace SmartHouseAPI
             {
                 app.UseExceptionHandler("/error");
             }
+            loggerFactory.AddContext(loggerContext);
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseStaticFiles();
 
@@ -128,9 +132,7 @@ namespace SmartHouseAPI
 
             app.UseRouting();
 
-            loggerFactory.AddContext(loggerContext);
-
-            // app.UseAuthorization();
+           // app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

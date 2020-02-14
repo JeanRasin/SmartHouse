@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
-using System;
+using SmartHouseAPI.Helpers;
 using System.Threading.Tasks;
 
 namespace SmartHouseAPI.Controllers
@@ -13,12 +12,10 @@ namespace SmartHouseAPI.Controllers
     public class WeatherController : ControllerBase
     {
         private readonly IWeatherWork weatherWork;
-        private readonly ILogger log;
 
-        public WeatherController(IWeatherWork weatherWork, ILogger log)
+        public WeatherController(IWeatherWork weatherWork)
         {
             this.weatherWork = weatherWork;
-            this.log = log;
         }
 
         // GET api/weather
@@ -30,23 +27,15 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetWeatherAsync()
         {
-            try
-            {
-                WeatherModel result = await weatherWork.GetWeatherAsync();
+            WeatherModel result = await weatherWork.GetWeatherAsync();
 
-                if (result == null)
-                {
-                    log.LogError("Weather result null.");
-                    return NotFound();
-                }
-
-                return Ok(result);
-            }
-            catch (Exception ex)
+            if (result == null)
             {
-                log.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                throw new NotFoundException("Weather result is null.");
             }
+
+            return Ok(result);
         }
     }
 }
+

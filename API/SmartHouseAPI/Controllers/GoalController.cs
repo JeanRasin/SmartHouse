@@ -29,16 +29,16 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoalAll()
         {
-            try
-            {
+            //try
+            //{
                 IEnumerable<GoalModel> result = goalWork.GetGoalAll();
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.LogError(ex, ex.Message);
+            //    return StatusCode(StatusCodes.Status500InternalServerError);
+            //}
         }
 
         // GET: api/goal
@@ -47,16 +47,16 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoals()
         {
-            try
-            {
+            //try
+            //{
                 IEnumerable<GoalModel> result = goalWork.GetGoals();
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.LogError(ex, ex.Message);
+            //    return StatusCode(StatusCodes.Status500InternalServerError);
+            //}
         }
 
         // GET: api/goal/{id}
@@ -66,23 +66,25 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoal(Guid id)
         {
-            try
-            {
+            //try
+            //{
                 GoalModel result = goalWork.GetGoal(id);
 
                 if (result == null)
                 {
-                    log.LogError($"Goal object id:{id} not found.");
-                    return NotFound();
+                throw new NotFoundException($"Goal object id:{id} not found.");
+
+                //log.LogError($"Goal object id:{id} not found.");
+                //    return NotFound();
                 }
 
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.LogError(ex, ex.Message);
+            //    return StatusCode(StatusCodes.Status500InternalServerError);
+            //}
         }
 
         // POST: api/goal
@@ -94,20 +96,22 @@ namespace SmartHouseAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                log.LogError("Goal model is not valid.");
-                return BadRequest(ModelState);
+                //log.LogError("Goal model is not valid.");
+               // return BadRequest(ModelState);
+
+                throw new ModelStateException("Goal model is not valid.", ModelState);
             }
 
-            try
-            {
+            //try
+            //{
                 GoalModel result = goalWork.Create(data.Name);
                 return Created(Url.RouteUrl(result.Id), result);
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.LogError(ex, ex.Message);
+            //    return StatusCode(StatusCodes.Status500InternalServerError);
+            //}
         }
 
         // PUT: api/goal
@@ -120,8 +124,9 @@ namespace SmartHouseAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                log.LogError("Goal model is not valid.");
-                return BadRequest(ModelState);
+                throw new ModelStateException("Goal model is not valid.", ModelState);
+                //log.LogError("Goal model is not valid.");
+                //return BadRequest(ModelState);
             }
 
             try
@@ -131,14 +136,16 @@ namespace SmartHouseAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                log.LogError($"Goal object id:{data.Id} not found.");
-                return NotFound();
+                //log.LogError($"Goal object id:{data.Id} not found.");
+                //return NotFound();
+
+                throw new NotFoundException($"Goal object id:{data.Id} not found.");
             }
-            catch (Exception ex)
-            {
-                log.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            //catch (Exception ex)
+            //{
+            //    log.LogError(ex, ex.Message);
+            //    return StatusCode(StatusCodes.Status500InternalServerError);
+            //}
         }
 
         // DELETE: api/goal/{id}
@@ -148,21 +155,23 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Delete(Guid id)
         {
-            try
-            {
+            //try
+            //{
                 goalWork.Delete(id);
                 return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                log.LogError($"Goal object id:{id} not found.");
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            //}
+            //catch (KeyNotFoundException)
+            //{
+                //log.LogError($"Goal object id:{id} not found.");
+                //return NotFound();
+
+                throw new NotFoundException($"Goal object id:{id} not found.");
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.LogError(ex, ex.Message);
+            //    return StatusCode(StatusCodes.Status500InternalServerError);
+            //}
         }
 
         // PUT: api/goal/done/
@@ -179,14 +188,16 @@ namespace SmartHouseAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                log.LogError($"Goal object id:{data.Id} not found.");
-                return NotFound();
+                //log.LogError($"Goal object id:{data.Id} not found.");
+                //return NotFound();
+
+                throw new NotFoundException($"Goal object id:{data.Id} not found.");
             }
-            catch (Exception ex)
-            {
-                log.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            //catch (Exception ex)
+            //{
+            //    log.LogError(ex, ex.Message);
+            //    return StatusCode(StatusCodes.Status500InternalServerError);
+            //}
         }
 
     }

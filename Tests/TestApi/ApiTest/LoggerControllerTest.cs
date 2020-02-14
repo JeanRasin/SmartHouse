@@ -6,6 +6,7 @@ using Moq;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
 using SmartHouseAPI.Controllers;
+using SmartHouseAPI.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,7 +17,6 @@ namespace ApiTest
     public class LoggerControllerTest
     {
         readonly IEnumerable<LoggerModel> loggerList;
-        readonly ILogger log;
 
         public LoggerControllerTest()
         {
@@ -35,8 +35,6 @@ namespace ApiTest
                 .RuleFor(o => o.Message, f => f.Random.Words(20))
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                 .Generate(10);
-
-            log = Mock.Of<ILogger<LoggerController>>();
         }
 
         #region GetLoggerAsync
@@ -47,7 +45,7 @@ namespace ApiTest
 
             mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult(loggerList));
 
-            var logController = new LoggerController(mockLogger.Object, log);
+            var logController = new LoggerController(mockLogger.Object);
             var result = logController.GetLoggerAsync().Result as OkObjectResult;
 
             Assert.IsAssignableFrom<IEnumerable<LoggerModel>>(result.Value);
@@ -61,11 +59,9 @@ namespace ApiTest
 
             mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult<IEnumerable<LoggerModel>>(null));
 
-            var loggerController = new LoggerController(mockLogger.Object, log);
-            var result = loggerController.GetLoggerAsync().Result as NotFoundResult;
+            var loggerController = new LoggerController(mockLogger.Object);
 
-            Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
+            Assert.ThrowsAsync<NotFoundException>(() => loggerController.GetLoggerAsync());
         }
 
         [Fact]
@@ -75,11 +71,9 @@ namespace ApiTest
 
             mockLogger.Setup(m => m.GetLoggerAsync()).Throws<Exception>();
 
-            var loggerController = new LoggerController(mockLogger.Object, log);
-            var result = loggerController.GetLoggerAsync().Result as StatusCodeResult;
+            var loggerController = new LoggerController(mockLogger.Object);
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
+            Assert.ThrowsAsync<Exception>(() => loggerController.GetLoggerAsync());
         }
         #endregion
     }

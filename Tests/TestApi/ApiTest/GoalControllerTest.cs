@@ -67,10 +67,13 @@ namespace ApiTest
             mockGoalWork.Setup(m => m.GetGoalAll()).Throws<Exception>();
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.GetGoalAll() as StatusCodeResult;
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
+            Assert.Throws<Exception>(() => goalController.GetGoalAll());
+
+            //var result = goalController.GetGoalAll() as StatusCodeResult;
+
+            //Assert.IsType<StatusCodeResult>(result);
+            //Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
         #endregion
 
@@ -98,10 +101,13 @@ namespace ApiTest
             mockGoalWork.Setup(m => m.GetGoals()).Throws<Exception>();
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.GetGoals() as StatusCodeResult;
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
+            Assert.Throws<Exception>(() => goalController.GetGoals());
+
+            //var result = goalController.GetGoals() as StatusCodeResult;
+
+            //Assert.IsType<StatusCodeResult>(result);
+            //Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
         #endregion
 
@@ -110,10 +116,7 @@ namespace ApiTest
         public void GetGoal_WhenCalled_Return()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns(() =>
-            {
-                return goalDataItem;
-            });
+            mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns(goalDataItem);
 
             var goalController = new GoalController(mockGoalWork.Object, log);
             var result = goalController.GetGoal(goalDataItem.Id) as OkObjectResult;
@@ -126,16 +129,15 @@ namespace ApiTest
         public void GetGoal_WhenCalled_ReturnsStatus404()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns(() =>
-            {
-                return null;
-            });
+            mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.GetGoal(Guid.NewGuid()) as NotFoundResult;
+            Assert.Throws<NotFoundException>(() => goalController.GetGoal(Guid.NewGuid()));
 
-            Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
+            //var result = goalController.GetGoal(Guid.NewGuid()) as NotFoundResult;
+
+            //Assert.IsType<NotFoundResult>(result);
+            //Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         [Fact]
@@ -145,10 +147,13 @@ namespace ApiTest
             mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Throws<Exception>();
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.GetGoal(Guid.NewGuid()) as StatusCodeResult;
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
+            Assert.Throws<Exception>(() => goalController.GetGoal(Guid.NewGuid()));
+
+            //var result = goalController.GetGoal(Guid.NewGuid()) as StatusCodeResult;
+
+            //Assert.IsType<StatusCodeResult>(result);
+            //Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
         #endregion
 
@@ -190,10 +195,13 @@ namespace ApiTest
             mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Throws<Exception>();
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.Create(inputParam) as StatusCodeResult;
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
+            Assert.Throws<Exception>(() => goalController.Create(inputParam));
+
+            //var result = goalController.Create(inputParam) as StatusCodeResult;
+
+            //Assert.IsType<StatusCodeResult>(result);
+            //Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
 
         [Fact]
@@ -210,10 +218,12 @@ namespace ApiTest
             var goalController = new GoalController(mockGoalWork.Object, log);
             goalController.ModelState.AddModelError("key", "error message");
 
-            var result = goalController.Create(inputParam) as BadRequestObjectResult;
+            Assert.Throws<ModelStateException>(() => goalController.Create(inputParam));
 
-            Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
+            //var result = goalController.Create(inputParam) as BadRequestObjectResult;
+
+            //Assert.IsType<BadRequestObjectResult>(result);
+            //Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
         }
         #endregion
 
@@ -244,10 +254,12 @@ namespace ApiTest
             var goalController = new GoalController(mockGoalWork.Object, log);
             goalController.ModelState.AddModelError("key", "error message");
 
-            var result = goalController.Update(inputData) as BadRequestObjectResult;
+            Assert.Throws<ModelStateException>(() => goalController.Update(inputData));
 
-            Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
+            //var result = goalController.Update(inputData) as BadRequestObjectResult;
+
+            //Assert.IsType<BadRequestObjectResult>(result);
+            //Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
         }
 
         [Fact]
@@ -259,10 +271,13 @@ namespace ApiTest
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>())).Throws<KeyNotFoundException>();
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.Update(inputData) as NotFoundResult;
 
-            Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
+            Assert.Throws<NotFoundException>(() => goalController.Update(inputData));
+
+            //var result = goalController.Update(inputData) as NotFoundResult;
+
+            //Assert.IsType<NotFoundResult>(result);
+            //Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         [Fact]
@@ -274,10 +289,13 @@ namespace ApiTest
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>())).Throws<Exception>();
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.Update(inputData) as StatusCodeResult;
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
+            Assert.Throws<Exception>(() => goalController.Update(inputData));
+
+            //var result = goalController.Update(inputData) as StatusCodeResult;
+
+            //Assert.IsType<StatusCodeResult>(result);
+            //Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
         #endregion
 
@@ -306,10 +324,13 @@ namespace ApiTest
             mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>())).Throws<KeyNotFoundException>();
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.Delete(id) as NotFoundResult;
 
-            Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
+            Assert.Throws<KeyNotFoundException>(() => goalController.Delete(id));
+
+            //var result = goalController.Delete(id) as NotFoundResult;
+
+            //Assert.IsType<NotFoundResult>(result);
+            //Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         [Fact]
@@ -321,10 +342,13 @@ namespace ApiTest
             mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>())).Throws<Exception>();
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.Delete(id) as StatusCodeResult;
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
+            Assert.Throws<Exception>(() => goalController.Delete(id));
+
+            //var result = goalController.Delete(id) as StatusCodeResult;
+
+            //Assert.IsType<StatusCodeResult>(result);
+            //Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
 
         [Fact]
@@ -353,10 +377,13 @@ namespace ApiTest
             mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.Done(inputData) as NotFoundResult;
 
-            Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
+            Assert.Throws<NotFoundException>(() => goalController.Done(inputData));
+
+            //var result = goalController.Done(inputData) as NotFoundResult;
+
+            //Assert.IsType<NotFoundResult>(result);
+            //Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         [Fact]
@@ -368,10 +395,13 @@ namespace ApiTest
             mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<Exception>();
 
             var goalController = new GoalController(mockGoalWork.Object, log);
-            var result = goalController.Done(inputData) as StatusCodeResult;
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
+            Assert.Throws<Exception>(() => goalController.Done(inputData));
+
+            //var result = goalController.Done(inputData) as StatusCodeResult;
+
+            //Assert.IsType<StatusCodeResult>(result);
+            //Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
         #endregion
     }

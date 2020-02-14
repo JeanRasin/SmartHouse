@@ -9,13 +9,13 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.AspNetCore.Http;
+using SmartHouseAPI.Helpers;
 
 namespace ApiTest
 {
     public class WeatherControllerTest
     {
         readonly WeatherModel wetaherData;
-        readonly ILogger log;
 
         public WeatherControllerTest()
         {
@@ -31,8 +31,6 @@ namespace ApiTest
                   .RuleFor(o => o.Description, f => f.Random.Words(5))
                   .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000))
                   .Generate();
-
-            log = Mock.Of<ILogger<WeatherController>>();
         }
 
         #region GetWeatherAsync
@@ -42,7 +40,7 @@ namespace ApiTest
             var mockWeatherWork = new Mock<IWeatherWork>();
             mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult(wetaherData));
 
-            var weatherController = new WeatherController(mockWeatherWork.Object, log);
+            var weatherController = new WeatherController(mockWeatherWork.Object);
             var result = await weatherController.GetWeatherAsync();
 
             Assert.IsType<OkObjectResult>(result);
@@ -54,7 +52,7 @@ namespace ApiTest
             var mockWeatherWork = new Mock<IWeatherWork>();
             mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult(wetaherData));
 
-            var weatherController = new WeatherController(mockWeatherWork.Object, log);
+            var weatherController = new WeatherController(mockWeatherWork.Object);
             var result = weatherController.GetWeatherAsync().Result as OkObjectResult;
 
             Assert.IsType<WeatherModel>(result.Value);
@@ -67,11 +65,9 @@ namespace ApiTest
             var mockWeatherWork = new Mock<IWeatherWork>();
             mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult<WeatherModel>(null));
 
-            var weatherController = new WeatherController(mockWeatherWork.Object, log);
-            var result = weatherController.GetWeatherAsync().Result as NotFoundResult;
+            var weatherController = new WeatherController(mockWeatherWork.Object);
 
-            Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
+            Assert.ThrowsAsync<NotFoundException>(() => weatherController.GetWeatherAsync());
         }
 
         [Fact]
@@ -80,11 +76,9 @@ namespace ApiTest
             var mockWeatherWork = new Mock<IWeatherWork>();
             mockWeatherWork.Setup(m => m.GetWeatherAsync()).Throws<Exception>();
 
-            var weatherController = new WeatherController(mockWeatherWork.Object, log);
-            var result = weatherController.GetWeatherAsync().Result as StatusCodeResult;
+            var weatherController = new WeatherController(mockWeatherWork.Object);
 
-            Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
+            Assert.ThrowsAsync<Exception>(() => weatherController.GetWeatherAsync());
         }
         #endregion
     }

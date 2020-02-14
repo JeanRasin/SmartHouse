@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
-using System;
+using SmartHouseAPI.Helpers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,12 +13,10 @@ namespace SmartHouseAPI.Controllers
     public class LoggerController : ControllerBase
     {
         private readonly ILoggerWork loggerWork;
-        private readonly ILogger log;
 
-        public LoggerController(ILoggerWork loggerWork, ILogger log)
+        public LoggerController(ILoggerWork loggerWork)
         {
             this.loggerWork = loggerWork;
-            this.log = log;
         }
 
         [HttpGet]
@@ -29,24 +26,15 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetLoggerAsync()
         {
-            try
-            {
-                IEnumerable<LoggerModel> result = await loggerWork.GetLoggerAsync();
+            IEnumerable<LoggerModel> result = await loggerWork.GetLoggerAsync();
 
-                if (result == null)
-                {
-                    log.LogError("Logger result null.");
-                    return NotFound();
-                }
-
-                return Ok(result);
-            }
-            catch (Exception ex)
+            if (result == null)
             {
-                log.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+
+                throw new NotFoundException("Logger result is null.");
             }
 
+            return Ok(result);
         }
 
     }
