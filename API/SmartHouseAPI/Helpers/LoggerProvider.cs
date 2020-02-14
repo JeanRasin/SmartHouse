@@ -13,7 +13,7 @@ namespace SmartHouseAPI.Helpers
         }
         public ILogger CreateLogger(string categoryName)
         {
-            return new LoggerWork(context);
+            return new LoggerWork(context, categoryName);
         }
 
         public void Dispose()

@@ -11,9 +11,10 @@ namespace SmartHouse.Business.Data
     public class LoggerWork : ILoggerWork, ILogger
     {
         private readonly LoggerRepository<LoggerModel> repository;
-        public LoggerWork(ILoggerContext context)
+
+        public LoggerWork(ILoggerContext context, string categoryName)
         {
-            repository = new LoggerRepository<LoggerModel>(context);
+            repository = new LoggerRepository<LoggerModel>(context, categoryName);
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -23,7 +24,7 @@ namespace SmartHouse.Business.Data
 
         public async Task<IEnumerable<LoggerModel>> GetLoggerAsync()
         {
-            var result =await repository.QueryAsync();
+            var result = await repository.QueryAsync();
             return result;
         }
 

@@ -20,7 +20,7 @@
     "SmartHouseAPI": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/logger",
+      "launchUrl": "api/goal",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

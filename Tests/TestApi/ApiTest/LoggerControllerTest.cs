@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
+using SmartHouseAPI.ApiException;
 using SmartHouseAPI.Controllers;
 using SmartHouseAPI.Helpers;
 using System;
@@ -30,6 +31,7 @@ namespace ApiTest
             loggerList = new Faker<LoggerModel>()
                 .StrictMode(true)
                 .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
+                .RuleFor(o => o.CategoryName, f => f.Random.Words(1))
                 .RuleFor(o => o.EventId, f => eventIdFaker)
                 .RuleFor(o => o.LogLevel, f => f.PickRandom<LogLevel>())
                 .RuleFor(o => o.Message, f => f.Random.Words(20))

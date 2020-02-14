@@ -9,13 +9,13 @@ namespace SmartHouseAPI.Middleware
 {
     public class RequestResponseLoggingMiddleware
     {
-        private readonly RequestDelegate _next;
+        private readonly RequestDelegate next;
         private readonly ILogger log;
 
-        public RequestResponseLoggingMiddleware(RequestDelegate next, ILogger log)
+        public RequestResponseLoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
-            _next = next;
-            this.log = log;
+            this.next = next;
+            log = loggerFactory.CreateLogger<RequestResponseLoggingMiddleware>();
         }
 
         public async Task Invoke(HttpContext context)
@@ -27,13 +27,14 @@ namespace SmartHouseAPI.Middleware
             var originalBodyStream = context.Response.Body;
 
             //Create a new memory stream...
-            using (var responseBody = new MemoryStream())
-            {
-                //...and use that for the temporary response body
-                context.Response.Body = responseBody;
+            var responseBody = new MemoryStream();
+           // using (var responseBody = new MemoryStream())// todo: dispose error
+           // {
+           //...and use that for the temporary response body
+            context.Response.Body = responseBody;
 
                 //Continue down the Middleware pipeline, eventually returning to this class
-                await _next(context);
+                await next(context);
 
                 //Format the response from the server
                 var response = await FormatResponse(context.Response);
@@ -43,7 +44,7 @@ namespace SmartHouseAPI.Middleware
 
                 //Copy the contents of the new memory stream (which contains the response) to the original stream, which is then returned to the client.
                 await responseBody.CopyToAsync(originalBodyStream);
-            }
+            //}
         }
 
         private async Task<string> FormatRequest(HttpRequest request)
@@ -51,7 +52,6 @@ namespace SmartHouseAPI.Middleware
             var body = request.Body;
 
             //This line allows us to set the reader for the request back at the beginning of its stream.
-            // .EnableRewind();
             request.EnableBuffering();
 
               //We now need to read the request stream.  First, we create a new byte[] with the same length as the request stream...

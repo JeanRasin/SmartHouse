@@ -1,24 +1,21 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartHouseAPI.Helpers
+namespace SmartHouseAPI.InputModel
 {
-    public class GoalDoneInput
+    public class GoalUpdateInput : GoalCreateInput
     {
         [Required(ErrorMessage = "Id not null or empty.")]
         public Guid Id { get; set; }
-        public bool Done { get; set; }
 
-        public GoalDoneInput()
+        public GoalUpdateInput()
         {
-
         }
 
-        public GoalDoneInput(Guid id, bool done)
+        public GoalUpdateInput(Guid id = default, string name = null)
         {
             Id = id;
-            Done = done;
+            Name = name;
         }
-
     }
 }

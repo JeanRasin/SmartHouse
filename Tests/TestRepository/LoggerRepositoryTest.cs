@@ -32,6 +32,7 @@ namespace RepositoryTest
                 .StrictMode(true)
                 .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
                 .RuleFor(o => o.EventId, f => eventIdFaker.Generate())
+                .RuleFor(o => o.CategoryName, f => f.Random.Words(2))
                 .RuleFor(o => o.LogLevel, f => f.PickRandom<LogLevel>())
                 .RuleFor(o => o.Message, f => f.Random.Words(20))
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)));
@@ -43,6 +44,7 @@ namespace RepositoryTest
             var data = new Faker<LoggerModel>()
                 .StrictMode(true)
                 .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
+                .RuleFor(o => o.CategoryName, f => f.Random.Words(2))
                 .RuleFor(o => o.EventId, f => eventIdFaker.Generate())
                 .RuleFor(o => o.LogLevel, f => f.PickRandom<LogLevel>())
                 .RuleFor(o => o.Message, f => f.Random.Words())
@@ -54,7 +56,7 @@ namespace RepositoryTest
             var context = new Mock<LoggerContext>();
             context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
 
-            var repository = new LoggerRepository<LoggerModel>(context.Object);
+            var repository = new LoggerRepository<LoggerModel>(context.Object, "test");
             repository.Create(data);
 
             Assert.True(true);
@@ -73,7 +75,7 @@ namespace RepositoryTest
             var context = new Mock<LoggerContext>();
             context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
 
-            var repository = new LoggerRepository<LoggerModel>(context.Object);
+            var repository = new LoggerRepository<LoggerModel>(context.Object, "test");
             List<LoggerModel> result = (await repository.QueryAsync()).ToList();
 
             Assert.NotNull(result);
@@ -99,7 +101,7 @@ namespace RepositoryTest
             var context = new Mock<LoggerContext>();
             context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
 
-            var repository = new LoggerRepository<LoggerModel>(context.Object);
+            var repository = new LoggerRepository<LoggerModel>(context.Object, "test");
 
             var query = await repository.QueryAsync(s => s.Id == "1");
 

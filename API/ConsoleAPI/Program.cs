@@ -139,7 +139,7 @@ namespace ConsoleAPI
                             //  var logger = loggerFactory.CreateLogger("NewLogger");
 
                             var loggerService = ServiceProvider.GetService<ILogger>();
-                            Logger = new LoggerWork(loggerContext);
+                            Logger = new LoggerWork(loggerContext,"66");
                         }
 
                         Logger.LogInformation("Log test.");
@@ -165,7 +165,7 @@ namespace ConsoleAPI
                         //  var logger = loggerFactory.CreateLogger("NewLogger");
 
                         var loggerService = ServiceProvider.GetService<ILogger>();
-                        Logger = new LoggerWork(loggerContext);
+                        Logger = new LoggerWork(loggerContext,"77");
                     }
 
                     var logs = (await Logger.GetLoggerAsync()).Take(2);

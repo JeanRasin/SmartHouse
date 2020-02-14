@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
-using SmartHouseAPI.Helpers;
+using SmartHouseAPI.ApiException;
+using SmartHouseAPI.InputModel;
 using System;
 using System.Collections.Generic;
 

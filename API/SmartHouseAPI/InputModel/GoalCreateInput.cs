@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartHouseAPI.Helpers
+namespace SmartHouseAPI.InputModel
 {
     public class GoalCreateInput
     {

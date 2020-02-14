@@ -89,8 +89,6 @@ namespace SmartHouseAPI
             services.AddTransient<IWeatherWork, WeatherWork>();
             services.AddTransient<ILoggerWork, LoggerWork>();
 
-            services.AddSingleton<ILogger, LoggerWork>();
-
             IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
 
             // OpenWeatherMap service.
@@ -132,7 +130,7 @@ namespace SmartHouseAPI
 
             app.UseRouting();
 
-           // app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

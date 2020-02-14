@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using SmartHouseAPI.ApiException;
 using SmartHouseAPI.Helpers;
 using System;
 using System.Net;
@@ -12,10 +13,10 @@ namespace SmartHouseAPI.Middleware
         private readonly RequestDelegate next;
         private readonly ILogger log;
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger log)
+        public ExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
             this.next = next;
-            this.log = log;
+            log = loggerFactory.CreateLogger<RequestResponseLoggingMiddleware>();
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -26,17 +27,17 @@ namespace SmartHouseAPI.Middleware
             }
             catch(ModelStateException ex)
             {
-                log.LogError("Goal model is not valid.");
+                log.LogError(new EventId(2), ex, "ModelStateException");
                 await HandleModelStateExceptionAsync(httpContext, ex);
             }
             catch(NotFoundException ex)
             {
-                log.LogError($"Data not found: {ex}");
+                log.LogError(new EventId(1), ex, "NotFoundException");
                 await HandleExceptionNotFoundAsync(httpContext, ex);
             }
             catch (Exception ex)
             {
-                log.LogError($"Something went wrong: {ex}");
+                log.LogError(new EventId(0), ex, "Exception");
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
@@ -73,7 +74,7 @@ namespace SmartHouseAPI.Middleware
             return context.Response.WriteAsync(new ErrorDetails()
             {
                 StatusCode = context.Response.StatusCode,
-                Message = "Goal model is not valid."
+                Message = "Model is not valid."
             }.ToString());
         }
     }

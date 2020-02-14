@@ -8,5 +8,8 @@ namespace SmartHouse.Domain.Core
         [BsonId]
        // [BsonRepresentation(BsonType.ObjectId)] todo: error!!!
         public string Id { get; set; }
+        [BsonElement("category_name")]
+        [BsonRepresentation(BsonType.String)]
+        public string CategoryName { get; set; }
     }
 }

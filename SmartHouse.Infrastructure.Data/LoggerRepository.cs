@@ -11,25 +11,22 @@ namespace SmartHouse.Infrastructure.Data
 {
     public class LoggerRepository<T> : ILoggerRepository<T> where T : MongoBaseModel
     {
+        private readonly string categoryName;
+
         public IMongoCollection<T> Collection { get; private set; }
 
-        public LoggerRepository(ILoggerContext context)
+        public LoggerRepository(ILoggerContext context, string categoryName)
         {
             Collection = context.DbSet<T>();
+            this.categoryName = categoryName;
         }
 
         public bool Create(T model)
         {
-            //try
-            //{
-                model.Id = Guid.NewGuid().ToString("N");
-                Collection.InsertOne(model);
-                return true;
-            //}
-            //catch (Exception)
-            //{
-            //    return false;
-            //}
+            model.Id = Guid.NewGuid().ToString("N");
+            model.CategoryName = categoryName;
+            Collection.InsertOne(model);
+            return true;
         }
 
         //public T Find(object id)

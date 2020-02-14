@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
-using SmartHouseAPI.Helpers;
+using SmartHouseAPI.ApiException;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

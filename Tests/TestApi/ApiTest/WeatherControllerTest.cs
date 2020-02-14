@@ -1,15 +1,13 @@
 using Bogus;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
+using SmartHouseAPI.ApiException;
 using SmartHouseAPI.Controllers;
 using System;
 using System.Threading.Tasks;
 using Xunit;
-using Microsoft.AspNetCore.Http;
-using SmartHouseAPI.Helpers;
 
 namespace ApiTest
 {
