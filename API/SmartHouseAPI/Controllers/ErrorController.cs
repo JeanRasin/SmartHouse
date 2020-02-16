@@ -11,6 +11,7 @@ namespace SmartHouseAPI.Controllers
     public class ErrorController : ControllerBase
     {
         [Route("/error-local-development")]
+        [HttpGet]
         public IActionResult ErrorLocalDevelopment([FromServices] IWebHostEnvironment webHostEnvironment)
         {
             if (webHostEnvironment.EnvironmentName != "Development")
@@ -44,6 +45,7 @@ namespace SmartHouseAPI.Controllers
         }
 
         [Route("/error")]
+        [HttpGet]
         // public IActionResult Error() => Problem();
         public IActionResult Error()
         {

@@ -38,12 +38,21 @@ namespace SmartHouseAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                 .ConfigureApiBehaviorOptions(options =>
+                 {
+                     options.SuppressConsumesConstraintForFormFileParameters = true;
+                     options.SuppressInferBindingSourcesForParameters = true;
+                     options.SuppressModelStateInvalidFilter = true;
+                     options.SuppressMapClientErrors = true;
+                   //  options.ClientErrorMapping[404].Link ="https://httpstatuses.com/404";
+                 });
             // services.AddLogging(cfg => cfg.AddConsole());
 
+            // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("V1", new OpenApiInfo { Title = "Api Docs", Version = "V1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
 
             services.AddControllersWithViews(options =>
@@ -112,25 +121,42 @@ namespace SmartHouseAPI
                 app.UseExceptionHandler("/error");
             }
             loggerFactory.AddContext(loggerContext);
-            app.UseMiddleware<ExceptionMiddleware>();
-
             app.UseStaticFiles();
 
-            // обработка ошибок HTTP
-            app.UseStatusCodePages("text/plain", "Error. Status code : {0}");
-            app.UseSwagger();
+           
+            app.UseMiddleware<ExceptionMiddleware>();
+        // app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
+            // обработка ошибок HTTP
+            //app.UseStatusCodePages("text/plain", "Error. Status code : {0}");
+
+
+            //app.UseSwagger();
+
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+            //    c.RoutePrefix = string.Empty;
+            //});
+
+            // Creates Swagger JSON
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "api/docs/{documentName}/swagger.json";
+            });
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
-                c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint("/api/docs/v1/swagger.json", "AnnexUI API V1");
+                c.RoutePrefix = "api/docs";
             });
 
             // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseRouting();
 
-            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            //
 
             app.UseEndpoints(endpoints =>
             {

@@ -38,7 +38,8 @@ namespace SmartHouseAPI.Middleware
             catch(NotFoundException ex)
             {
                 log.LogError(new EventId(1), ex, "NotFoundException");
-                throw new Exception("444");
+               // throw ex;
+                 throw new Exception("444");
                 //await HandleExceptionNotFoundAsync(httpContext, ex);
             }
             catch (Exception ex)
@@ -48,7 +49,7 @@ namespace SmartHouseAPI.Middleware
                 // await HandleExceptionAsync(httpContext, ex);
             }
         }
-
+        /*
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
@@ -63,7 +64,6 @@ namespace SmartHouseAPI.Middleware
 
         private Task HandleExceptionNotFoundAsync(HttpContext context, Exception exception)
         {
-            context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.NotFound;
 
             var hh = context.Features.Get<IExceptionHandlerFeature>();
@@ -113,5 +113,6 @@ namespace SmartHouseAPI.Middleware
                 Message = "Model is not valid."
             }.ToString());
         }
+        */
     }
 }
