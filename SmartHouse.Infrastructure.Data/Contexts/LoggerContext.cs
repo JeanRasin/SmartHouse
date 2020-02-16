@@ -53,6 +53,7 @@ namespace SmartHouse.Infrastructure.Data
             var loggerModelFaker = new Faker<LoggerModel>()
                  .StrictMode(true)
                  .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
+                 .RuleFor(o => o.CategoryName, f => "test")
                  .RuleFor(o => o.EventId, f => eventIdFaker.Generate())
                  .RuleFor(o => o.LogLevel, f => f.PickRandom<Microsoft.Extensions.Logging.LogLevel>())
                  .RuleFor(o => o.Message, f => f.Random.Words())

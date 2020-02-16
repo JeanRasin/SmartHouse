@@ -40,7 +40,7 @@ namespace SmartHouse.Business.Data
                 tokenSource.Cancel();
                 return await task;
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException ex)//todo:???
             {
                 throw ex;
             }

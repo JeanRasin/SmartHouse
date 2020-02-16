@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SmartHouse.Business.Data
 {
-    public class GoalWork : IGoalWork<GoalModel>
+    public class GoalWork : IGoalWork<GoalModel> 
     {
         private readonly GoalRepository repository;
 

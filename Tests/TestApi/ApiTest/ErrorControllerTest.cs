@@ -20,7 +20,7 @@ using Xunit;
 
 namespace ApiTest
 {
-   public class ErrorControllerTest
+    public class ErrorControllerTest
     {
 
         //protected T GetController<T>() where T : Controller, new()
@@ -87,18 +87,36 @@ namespace ApiTest
                 return "Development";
             });
 
-            var errorController = new ErrorController();
+             var kkk = new ErrorController();
 
-            //var hh = new Mock<HttpContext>();
-            //hh.Setup(m => m.p).Returns(() =>
+            var mockErrorController = new Mock<ErrorController>() {
+                CallBase = true,
+               
+            };
+
+            //mockErrorController.Setup(m => m.Problem()).Returns(() =>
             //{
-            //    var exceptionHandlerFeature = new ExceptionHandlerFeature
+            //    //https://github.com/dotnet/aspnetcore/blob/master/src/Mvc/Mvc.Core/src/ControllerBase.cs
+            //    var problemDetails = ProblemDetailsFactory.CreateProblemDetails(
+            // HttpContext,
+            // statusCode: statusCode ?? 500,
+            // title: title,
+            // type: type,
+            // detail: detail,
+            // instance: instance);
+
+            //    return new ObjectResult(problemDetails)
             //    {
-            //        Error = new Exception("Excaption message")
+            //        StatusCode = problemDetails.Status
             //    };
-            //    return exceptionHandlerFeature;
             //});
 
+            //mockErrorController.Setup(m => m.ErrorLocalDevelopment(mockErrorWork.Object)).Returns(() => {
+
+            //    errorController.
+            //});
+
+            /* */
             var mockfeatureCollection = new Mock<IFeatureCollection>();
             mockfeatureCollection.Setup(m => m.Get<IExceptionHandlerFeature>()).Returns(() =>
            {
@@ -117,17 +135,20 @@ namespace ApiTest
 
 
             var httpContext = new DefaultHttpContext(mockfeatureCollection.Object);
-            var actionContext = new ActionContext(httpContext, new Microsoft.AspNetCore.Routing.RouteData(),new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor());
+            var actionContext = new ActionContext(httpContext, new Microsoft.AspNetCore.Routing.RouteData(), new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor());
             var controllerContext = new ControllerContext(actionContext);
 
-           // httpContext.
 
-          //  errorController.Problem
+            kkk.ControllerContext = controllerContext;
 
-            errorController.Problem();
 
-  //var hh = errorController as ControllerBase;
-            var result = errorController.ErrorLocalDevelopment(mockErrorWork.Object) as ObjectResult;
+             // var problemDetails = ProblemDetailsFactory.CreateProblemDetails(httpContext);
+          // var tt=  ProblemDetailsFactory.CreateProblemDetails(httpContext);
+
+         // kkk.ProblemDetailsFactory = new 
+
+            var hh =  mockErrorController.Object;
+            var result = mockErrorController.Object.ErrorLocalDevelopment(mockErrorWork.Object) as ObjectResult;
 
             Assert.IsType<ObjectResult>(result);
         }

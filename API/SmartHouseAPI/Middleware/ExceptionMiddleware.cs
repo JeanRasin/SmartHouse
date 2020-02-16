@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SmartHouseAPI.ApiException;
 using SmartHouseAPI.Helpers;
@@ -28,17 +32,20 @@ namespace SmartHouseAPI.Middleware
             catch(ModelStateException ex)
             {
                 log.LogError(new EventId(2), ex, "ModelStateException");
-                await HandleModelStateExceptionAsync(httpContext, ex);
+                throw ex;
+               // await HandleModelStateExceptionAsync(httpContext, ex);
             }
             catch(NotFoundException ex)
             {
                 log.LogError(new EventId(1), ex, "NotFoundException");
-                await HandleExceptionNotFoundAsync(httpContext, ex);
+                throw new Exception("444");
+                //await HandleExceptionNotFoundAsync(httpContext, ex);
             }
             catch (Exception ex)
             {
                 log.LogError(new EventId(0), ex, "Exception");
-                await HandleExceptionAsync(httpContext, ex);
+                throw ex;
+                // await HandleExceptionAsync(httpContext, ex);
             }
         }
 
@@ -58,6 +65,35 @@ namespace SmartHouseAPI.Middleware
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+
+            var hh = context.Features.Get<IExceptionHandlerFeature>();
+
+            //return context0.Problem(detail: hh.Error?.StackTrace, title: hh.Error.Message);
+
+
+            var kk = context?.RequestServices?.GetRequiredService<ProblemDetailsFactory>();
+
+            throw exception;
+
+            //var problemDetails = kk.CreateProblemDetails(
+            //    context,
+            //    statusCode: context.Response.StatusCode,
+            //    title: hh.Error.Message,
+            //   // type: type,
+            //    detail: hh.Error?.StackTrace
+            //    //instance: instance
+            //    );
+
+          //  problemDetails.
+
+          //  var ff = new ObjectResult(problemDetails);
+
+            //ff.
+
+            //return new ObjectResult(problemDetails)
+            //{
+            //    StatusCode = problemDetails.Status
+            //};
 
             return context.Response.WriteAsync(new ErrorDetails()
             {
