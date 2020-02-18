@@ -34,7 +34,6 @@ namespace SmartHouse.Infrastructure.Data
 
         public void Create(GoalModel data)
         {
-            //db.Goals.Add(data);
             db.Entry(data).State = EntityState.Added;
         }
 
@@ -43,7 +42,6 @@ namespace SmartHouse.Infrastructure.Data
             var goal = db.Goals.Find(id);
             if (goal != null)
             {
-                // db.Remove(goal);
                 db.Entry(goal).State = EntityState.Deleted;
             }
             else
@@ -57,7 +55,6 @@ namespace SmartHouse.Infrastructure.Data
             var goal = db.Goals.Find(data.Id);
             if (goal != null)
             {
-                // db.Update(data);
                 db.Entry(data).State = EntityState.Modified;
             }
             else
