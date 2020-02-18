@@ -1,4 +1,8 @@
 ﻿using Bogus;
+using EntityFrameworkCore.Testing.Moq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using MongoDB.Driver;
@@ -20,10 +24,32 @@ namespace RepositoryTest
 
         }
 
-        [Fact]
-        public void Repository_Get_List()
+        /// <summary>
+        /// Mock dbSet.
+        /// </summary>
+        /// <remarks>
+        /// https://stackoverflow.com/questions/37630564/how-to-mock-up-dbcontext
+        /// </remarks>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private Mock<DbSet<T>> MockDbSet<T>(IEnumerable<T> list) where T : class, new()
         {
-            var data = new Faker<GoalModel>()
+            IQueryable<T> queryableList = list.AsQueryable();
+            Mock<DbSet<T>> dbSetMock = new Mock<DbSet<T>>();
+            dbSetMock.As<IQueryable<T>>().Setup(x => x.Provider).Returns(queryableList.Provider);
+            dbSetMock.As<IQueryable<T>>().Setup(x => x.Expression).Returns(queryableList.Expression);
+            dbSetMock.As<IQueryable<T>>().Setup(x => x.ElementType).Returns(queryableList.ElementType);
+            dbSetMock.As<IQueryable<T>>().Setup(x => x.GetEnumerator()).Returns(() => queryableList.GetEnumerator());
+            // dbSetMock.Setup(x => x.Create()).Returns(new T());
+
+            return dbSetMock;
+        }
+        /*
+        [Fact]
+        public void Repository_GetGoals_Items()
+        {
+            var testFakerData = new Faker<GoalModel>()
                 .StrictMode(true)
                 .RuleFor(o => o.Id, f => f.Random.Uuid())
                 .RuleFor(o => o.Name, f => f.Random.Words(3))
@@ -31,79 +57,95 @@ namespace RepositoryTest
                 .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                 .RuleFor(o => o.Done, f => f.Random.Bool());
 
-            //            var data = new[]
-            //{
-            //    new GoalModel(),
-            //    new GoalModel(),
-            //    new GoalModel()
-            //}.AsQueryable();
+            List<GoalModel> testData = testFakerData.Generate(10);
 
-         //   var mock = new Mock<DbSet<GoalModel>>();
+            var goalSetMock = MockDbSet(testData);
 
-            // This line is new
-            //mock.As<IAsyncEnumerable<GoalModel>>()
-            //    .Setup(x => x.GetAsyncEnumerator())
-            //    .Returns(new TestDbAsyncEnumerator<Foo>(data.GetEnumerator()));
+            var dbContext = new Mock<IGoalContext>();
+            dbContext.Setup(m => m.Goals).Returns(goalSetMock.Object);
 
-            //// this line is updated
-            //mock.As<IQueryable<Foo>>()
-            //    .Setup(x => x.Provider)
-            //    .Returns(new Test DbAsyncQueryProvider<Foo>(data.Provider));
+            var repository = new GoalRepository(dbContext.Object);
+            List<GoalModel> result = repository.GetGoals().ToList();
 
-            //mock.As<IQueryable<Foo>>()
-            //    .Setup(x => x.Expression)
-            //    .Returns(data.Expression);
+            Assert.Equal(testData, result);
+        }
 
-            //mock.As<IQueryable<Foo>>()
-            //    .Setup(x => x.ElementType)
-            //    .Returns(data.ElementType);
+        [Fact]
+        public void Repository_GetGoal_Item()
+        {
+            var testFakerData = new Faker<GoalModel>()
+                .StrictMode(true)
+                .RuleFor(o => o.Id, f => f.Random.Uuid())
+                .RuleFor(o => o.Name, f => f.Random.Words(3))
+                .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
+                .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
+                .RuleFor(o => o.Done, f => f.Random.Bool());
 
-            //mock.As<IQueryable<Foo>>()
-            //    .Setup(x => x.GetEnumerator())
-            //    .Returns(data.GetEnumerator());
+            List<GoalModel> testData = testFakerData.Generate(1);
 
-            var result = data.Generate(1);
+            GoalModel itemTestData = testData.Single();
 
-            //var mockSet = new Mock<DbSet<GoalModel>>();
-            //mockSet.As<IQueryable<GoalModel>>().Setup(m => m.Provider).Returns(result.AsQueryable().Provider);
-            //mockSet.As<IQueryable<GoalModel>>().Setup(m => m.Expression).Returns(result.AsQueryable().Expression);
-            //mockSet.As<IQueryable<GoalModel>>().Setup(m => m.ElementType).Returns(result.AsQueryable().ElementType);
-            //mockSet.As<IQueryable<GoalModel>>().Setup(m => m.GetEnumerator()).Returns(result.AsQueryable().GetEnumerator());
-            //mockSet.Setup(m => m.Add(It.IsAny<GoalModel>())).Callback<GoalModel>(result.Add);
-            //return mockSet;
+            var goalSetMock = MockDbSet(testData);
+            goalSetMock.Setup(x => x.Find(itemTestData.Id)).Returns(itemTestData);
 
-            var mockSet = MockHelper.GetMockDbSet(result);
+            var dbContext = new Mock<IGoalContext>();
+            dbContext.Setup(m => m.Goals).Returns(goalSetMock.Object);
 
-            /*
-            var relationalCommand = new Mock<IRelationalCommand>();
-            relationalCommand.Setup(m => m.ExecuteNonQuery(It.IsAny<RelationalCommandParameterObject>())).Returns(1);
+            var repository = new GoalRepository(dbContext.Object);
+            GoalModel result = repository.GetGoal(itemTestData.Id);
 
-            var rawSqlCommand = new Mock<RawSqlCommand>(MockBehavior.Strict, relationalCommand.Object, new Dictionary<string, object>());
-            rawSqlCommand.Setup(m => m.RelationalCommand).Returns(() => relationalCommand.Object);
-            rawSqlCommand.Setup(m => m.ParameterValues).Returns(new Dictionary<string, object>());
+            Assert.Equal(itemTestData, result);
+        }
+        */
 
-            var rawSqlCommandBuilder = new Mock<IRawSqlCommandBuilder>();
-            rawSqlCommandBuilder.Setup(m => m.Build(It.IsAny<string>(), It.IsAny<IEnumerable<object>>())).Returns(rawSqlCommand.Object);
+        /// <summary>
+        /// https://github.com/rgvlee/EntityFrameworkCore.Testing
+        /// </summary>
+        [Fact]
+        public void Repository_Create_Item()
+        {
+            var testFakerData = new Faker<GoalModel>()
+                .StrictMode(true)
+                .RuleFor(o => o.Id, f => f.Random.Uuid())
+                .RuleFor(o => o.Name, f => f.Random.Words(3))
+                .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
+                .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
+                .RuleFor(o => o.Done, f => f.Random.Bool());
 
-            var databaseFacade = new Mock<DatabaseFacade>(context.Object);
-            databaseFacade.As<IInfrastructure<IServiceProvider>>().Setup(m => m.Instance.GetService(It.Is<Type>(t => t == typeof(IConcurrencyDetector)))).Returns(new Mock<IConcurrencyDetector>().Object);
-            databaseFacade.As<IInfrastructure<IServiceProvider>>().Setup(m => m.Instance.GetService(It.Is<Type>(t => t == typeof(IRawSqlCommandBuilder)))).Returns(rawSqlCommandBuilder.Object);
-            databaseFacade.As<IInfrastructure<IServiceProvider>>().Setup(m => m.Instance.GetService(It.Is<Type>(t => t == typeof(IRelationalConnection)))).Returns(new Mock<IRelationalConnection>().Object);
-            */
+            List<GoalModel> testData = testFakerData.Generate(1);
 
-            var context = new Mock<GoalContext>();
-          
-            context.Setup(l => l.Set<GoalModel>()).Returns(mockSet.Object);
-            context.Setup(l => l.Goals).Returns(mockSet.Object);
+            GoalModel itemTestData = testData.Single();
 
-          //  context.Setup(l => l.Goals.Find()).Returns(result.First());
 
-            var repository = new GoalRepository(context.Object);
+            var mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            var hh = mockedDbContext.Goals;
 
-            GoalModel item = result.Single();
-           var rr= repository.GetGoal(item.Id);
+            int count = mockedDbContext.Goals.Count();
 
-            Assert.True(true);
+            //var goalSetMock = MockDbSet(testData);
+            //goalSetMock.Setup(x => x.Add(itemTestData));
+
+            // var tt = new InternalEntityEntry()
+
+            //var entityEntryMock = new Mock<EntityEntry>(It.IsAny<InternalEntityEntry>());
+            //entityEntryMock.Setup(x => x.Entity).Returns(itemTestData);
+
+            //var dbContext = new Mock<IGoalContext>();
+            //dbContext.Setup(m => m.Entry(It.IsAny<GoalModel>())).Returns(entityEntryMock.Object);
+
+            var repository = new GoalRepository(mockedDbContext);
+            repository.Create(itemTestData);
+
+            mockedDbContext.SaveChanges();
+
+            //dbContext.Verify(v => v.Entry(It.IsAny<GoalModel>()), Times.Once);
+
+            // Assert.Equal(itemTestData, result);
+
+            var dbContextMock = Mock.Get(mockedDbContext);
+
+            dbContextMock.Verify(v => v.Entry(itemTestData), Times.Once, "Entry was not called.");
+            Assert.Equal(count + 1, mockedDbContext.Goals.Count());//, "No entry has been added."
         }
     }
 }

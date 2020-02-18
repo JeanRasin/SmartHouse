@@ -1,4 +1,5 @@
-﻿using SmartHouse.Domain.Core;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,14 @@ namespace SmartHouse.Infrastructure.Data
 
         public GoalModel GetGoal(Guid id)
         {
-            return db.Goals.Find(id);
+            GoalModel result = db.Goals.Find(id);
+            return result;
         }
 
         public void Create(GoalModel data)
         {
-            db.Goals.Add(data);
+            //db.Goals.Add(data);
+            db.Entry(data).State = EntityState.Added;
         }
 
         public void Remove(Guid id)
@@ -38,13 +41,13 @@ namespace SmartHouse.Infrastructure.Data
             }
             else
             {
-                throw new Exception($"Record with id:{id} not found");
+                throw new KeyNotFoundException($"Record with id:{id} not found");
             }
         }
 
         public void Update(GoalModel data)
         {
-            db.Entry(data).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            db.Entry(data).State =  EntityState.Modified;
         }
 
         public void Save()

@@ -19,6 +19,12 @@ namespace SmartHouseAPI.Controllers
             this.loggerWork = loggerWork;
         }
 
+        /// <summary>
+        /// Get log a data.
+        /// </summary>
+        /// <returns>Returns list logs</returns>
+        /// <response code="200">Returns list logs</response>
+        /// <response code="500">Internal server error</response>  
         [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -26,7 +32,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetLoggerAsync()
         {
-            IEnumerable<LoggerModel> result = await loggerWork.GetLoggerAsync();
+            IEnumerable<LoggerModel> result = await loggerWork.GetLoggerAsync();//todo:remove
 
             if (result == null)
             {

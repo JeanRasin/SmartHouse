@@ -59,6 +59,22 @@ namespace SmartHouseAPI.Controllers
         }
 
         // POST: api/goal
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// Sample request: todo:!!!
+        ///
+        ///     POST /Todo
+        ///     {
+        ///        "id": 1,
+        ///        "name": "Item1",
+        ///        "isComplete": true
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

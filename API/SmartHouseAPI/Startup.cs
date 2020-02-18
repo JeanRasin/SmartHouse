@@ -20,6 +20,8 @@ using SmartHouse.Domain.Interfaces;
 using Bogus;
 using SmartHouse.Domain.Core;
 using SmartHouseAPI.Middleware;
+using static SmartHouseAPI.Middleware.RequestResponseLoggingMiddleware;
+using System.Diagnostics;
 
 namespace SmartHouseAPI
 {
@@ -123,22 +125,25 @@ namespace SmartHouseAPI
             loggerFactory.AddContext(loggerContext);
             app.UseStaticFiles();
 
-           
+            /*
+            Action<RequestProfilerModel> requestResponseHandler = requestProfilerModel =>
+            {
+                Debug.Print(requestProfilerModel.Request);
+                Debug.Print(Environment.NewLine);
+                Debug.Print(requestProfilerModel.Response);
+            };
+
+            app.UseMiddleware<RequestResponseLoggingMiddleware>(requestResponseHandler);
+            */
+
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
             app.UseMiddleware<ExceptionMiddleware>();
-        // app.UseMiddleware<RequestResponseLoggingMiddleware>();
+       
 
             // обработка ошибок HTTP
             //app.UseStatusCodePages("text/plain", "Error. Status code : {0}");
-
-
-            //app.UseSwagger();
-
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
-            //    c.RoutePrefix = string.Empty;
-            //});
-
+            
             // Creates Swagger JSON
             app.UseSwagger(c =>
             {

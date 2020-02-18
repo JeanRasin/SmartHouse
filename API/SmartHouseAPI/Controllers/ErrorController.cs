@@ -40,7 +40,7 @@ namespace SmartHouseAPI.Controllers
             }
             else
             {
-                return base.Problem(detail: context.Error?.StackTrace, title: context.Error?.Message);
+                return Problem(detail: context.Error?.StackTrace, title: context.Error?.Message);
             }
         }
 
@@ -69,7 +69,7 @@ namespace SmartHouseAPI.Controllers
             }
             else
             {
-                return base.Problem();
+                return Problem();
             }
         }
     }
