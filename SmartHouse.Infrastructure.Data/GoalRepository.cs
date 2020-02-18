@@ -23,6 +23,12 @@ namespace SmartHouse.Infrastructure.Data
         public GoalModel GetGoal(Guid id)
         {
             GoalModel result = db.Goals.Find(id);
+
+            if (result == null)
+            {
+                throw new KeyNotFoundException($"Record with id:{id} not found");
+            }
+
             return result;
         }
 
@@ -37,7 +43,8 @@ namespace SmartHouse.Infrastructure.Data
             var goal = db.Goals.Find(id);
             if (goal != null)
             {
-                db.Remove(goal);
+                // db.Remove(goal);
+                db.Entry(goal).State = EntityState.Deleted;
             }
             else
             {
@@ -47,7 +54,16 @@ namespace SmartHouse.Infrastructure.Data
 
         public void Update(GoalModel data)
         {
-            db.Entry(data).State =  EntityState.Modified;
+            var goal = db.Goals.Find(data.Id);
+            if (goal != null)
+            {
+                // db.Update(data);
+                db.Entry(data).State = EntityState.Modified;
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Record with id:{data.Id} not found");
+            }
         }
 
         public void Save()
