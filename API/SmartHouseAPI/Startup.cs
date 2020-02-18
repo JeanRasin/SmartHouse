@@ -84,19 +84,29 @@ namespace SmartHouseAPI
             ILoggerContext loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
 
             // добавляем контекст MobileContext в качестве сервиса в приложение
-            services.AddDbContext<GoalContext>(options =>
-            {
+            //services.AddDbContext<GoalContext>(options =>
+            //{
+            //    options.UseNpgsql(connection);
+
+            //    //ILoggerFactory loggerFactory = Helpers.LoggerExtensions.AddContext(loggerContext);
+
+            //    //options.UseLoggerFactory(loggerFactory);
+            //});
+
+            services.AddTransient<SmartHouse.Infrastructure.Data.GoalContext>(x=> {
+
+                //var options = new DbContextOptions<SmartHouse.Infrastructure.Data.GoalContext>();
+                var options = new DbContextOptionsBuilder<SmartHouse.Infrastructure.Data.GoalContext>();
                 options.UseNpgsql(connection);
 
-                //ILoggerFactory loggerFactory = Helpers.LoggerExtensions.AddContext(loggerContext);
-
-                //options.UseLoggerFactory(loggerFactory);
+                return new GoalContext(options.Options, CurrentEnvironment);
             });
+
             //services.AddControllersWithViews();
 
             // services.AddTransient<IGoalWork<GoalWork>, GoalWork>();
 
-            services.AddTransient<IGoalWork<GoalModel>, GoalWork>();
+          //  services.AddTransient<IGoalWork<GoalModel>, GoalWork>();
             services.AddTransient<IWeatherWork, WeatherWork>();
             services.AddTransient<ILoggerWork>(x => new LoggerWork(x.GetRequiredService<ILoggerContext>(), ""));
 
