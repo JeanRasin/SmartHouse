@@ -11,6 +11,7 @@ using Xunit;
 
 namespace ApiTest
 {
+    [CollectionDefinition("Weather controller")]
     public class WeatherControllerTest
     {
         readonly WeatherModel wetaherData;
@@ -33,49 +34,42 @@ namespace ApiTest
 
         #region GetWeatherAsync
         [Fact]
-        public async void GetWeatherAsync_WhenCalled_ReturnsResult()
+        public void GetWeatherAsync_Success_WeatherModelItem()
         {
+            // Arrange
             var mockWeatherWork = new Mock<IWeatherWork>();
             mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult(wetaherData));
-
             var weatherController = new WeatherController(mockWeatherWork.Object);
-            var result = await weatherController.GetWeatherAsync();
 
-            Assert.IsType<OkObjectResult>(result);
-        }
-
-        [Fact]
-        public void GetWeatherAsync_WhenCalled_ReturnsAllItems()
-        {
-            var mockWeatherWork = new Mock<IWeatherWork>();
-            mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult(wetaherData));
-
-            var weatherController = new WeatherController(mockWeatherWork.Object);
+            // Act
             var result = weatherController.GetWeatherAsync().Result as OkObjectResult;
 
+            // Assert
             Assert.IsType<WeatherModel>(result.Value);
             Assert.Equal(result.Value, wetaherData);
         }
 
         [Fact]
-        public void GetWeatherAsync_WhenCalled_ReturnsStatus404()
+        public void GetWeatherAsync_IdNotFound_NotFoundExceptionStatus404()
         {
+            // Arrange
             var mockWeatherWork = new Mock<IWeatherWork>();
             mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult<WeatherModel>(null));
-
             var weatherController = new WeatherController(mockWeatherWork.Object);
 
+            // Act Assert
             Assert.ThrowsAsync<NotFoundException>(() => weatherController.GetWeatherAsync());
         }
 
         [Fact]
-        public void GetWeatherAsync_WhenCalled_ReturnsStatus500()
+        public void GetWeatherAsync_Exception_ExceptionStatus500()
         {
+            // Arrange
             var mockWeatherWork = new Mock<IWeatherWork>();
             mockWeatherWork.Setup(m => m.GetWeatherAsync()).Throws<Exception>();
-
             var weatherController = new WeatherController(mockWeatherWork.Object);
 
+            // Act Assert
             Assert.ThrowsAsync<Exception>(() => weatherController.GetWeatherAsync());
         }
         #endregion

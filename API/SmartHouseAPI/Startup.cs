@@ -106,9 +106,9 @@ namespace SmartHouseAPI
 
             // services.AddTransient<IGoalWork<GoalWork>, GoalWork>();
 
-          //  services.AddTransient<IGoalWork<GoalModel>, GoalWork>();
+            services.AddTransient<IGoalWork<GoalModel>, GoalWork>();
             services.AddTransient<IWeatherWork, WeatherWork>();
-            services.AddTransient<ILoggerWork>(x => new LoggerWork(x.GetRequiredService<ILoggerContext>(), ""));
+            services.AddTransient<ILoggerWork>(x => new LoggerWork(x.GetRequiredService<ILoggerContext>(), "General category"));
 
             IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
 

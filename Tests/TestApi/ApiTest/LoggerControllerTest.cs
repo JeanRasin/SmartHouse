@@ -1,5 +1,4 @@
 ﻿using Bogus;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -7,7 +6,6 @@ using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
 using SmartHouseAPI.ApiException;
 using SmartHouseAPI.Controllers;
-using SmartHouseAPI.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,6 +13,7 @@ using Xunit;
 
 namespace ApiTest
 {
+    [CollectionDefinition("Logger controller")]
     public class LoggerControllerTest
     {
         readonly IEnumerable<LoggerModel> loggerList;
@@ -41,7 +40,7 @@ namespace ApiTest
 
         #region GetLoggerAsync
         [Fact]
-        public void GetLoggerAsync_WhenCalled_ReturnsResult()
+        public void GetLoggerAsync_Success_LoggerModelItems()
         {
             var mockLogger = new Mock<ILoggerWork>();
 
@@ -55,7 +54,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void GetLoggerAsync_WhenCalled_ReturnsStatus404()
+        public void GetLoggerAsync_IdNotFound_NotFoundExceptionStatus404()
         {
             var mockLogger = new Mock<ILoggerWork>();
 
@@ -67,7 +66,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void GetLoggerAsync_WhenCalled_ReturnsStatus500()
+        public void GetLoggerAsync_Exception_ExceptionStatus500()
         {
             var mockLogger = new Mock<ILoggerWork>();
 

@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using System;
@@ -9,24 +8,26 @@ using System.Threading.Tasks;
 
 namespace SmartHouse.Infrastructure.Data
 {
+    /// <summary>
+    /// https://gist.github.com/antdimot/5037532
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class LoggerRepository<T> : ILoggerRepository<T> where T : MongoBaseModel
     {
-        private readonly string categoryName;
+        public string CategoryName { get; }
 
         public IMongoCollection<T> Collection { get; private set; }
 
         public LoggerRepository(ILoggerContext context, string categoryName)
         {
             Collection = context.DbSet<T>();
-            this.categoryName = categoryName;
+            CategoryName = categoryName;
         }
 
-        public bool Create(T model)
+        public void Create(T model)
         {
-            model.Id = Guid.NewGuid().ToString("N");
-            model.CategoryName = categoryName;
+            model.CategoryName = CategoryName;
             Collection.InsertOne(model);
-            return true;
         }
 
         //public T Find(object id)
@@ -48,10 +49,10 @@ namespace SmartHouse.Infrastructure.Data
             return result;
         }
 
-          public async Task<List<T>> QueryAsync(Expression<Func<T, bool>> filter)
-     // public async Task<List<T>> QueryAsync(FilterDefinition<T> filter) //, FindOptions<T, TProjection> options = null
+        public async Task<List<T>> QueryAsync(Expression<Func<T, bool>> filter)
         {
-            return await Collection.FindAsync<T>(filter).GetAwaiter().GetResult().ToListAsync();
+            var result = await Collection.FindAsync<T>(filter).GetAwaiter().GetResult().ToListAsync();
+            return result;
         }
     }
 }

@@ -10,10 +10,12 @@ using Xunit;
 
 namespace TestBusiness
 {
+    [CollectionDefinition("Weather work")]
     public class WeatherWorkTest
     {
+        #region WeatherWork
         [Fact]
-        public async void Data_Get_Success_Async()
+        public async void GetWeatherAsync_WeatherModel()
         {
             Randomizer.Seed = new Random(1338);
 
@@ -31,6 +33,7 @@ namespace TestBusiness
                 return await Task.Run(() =>
                 {
                     WeatherModel wetaherData = new Faker<WeatherModel>()
+                    .StrictMode(false)
                     .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000))
                     .RuleFor(o => o.WindDeg, f => f.Random.UShort(0, 360))
                     .RuleFor(o => o.Temp, f => f.Random.Float(-100, 100))
@@ -48,10 +51,7 @@ namespace TestBusiness
             var tokenSource = new CancellationTokenSource();
             var mock = new Mock<IWeatherService>();
 
-            mock.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(() =>
-            {
-                return MoqGetWeatherAsync(tokenSource: tokenSource, sec: 2);
-            });
+            mock.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(MoqGetWeatherAsync(tokenSource: tokenSource, sec: 2));
 
             var weatherWork = new WeatherWork(weatherService: mock.Object, timeOutSec: 4);
 
@@ -61,14 +61,11 @@ namespace TestBusiness
         }
 
         [Fact]
-        public void Data_Get_Exception()
+        public void GetWeatherAsync_Exception()
         {
             var mock = new Mock<IWeatherService>();
 
-            mock.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(() =>
-            {
-                throw new Exception();
-            });
+            mock.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Throws(new Exception());
 
             var weatherWork = new WeatherWork(mock.Object);
 
@@ -76,7 +73,7 @@ namespace TestBusiness
         }
 
         [Fact]
-        public async void Data_TimeOut_OperationCanceledException_Async()
+        public async void GetWeatherAsync_TimeOut_OperationCanceledException()
         {
             async static Task<WeatherModel> MoqGetWeatherAsync(CancellationTokenSource tokenSource, int sec)
             {
@@ -96,14 +93,12 @@ namespace TestBusiness
             var mock = new Mock<IWeatherService>();
             var tokenSource = new CancellationTokenSource();
 
-            mock.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(() =>
-            {
-                return MoqGetWeatherAsync(tokenSource: tokenSource, sec: 3);
-            });
+            mock.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(MoqGetWeatherAsync(tokenSource: tokenSource, sec: 3));
 
             var weatherWork = new WeatherWork(weatherService: mock.Object, timeOutSec: 2);
 
             await Assert.ThrowsAsync<OperationCanceledException>(() => weatherWork.GetWeatherAsync(tokenSource));
         }
+        #endregion
     }
 }

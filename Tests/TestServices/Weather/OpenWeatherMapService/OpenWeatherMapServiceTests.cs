@@ -238,12 +238,11 @@ namespace TestService
         {
             WeatherResponse wetaherData = GetWeatherResponse();
 
-            var serializeOptions = new JsonSerializerOptions
+            var responseJson = JsonSerializer.Serialize(wetaherData, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
-            };
-            var responseJson = JsonSerializer.Serialize(wetaherData, serializeOptions);
+            });
 
             mockHttp.Fallback.Respond("application/json", responseJson);
 

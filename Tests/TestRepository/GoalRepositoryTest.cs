@@ -66,7 +66,7 @@ namespace RepositoryTest
 
         #region GetGoals
         [Fact]
-        public void Repository_GetGoals_Items()
+        public void GetGoals_GoalModelItems()
         {
             GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
 
@@ -82,7 +82,7 @@ namespace RepositoryTest
 
         #region GetGoal 
         [Fact]
-        public void Repository_GetGoal_Item()
+        public void GetGoal_GoalModelItem()
         {
             GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
             mockedDbContext.Goals.Add(itemTestData);
@@ -95,7 +95,7 @@ namespace RepositoryTest
         }
 
         [Fact]
-        public void Repository_GetGoal_KeyNotFoundException()
+        public void GetGoal_KeyNotFound_KeyNotFoundException()
         {
             GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
             var repository = new GoalRepository(mockedDbContext);
@@ -106,7 +106,7 @@ namespace RepositoryTest
 
         #region Create 
         [Fact]
-        public void Repository_Create_Item()
+        public void Create_Success()
         {
             GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
 
@@ -123,7 +123,7 @@ namespace RepositoryTest
 
         #region Remove
         [Fact]
-        public void Repository_Remove_Item()
+        public void Remove_Success()
         {
             GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
             mockedDbContext.Goals.Add(itemTestData);
@@ -139,7 +139,7 @@ namespace RepositoryTest
         }
 
         [Fact]
-        public void Repository_Remove_KeyNotFoundException()
+        public void Remove_KeyNotFound_KeyNotFoundException()
         {
             GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
 
@@ -151,7 +151,7 @@ namespace RepositoryTest
 
         #region Update
         [Fact]
-        public void Repository_Update_Item()
+        public void Update_Success()
         {
             GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
 
@@ -167,7 +167,7 @@ namespace RepositoryTest
         }
 
         [Fact]
-        public void Repository_Update_KeyNotFoundException()
+        public void Update_KeyNotFound_KeyNotFoundException()
         {
             GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
 

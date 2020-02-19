@@ -2,13 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.Extensions.Logging;
 using Moq;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using SmartHouseAPI.ApiException;
 using SmartHouseAPI.Controllers;
-using SmartHouseAPI.Helpers;
 using SmartHouseAPI.InputModel;
 using System;
 using System.Collections.Generic;
@@ -16,6 +14,7 @@ using Xunit;
 
 namespace ApiTest
 {
+    [CollectionDefinition("Goal controller")]
     public class GoalControllerTest
     {
         readonly GoalModel goalDataItem;
@@ -44,13 +43,10 @@ namespace ApiTest
 
         #region GetGoalAll
         [Fact]
-        public void GetGoalAll_WhenCalled_ReturnsAllItems()
+        public void GetGoalAll_All_GoalModelItems()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            mockGoalWork.Setup(m => m.GetGoalAll()).Returns(() =>
-            {
-                return goalDataItems;
-            });
+            mockGoalWork.Setup(m => m.GetGoalAll()).Returns(goalDataItems);
 
             var goalController = new GoalController(mockGoalWork.Object);
             var result = goalController.GetGoalAll() as OkObjectResult;
@@ -60,7 +56,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void GetGoalAll_WhenCalled_ReturnsStatus500()
+        public void GetGoalAll_Exception_ExceptionStatus500()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.GetGoalAll()).Throws<Exception>();
@@ -73,13 +69,10 @@ namespace ApiTest
 
         #region GetGoals
         [Fact]
-        public void GetGoals_WhenCalled_ReturnsAllItems()
+        public void GetGoals_GoalModelItems()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            mockGoalWork.Setup(m => m.GetGoals()).Returns(() =>
-            {
-                return goalDataItems;
-            });
+            mockGoalWork.Setup(m => m.GetGoals()).Returns(goalDataItems);
 
             var goalController = new GoalController(mockGoalWork.Object);
             var result = goalController.GetGoals() as OkObjectResult;
@@ -89,7 +82,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void GetGoals_WhenCalled_ReturnsStatus500()
+        public void GetGoals_Exception_ExceptionStatus500()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.GetGoals()).Throws<Exception>();
@@ -102,7 +95,7 @@ namespace ApiTest
 
         #region GetGoal
         [Fact]
-        public void GetGoal_WhenCalled_Return()
+        public void GetGoal_GoalModelItem()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns(goalDataItem);
@@ -115,7 +108,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void GetGoal_WhenCalled_ReturnsStatus404()
+        public void GetGoal_IdNotFound_NotFoundExceptionStatus404()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
@@ -126,7 +119,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void GetGoal_WhenCalled_ReturnsStatus500()
+        public void GetGoal_Exception_ExceptionStatus500()
         {
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Throws<Exception>();
@@ -139,15 +132,12 @@ namespace ApiTest
 
         #region Create
         [Fact]
-        public void Create_WhenCalled_Success201()
+        public void Create_Success_Status201()
         {
             var inputParam = new GoalCreateInput(goalDataItem.Name);
 
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(() =>
-            {
-                return goalDataItem;
-            });
+            mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(goalDataItem);
 
             var mockUrlHelper = new Mock<IUrlHelper>();
             mockUrlHelper
@@ -167,7 +157,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void Create_WhenCalled_ReturnsStatus500()
+        public void Create_Exception_ExceptionStatus500()
         {
             var inputParam = new GoalCreateInput(goalDataItem.Name);
 
@@ -180,15 +170,12 @@ namespace ApiTest
         }
 
         [Fact]
-        public void Create_WhenCalled_ReturnsStatus400()
+        public void Create_Exception_ModelStateExceptionStatus400()
         {
             var inputParam = new GoalCreateInput();
 
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(() =>
-            {
-                return goalDataItem;
-            });
+            mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(goalDataItem);
 
             var goalController = new GoalController(mockGoalWork.Object);
             goalController.ModelState.AddModelError("key", "error message");
@@ -199,7 +186,7 @@ namespace ApiTest
 
         #region Update
         [Fact]
-        public void Update_WhenCalled_Success()
+        public void Update_Success_Status204()
         {
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "test name");
 
@@ -214,7 +201,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void Update_WhenCalled_ReturnsStatus400()
+        public void Update_Exception_ModelStateExceptionStatus400()
         {
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "");
 
@@ -228,7 +215,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void Update_WhenCalled_ReturnsStatus404()
+        public void Update_IdNotFound_NotFoundExceptionStatus404()
         {
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "test text");
 
@@ -241,7 +228,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void Update_WhenCalled_ReturnsStatus500()
+        public void Update_Exception_ExceptionStatus500()
         {
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "test text");
 
@@ -256,7 +243,7 @@ namespace ApiTest
 
         #region Delete
         [Fact]
-        public void Delete_WhenCalled_Success()
+        public void Delete_Success_Status204()
         {
             var id = new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21");
 
@@ -271,7 +258,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void Delete_WhenCalled_ReturnsStatus404()
+        public void Delete_IdNotFound_NotFoundExceptionStatus404()
         {
             var id = new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21");
 
@@ -284,7 +271,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void Delete_WhenCalled_ReturnsStatus500()
+        public void Delete_Exception_ExceptionStatus500()
         {
             var id = new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21");
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
@@ -297,7 +284,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void Done_WhenCalled_Success()
+        public void Done_Success_Status204()
         {
             var inputData = new GoalDoneInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), true);
 
@@ -314,7 +301,7 @@ namespace ApiTest
 
         #region Done
         [Fact]
-        public void Done_WhenCalled_ReturnsStatus404()
+        public void Done_IdNotFound_NotFoundExceptionStatus404()
         {
             var inputData = new GoalDoneInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), true);
 
@@ -327,7 +314,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public void Done_WhenCalled_ReturnsStatus500()
+        public void Done_Exception_ExceptionStatus500()
         {
             var inputData = new GoalDoneInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), true);
 

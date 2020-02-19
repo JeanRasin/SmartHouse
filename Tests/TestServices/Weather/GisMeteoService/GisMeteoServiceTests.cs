@@ -13,7 +13,7 @@ namespace TestService
         }
 
         [Test]
-        public async Task Get_Success_Data()
+        public async Task Get_Success_WeatherModelItem()
         {
             var service = new GisMeteoService();
             WeatherModel result = await service.GetWeatherAsync();

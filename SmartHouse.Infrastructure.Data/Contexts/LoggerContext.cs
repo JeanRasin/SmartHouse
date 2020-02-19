@@ -1,68 +1,47 @@
-﻿using Bogus;
-using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using SmartHouse.Domain.Core;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace SmartHouse.Infrastructure.Data
 {
     public class LoggerContext : ILoggerContext
     {
-        public readonly MongoClient mongoClient;
-        public readonly IMongoDatabase mongoDb;
+        public MongoClient MongoClient { get; set; }
 
-        public LoggerContext()//todo:не понятно как использовать для Moq
+        private readonly IMongoDatabase mongoDb;
+
+        public LoggerContext(string connection, string dbName)
         {
-        }
+            MongoClient = new MongoClient(connection);
+            mongoDb = MongoClient.GetDatabase(dbName);
 
-        public LoggerContext(string connection, string dbName) : this()
-        {
-            mongoClient = new MongoClient(connection);
-            mongoDb = mongoClient.GetDatabase(dbName);
+            // Add test data to the logger table
+            List<LoggerModel> dataItems = OnModelCreating() ?? new List<LoggerModel>();
 
-#if (DEBUG)
-
-            bool exist = mongoDb.ListCollections().Any();
-            if (!exist)
+            if (dataItems.Any())
             {
-                // Add test data to the logger table
-                InsertDefaultData(mongoDb, CreateDefaulLoggerModeltData(12));
+                bool exist = mongoDb.ListCollections().Any();
+                if (!exist)
+                {
+                    InsertDefaultData(mongoDb, dataItems);
+                }
             }
-#endif
         }
 
         public virtual IMongoCollection<T> DbSet<T>() where T : MongoBaseModel
         {
-            var tableName = GetTableName<T>();
-            var result = mongoDb.GetCollection<T>(tableName);
+            string tableName = GetTableName<T>();
+            IMongoCollection<T> result = mongoDb.GetCollection<T>(tableName);
             return result;
         }
 
-        private List<LoggerModel> CreateDefaulLoggerModeltData(int count = 10)
+        public virtual List<LoggerModel> OnModelCreating()
         {
-            // Randomizer.Seed = new Random(544);
-
-            var eventIdFaker = new Faker<EventId>()
-                 .RuleFor(o => o.StateId, f => f.Random.Int(1, 10))
-                 .RuleFor(o => o.Name, f => f.Random.String2(10));
-
-            var loggerModelFaker = new Faker<LoggerModel>()
-                 .StrictMode(true)
-                 .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
-                 .RuleFor(o => o.CategoryName, f => "test")
-                 .RuleFor(o => o.EventId, f => eventIdFaker.Generate())
-                 .RuleFor(o => o.LogLevel, f => f.PickRandom<Microsoft.Extensions.Logging.LogLevel>())
-                 .RuleFor(o => o.Message, f => f.Random.Words())
-                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)));
-
-            List<LoggerModel> result = loggerModelFaker.Generate(count);
-            return result;
+            return null;
         }
-
         private void InsertDefaultData<T>(IMongoDatabase mongoDb, List<T> items)
         {
             var tableName = GetTableName<T>();
