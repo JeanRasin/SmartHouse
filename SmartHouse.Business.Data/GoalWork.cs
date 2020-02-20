@@ -9,65 +9,78 @@ namespace SmartHouse.Business.Data
 {
     public class GoalWork : IGoalWork<GoalModel> 
     {
-        private readonly GoalRepository repository;
+        private readonly IGoalRepository<GoalModel> repository;
 
         public GoalWork(GoalContext context)
         {
             repository = new GoalRepository(context);
         }
+
+        public GoalWork(IGoalRepository<GoalModel> goalRepository)
+        {
+            repository = goalRepository;
+        }
+
         public IEnumerable<GoalModel> GetGoalAll()
         {
-            IOrderedEnumerable<GoalModel> items = repository
+            IOrderedEnumerable<GoalModel> result = repository
                   .GetGoals()
                   .OrderByDescending(p => p.DateUpdate);
-            return items;
+            return result;
         }
 
         public IEnumerable<GoalModel> GetGoals()
         {
-            IOrderedEnumerable<GoalModel> items = repository
+            IOrderedEnumerable<GoalModel> result = repository
                   .GetGoals()
                   .Where(p => p.Done == false)
                   .OrderByDescending(p => p.DateUpdate);
 
-            return items;
+            return result;
         }
 
         public GoalModel GetGoal(Guid id)
         {
-            GoalModel item = repository.GetGoal(id);
-            return item;
-        }
+            GoalModel result = repository.GetGoal(id);
 
-        public GoalModel Create(string name)
-        {
-            var item = new GoalModel(name);
-            repository.Create(item);
-            repository.Save();
-
-            return item;
-        }
-
-        public void Update(Guid id, string name)
-        {
-            GoalModel item = repository.GetGoal(id);
-
-            if (item == null)
+            if (result == null)
             {
                 throw new KeyNotFoundException($"Record id:{id} not found");
             }
 
-            item.Name = name;
+            return result;
+        }
 
-            repository.Update(item);
+        public GoalModel Create(string name)
+        {
+            var result = new GoalModel(name);
+
+            repository.Create(result);
+            repository.Save();
+
+            return result;
+        }
+
+        public void Update(Guid id, string name)
+        {
+            GoalModel result = repository.GetGoal(id);
+
+            if (result == null)
+            {
+                throw new KeyNotFoundException($"Record id:{id} not found");
+            }
+
+            result.Name = name;
+
+            repository.Update(result);
             repository.Save();
         }
 
         public void Delete(Guid id)
         {
-            GoalModel item = repository.GetGoal(id);
+            GoalModel result = repository.GetGoal(id);
 
-            if (item == null)
+            if (result == null)
             {
                 throw new KeyNotFoundException($"Record id:{id} not found");
             }
@@ -78,19 +91,19 @@ namespace SmartHouse.Business.Data
 
         public void Done(Guid id, bool done)
         {
-            GoalModel item = repository
+            GoalModel result = repository
                  .GetGoals()
                  .Where(p => p.Id == id)
                  .FirstOrDefault();
 
-            if (item == null)
+            if (result == null)
             {
                 throw new KeyNotFoundException($"Record id:{id} not found");
             }
 
-            item.Done = done;
+            result.Done = done;
 
-            repository.Update(item);
+            repository.Update(result);
             repository.Save();
         }
 
