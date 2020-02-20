@@ -101,5 +101,39 @@ namespace BusinessTest
             mockLoggerRepository.Verify(v => v.Create(It.IsAny<LoggerModel>()), Times.Never);
         }
         #endregion
+
+        #region BeginScope
+        [Fact]
+        public void BeginScope_null()
+        {
+            //Arrange
+            var mockLoggerRepository = Mock.Of<ILoggerRepository<LoggerModel>>();
+            var loggerWork = new LoggerWork(mockLoggerRepository);
+
+            // Act
+            IDisposable result = loggerWork.BeginScope(new object());
+
+            //Assert
+            Assert.Null(result);
+
+        }
+        #endregion
+
+        #region BeginScope
+        [Fact]
+        public void IsEnabled_true()
+        {
+            //Arrange
+            var mockLoggerRepository =  Mock.Of<ILoggerRepository<LoggerModel>>();
+            var loggerWork = new LoggerWork(mockLoggerRepository);
+
+            // Act
+            bool result = loggerWork.IsEnabled(new LogLevel());
+
+            //Assert
+            Assert.True(result);
+
+        }
+        #endregion
     }
 }
