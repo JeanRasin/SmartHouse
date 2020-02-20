@@ -69,7 +69,7 @@ namespace ApiTest
             mockWeatherWork.Setup(m => m.GetWeatherAsync()).Throws<Exception>();
             var weatherController = new WeatherController(mockWeatherWork.Object);
 
-            // Act Assert
+            // Act & Assert
             Assert.ThrowsAsync<Exception>(() => weatherController.GetWeatherAsync());
         }
         #endregion

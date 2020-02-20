@@ -193,7 +193,7 @@ namespace ApiTest
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>()));
 
-            var goalController = new GoalController(mockGoalWork.Object);
+            var goalController = new GoalController(mockGoalWork.Object); 
             var result = goalController.Update(inputData) as NoContentResult;
 
             Assert.IsType<NoContentResult>(result);
