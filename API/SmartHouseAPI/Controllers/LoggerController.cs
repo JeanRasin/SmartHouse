@@ -25,6 +25,7 @@ namespace SmartHouseAPI.Controllers
         /// <returns>Returns list logs</returns>
         /// <response code="200">Returns list logs</response>
         /// <response code="500">Internal server error</response>  
+        // GET api/logger
         [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -36,7 +37,6 @@ namespace SmartHouseAPI.Controllers
 
             if (result == null)
             {
-
                 throw new NotFoundException("Logger result is null.");
             }
 

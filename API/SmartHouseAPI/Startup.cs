@@ -20,6 +20,7 @@ using SmartHouse.Domain.Interfaces;
 using Bogus;
 using SmartHouse.Domain.Core;
 using SmartHouseAPI.Middleware;
+using SmartHouseAPI.Contexts;
 using static SmartHouseAPI.Middleware.RequestResponseLoggingMiddleware;
 using System.Diagnostics;
 
@@ -27,7 +28,10 @@ namespace SmartHouseAPI
 {
     public class Startup
     {
+        
+        private ILoggerContext loggerContext = null;
         private IWebHostEnvironment CurrentEnvironment { get; set; }
+        private bool IsLogger { get { return Convert.ToBoolean(Configuration["Logger"]); } }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
@@ -59,7 +63,7 @@ namespace SmartHouseAPI
 
             services.AddControllersWithViews(options =>
             {
-                var weatherCachingTime = Configuration["WeatherCachingTime"];
+                string weatherCachingTime = Configuration["WeatherCachingTime"];
 
                 options.CacheProfiles.Add("WeatherCaching",
                     new CacheProfile()
@@ -68,47 +72,56 @@ namespace SmartHouseAPI
                     });
             });
 
-            // string envName = CurrentEnvironment.IsDevelopment;
-
             if (CurrentEnvironment.IsDevelopment())
             {
                 int randomizerSeed = Convert.ToInt32(Configuration["RandomizerSeed"]);
+
                 // Random const;
                 Randomizer.Seed = new Random(randomizerSeed);
             }
 
-            // получаем строку подключения из файла конфигурации
-            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddSingleton(x =>
+            {
+                string connection = Configuration.GetConnectionString("DefaultConnection");
 
-            MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
-            ILoggerContext loggerContext = new LoggerContext(logConfig.Connection, logConfig.DbName);
-
-            // добавляем контекст MobileContext в качестве сервиса в приложение
-            //services.AddDbContext<GoalContext>(options =>
-            //{
-            //    options.UseNpgsql(connection);
-
-            //    //ILoggerFactory loggerFactory = Helpers.LoggerExtensions.AddContext(loggerContext);
-
-            //    //options.UseLoggerFactory(loggerFactory);
-            //});
-
-            services.AddTransient<SmartHouse.Infrastructure.Data.GoalContext>(x=> {
-
-                //var options = new DbContextOptions<SmartHouse.Infrastructure.Data.GoalContext>();
                 var options = new DbContextOptionsBuilder<SmartHouse.Infrastructure.Data.GoalContext>();
                 options.UseNpgsql(connection);
 
-                return new GoalContext(options.Options, CurrentEnvironment);
+                if (CurrentEnvironment.IsDevelopment())
+                {
+                    var goalContext = new Contexts.GoalContext(options.Options);
+                    goalContext.Database.EnsureCreated();
+                    return goalContext;
+                }
+                else
+                {
+                    var goalContext = new SmartHouse.Infrastructure.Data.GoalContext(options.Options);
+                    goalContext.Database.EnsureCreated();
+                    return goalContext;
+                }
             });
-
-            //services.AddControllersWithViews();
-
-            // services.AddTransient<IGoalWork<GoalWork>, GoalWork>();
 
             services.AddTransient<IGoalWork<GoalModel>, GoalWork>();
             services.AddTransient<IWeatherWork, WeatherWork>();
-            services.AddTransient<ILoggerWork>(x => new LoggerWork(x.GetRequiredService<ILoggerContext>(), "General category"));
+
+            if (IsLogger)
+            {
+                MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+                loggerContext = new Contexts.LoggerContext(logConfig.Connection, logConfig.DbName);
+
+                if (CurrentEnvironment.IsDevelopment())
+                {
+                    loggerContext.EnsureCreated();
+                }
+
+                services.AddTransient<ILoggerWork>(x => new LoggerWork(loggerContext, "General category"));//x.GetRequiredService<ILoggerContext>()
+               // services.AddSingleton(loggerContext);
+            }
+            else
+            {
+                // services.AddSingleton(null);
+                //loggerContext = null;
+            }
 
             IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
 
@@ -116,12 +129,10 @@ namespace SmartHouseAPI
             services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(parm, logger: x.GetRequiredService<ILogger<OpenWeatherMapService>>()));
             // GisMeteo service.
             //services.AddTransient<IWeatherService, GisMeteoService>(); 
-
-            services.AddSingleton(loggerContext);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ILoggerContext loggerContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)//ILoggerContext loggerContext
         {
             if (env.IsDevelopment())
             {
@@ -132,7 +143,12 @@ namespace SmartHouseAPI
             {
                 app.UseExceptionHandler("/error");
             }
-            loggerFactory.AddContext(loggerContext);
+
+            if (IsLogger)
+            {
+                loggerFactory.AddContext(loggerContext);
+            }
+
             app.UseStaticFiles();
 
             /*
@@ -170,8 +186,6 @@ namespace SmartHouseAPI
             // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseRouting();
-
-            //
 
             app.UseEndpoints(endpoints =>
             {

@@ -17,18 +17,6 @@ namespace SmartHouse.Infrastructure.Data
         {
             MongoClient = new MongoClient(connection);
             mongoDb = MongoClient.GetDatabase(dbName);
-
-            // Add test data to the logger table
-            List<LoggerModel> dataItems = OnModelCreating() ?? new List<LoggerModel>();
-
-            if (dataItems.Any())
-            {
-                bool exist = mongoDb.ListCollections().Any();
-                if (!exist)
-                {
-                    InsertDefaultData(mongoDb, dataItems);
-                }
-            }
         }
 
         public virtual IMongoCollection<T> DbSet<T>() where T : MongoBaseModel
@@ -56,6 +44,21 @@ namespace SmartHouse.Infrastructure.Data
         private string GetTableName<T>()
         {
             return typeof(T).GetCustomAttribute<TableAttribute>(false).Name;
+        }
+
+        public void EnsureCreated()
+        {
+            // Add test data to the logger table 
+            List<LoggerModel> dataItems = OnModelCreating() ?? new List<LoggerModel>();
+
+            if (dataItems.Any())
+            {
+                bool exist = mongoDb.ListCollections().Any();
+                if (!exist)
+                {
+                    InsertDefaultData(mongoDb, dataItems);
+                }
+            }
         }
     }
 }

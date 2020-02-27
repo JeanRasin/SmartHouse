@@ -67,7 +67,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiTest", "Tests\TestApi\Ap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{B3F8CEAD-7F26-4CE5-8050-4F8CB194277E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiIntegrationTest", "Tests\TestIntegration\ApiIntegrationTest\ApiIntegrationTest.csproj", "{4820D34D-64C1-4CCD-AEB1-F47594FA4AA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiIntegrationTest", "Tests\TestIntegration\ApiIntegrationTest\ApiIntegrationTest.csproj", "{4820D34D-64C1-4CCD-AEB1-F47594FA4AA4}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2330F0B0-19D6-4A12-8AA7-CF7382E26A6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,6 +137,10 @@ Global
 		{4820D34D-64C1-4CCD-AEB1-F47594FA4AA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4820D34D-64C1-4CCD-AEB1-F47594FA4AA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4820D34D-64C1-4CCD-AEB1-F47594FA4AA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2330F0B0-19D6-4A12-8AA7-CF7382E26A6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2330F0B0-19D6-4A12-8AA7-CF7382E26A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2330F0B0-19D6-4A12-8AA7-CF7382E26A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2330F0B0-19D6-4A12-8AA7-CF7382E26A6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

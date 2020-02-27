@@ -3,7 +3,7 @@ using SmartHouse.Domain.Core;
 using System;
 using System.Collections.Generic;
 
-namespace SmartHouseAPI
+namespace SmartHouseAPI.Contexts
 {
     public class LoggerContext : SmartHouse.Infrastructure.Data.LoggerContext
     {
@@ -13,11 +13,9 @@ namespace SmartHouseAPI
 
         public override List<LoggerModel> OnModelCreating()
         {
-            // Randomizer.Seed = new Random(544);
-
             var eventIdFaker = new Faker<EventId>()
-                 .RuleFor(o => o.StateId, f => f.Random.Int(1, 10))
-                 .RuleFor(o => o.Name, f => f.Random.String2(10));
+             .RuleFor(o => o.StateId, f => f.Random.Int(1, 10))
+             .RuleFor(o => o.Name, f => f.Random.String2(10));
 
             var loggerModelFaker = new Faker<LoggerModel>()
                  .StrictMode(true)
@@ -28,7 +26,7 @@ namespace SmartHouseAPI
                  .RuleFor(o => o.Message, f => f.Random.Words())
                  .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)));
 
-           return loggerModelFaker.Generate(10);
+            return loggerModelFaker.Generate(10);
         }
     }
 }

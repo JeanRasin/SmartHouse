@@ -1,0 +1,43 @@
+# Use root/example as user/password credentials
+version: '3.6'
+
+services:
+  aspnetcorespa:
+   # image: ${DOCKER_REGISTRY-}aspnetcorespa
+    build:
+      context: .
+      dockerfile: SmartHouse/Dockerfile
+    networks:
+      - app-network
+    ports:
+        - 8888:80
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    networks:
+        - app-network
+    ports:
+        - 27010:27017
+
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+        - 5435:5432
+    networks:
+        - app-network
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_USER: 'postgres'
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+
+volumes:
+  database_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
