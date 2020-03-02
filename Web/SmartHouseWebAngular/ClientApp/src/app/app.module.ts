@@ -39,12 +39,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatTreeModule } from '@angular/material/tree'
+import { MatTreeModule } from '@angular/material/tree';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
-import { LoggerModule } from './logger/logger.module'
+import { LoggerModule } from './logger/logger.module';
 import { SharedModule } from './shared';
 import { GoalModule } from './goal/goal.module';
 import { WeatherModule } from './weather/weather.module';

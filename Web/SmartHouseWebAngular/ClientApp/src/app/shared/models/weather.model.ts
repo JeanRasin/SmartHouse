@@ -6,5 +6,5 @@ export class Weather {
   pressure: number;
   humidity: number;
   description: string;
-  feelsLike: number
+  feelsLike: number;
 }

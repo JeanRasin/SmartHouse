@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component } from '@angular/core';
 import { Weather } from '../shared';
 import { HttpWeatherService } from '../shared/services';
 
@@ -20,7 +20,6 @@ export class WeatherComponent {
       console.log(this.weatherData);
     }, error => {
       this.error = error.message;
-      //console.log(error);
     });
   }
 }

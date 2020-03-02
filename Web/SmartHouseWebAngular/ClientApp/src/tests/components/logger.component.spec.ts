@@ -1,8 +1,8 @@
 import { ModuleWithProviders, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed, async } from "@angular/core/testing";
-import { BrowserModule } from "@angular/platform-browser";
-import { HttpClientModule } from "@angular/common/http";
-import { HttpWeatherService, HttpLoggerService } from "src/app/shared";
+import { TestBed, async } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpWeatherService, HttpLoggerService } from 'src/app/shared';
 import { RouterModule } from '@angular/router';
 import { LoggerComponent } from 'src/app/logger/logger.component';
 import { MatTableModule, MatPaginatorModule } from '@angular/material';

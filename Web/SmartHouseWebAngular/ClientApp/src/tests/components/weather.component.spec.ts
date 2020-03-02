@@ -1,9 +1,9 @@
 import { ModuleWithProviders, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed, async } from "@angular/core/testing";
-import { WeatherComponent } from "src/app/weather";
-import { BrowserModule } from "@angular/platform-browser";
-import { HttpClientModule } from "@angular/common/http";
-import { HttpWeatherService } from "src/app/shared";
+import { TestBed, async } from '@angular/core/testing';
+import { WeatherComponent } from 'src/app/weather';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpWeatherService } from 'src/app/shared';
 import { RouterModule } from '@angular/router';
 
 

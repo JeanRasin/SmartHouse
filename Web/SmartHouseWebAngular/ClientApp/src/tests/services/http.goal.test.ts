@@ -1,4 +1,4 @@
-//https://blog.knoldus.com/unit-testing-of-angular-service-with-httpclient/
+// https://blog.knoldus.com/unit-testing-of-angular-service-with-httpclient/
 
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpGoalService, Goal } from '../../app/shared';
@@ -205,5 +205,6 @@ export class GoalServiceTest {
 
     });
 
-  };
+  }
 }
+

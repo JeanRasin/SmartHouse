@@ -10,7 +10,7 @@ import { HttpLoggerService } from '../shared/services';
   providers: [HttpLoggerService]
 })
 export class LoggerComponent implements OnInit {
-  pageSize: number = 10;
+  pageSize = 10;
   error: any = null;
   displayedColumns: string[] = ['date', 'logLevel', 'eventId', 'message'];
   dataSource: MatTableDataSource<Logger>;

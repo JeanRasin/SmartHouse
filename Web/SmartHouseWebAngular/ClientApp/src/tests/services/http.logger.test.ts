@@ -60,7 +60,7 @@ export class LoggerServiceTest {
         (httpMock: HttpTestingController, service: HttpLoggerService) => {
           service.get().subscribe(data => {
             expect(data).toEqual(dataLog);
-          })
+          });
 
           const request = httpMock.expectOne(`${service.baseUrl}/api/logger`);
           expect(request.request.method).toBe('GET');
@@ -69,5 +69,5 @@ export class LoggerServiceTest {
       );
 
     });
-  };
+  }
 }

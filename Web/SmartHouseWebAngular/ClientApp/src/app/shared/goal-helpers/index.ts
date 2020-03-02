@@ -1,1 +1,2 @@
-export * from './goal-dialog.component'
+export * from './goal-dialog.component';
+

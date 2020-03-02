@@ -24,7 +24,7 @@ export class GoalComponent implements OnInit {
   faCircle = faCircle;
 
   paginator: MatPaginator;
-  pageSize: number = 5;
+  pageSize = 5;
 
   constructor(private httpService: HttpGoalService, private dialog: MatDialog) { }
 
@@ -49,7 +49,7 @@ export class GoalComponent implements OnInit {
         }, error => {
           console.log(error);
         });
-        break
+        break;
       case 'all':
         this.httpService.getAll().subscribe((data: Goal[]) => {
           this.dataSource = new MatTableDataSource<Goal>(data);
@@ -57,12 +57,12 @@ export class GoalComponent implements OnInit {
         }, error => {
           console.log(error);
         });
-        break
+        break;
     }
   }
 
   onDelete(id: string) {
-    let dialogConfig: MatDialogConfig = {
+    const dialogConfig: MatDialogConfig = {
       width: '400px',
       height: '180px',
       data: DialogTypeEnum.Delete
@@ -71,7 +71,7 @@ export class GoalComponent implements OnInit {
     const dialogRef = this.dialog.open(WindowDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
-        if (data == true) {
+        if (data === true) {
           this.delete(id);
         }
       });
@@ -84,11 +84,11 @@ export class GoalComponent implements OnInit {
       data: DialogTypeEnum.Uncheck
     };
 
-    if (done == true) {
+    if (done === true) {
       const dialogRef = this.dialog.open(WindowDialogComponent, dialogConfig);
       dialogRef.afterClosed().subscribe(
         data => {
-          if (data == true) {
+          if (data === true) {
             this.check(id, false);
           }
         });
@@ -118,7 +118,7 @@ export class GoalComponent implements OnInit {
   }
 
   onUpdate(id: string, done: boolean) {
-    let dialogConfig: MatDialogConfig = {
+    const dialogConfig: MatDialogConfig = {
       width: '450px',
       height: '260px',
       data: {
@@ -128,7 +128,7 @@ export class GoalComponent implements OnInit {
       }
     };
 
-    let data = this.dataSource.data.filter(d => d.id === id)[0];
+    const data = this.dataSource.data.filter(d => d.id === id)[0];
 
     dialogConfig.data.name = data.name;
     dialogConfig.data.done = done;
@@ -144,7 +144,7 @@ export class GoalComponent implements OnInit {
 
   private delete(id: string) {
     this.httpService.delete(id).subscribe(() => {
-      let index = this.dataSource.data.findIndex(d => d.id === id);
+      const index = this.dataSource.data.findIndex(d => d.id === id);
       this.dataSource.data.splice(index, 1);
       this.dataSource = new MatTableDataSource<Goal>(this.dataSource.data);
       this.dataSource.paginator = this.paginator;
@@ -182,14 +182,14 @@ export class GoalComponent implements OnInit {
   }
 
   private setDataSource(id: string, name: string = undefined, done: boolean = undefined) {
-    var item = this.dataSource.data.filter(d => d.id === id)[0];
+    const item = this.dataSource.data.filter(d => d.id === id)[0];
     if (item != null) {
 
-      if (name != undefined) {
+      if (name !== undefined) {
         item.name = name;
       }
 
-      if (done != undefined) {
+      if (done !== undefined) {
         item.done = done;
       }
 
