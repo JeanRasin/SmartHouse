@@ -1,5 +1,3 @@
-//https://blog.knoldus.com/unit-testing-of-angular-service-with-httpclient/
-
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpLoggerService, Logger } from '../../app/shared';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';

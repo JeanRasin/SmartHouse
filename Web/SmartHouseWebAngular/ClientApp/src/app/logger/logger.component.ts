@@ -6,19 +6,18 @@ import { HttpLoggerService } from '../shared/services';
 @Component({
   selector: 'logger-component',
   templateUrl: './logger.component.html',
-  styleUrls: ['logger.component.css'],
+  styleUrls: ['logger.component.scss'],
   providers: [HttpLoggerService]
 })
 export class LoggerComponent implements OnInit {
+  pageSize: number = 10;
   error: any = null;
-
-  constructor(private httpService: HttpLoggerService) { }
-
   displayedColumns: string[] = ['date', 'logLevel', 'eventId', 'message'];
   dataSource: MatTableDataSource<Logger>;
 
+  constructor(private httpService: HttpLoggerService) { }
+
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  pageSize: number = 10;
 
   ngOnInit() {
     this.httpService.get().subscribe((data: Logger[]) => {
@@ -27,7 +26,6 @@ export class LoggerComponent implements OnInit {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
       });
 
-      //console.log(data);
       this.dataSource = new MatTableDataSource<Logger>(data);
       this.dataSource.paginator = this.paginator;
     }, error => {

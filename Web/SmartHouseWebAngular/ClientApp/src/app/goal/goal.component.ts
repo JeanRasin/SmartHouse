@@ -19,8 +19,6 @@ export class GoalComponent implements OnInit {
   displayedColumns: string[] = ['check', 'name', 'dateCreate', 'remove'];
   dataSource: MatTableDataSource<Goal>;
 
-  @ViewChild(MatButtonToggleGroup, { static: true }) group: MatButtonToggleGroup;
-
   faTrashAlt = faTrashAlt;
   faCheckCircle = faCheckCircle;
   faCircle = faCircle;
@@ -29,6 +27,8 @@ export class GoalComponent implements OnInit {
   pageSize: number = 5;
 
   constructor(private httpService: HttpGoalService, private dialog: MatDialog) { }
+
+  @ViewChild(MatButtonToggleGroup, { static: true }) group: MatButtonToggleGroup;
 
   ngOnInit() {
     this.group.value = 'goals';
@@ -40,7 +40,7 @@ export class GoalComponent implements OnInit {
     });
   }
 
-  onValChange(value) {
+  onValChange(value: string) {
     switch (value) {
       case 'goals':
         this.httpService.get().subscribe((data: Goal[]) => {
@@ -48,7 +48,6 @@ export class GoalComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
         }, error => {
           console.log(error);
-          // this.error = error;
         });
         break
       case 'all':
@@ -57,7 +56,6 @@ export class GoalComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
         }, error => {
           console.log(error);
-          // this.error = error;
         });
         break
     }
@@ -115,7 +113,6 @@ export class GoalComponent implements OnInit {
       data => {
         if (data != null) {
           this.create(data.name);
-          console.log('create');
         }
       });
   }
@@ -153,7 +150,6 @@ export class GoalComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
     }, error => {
       console.log(error);
-      // this.error = error;
     });
   }
 
@@ -162,7 +158,6 @@ export class GoalComponent implements OnInit {
       this.setDataSource(id, undefined, done);
     }, error => {
       console.log(error);
-      // this.error = error;
     });
   }
 
@@ -175,7 +170,6 @@ export class GoalComponent implements OnInit {
 
     }, error => {
       console.log(error);
-      // this.error = error;
     });
   }
 
@@ -184,7 +178,6 @@ export class GoalComponent implements OnInit {
       this.setDataSource(id, name);
     }, error => {
       console.log(error);
-      // this.error = error;
     });
   }
 

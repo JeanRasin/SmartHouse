@@ -9,11 +9,6 @@ import { RouterModule } from '@angular/router';
 import { GoalDialogComponent } from './goal-helpers';
 import { NavMenuComponent } from './nav-menu';
 
-//import { ArticleListComponent, ArticleMetaComponent, ArticlePreviewComponent } from './article-helpers';
-//import { FavoriteButtonComponent, FollowButtonComponent } from './buttons';
-//import { ListErrorsComponent } from './list-errors.component';
-//import { ShowAuthedDirective } from './show-authed.directive';
-
 @NgModule({
   imports: [
     MatFormFieldModule,
@@ -28,27 +23,14 @@ import { NavMenuComponent } from './nav-menu';
   declarations: [
     GoalDialogComponent,
     NavMenuComponent
-    //ArticleMetaComponent,
-    //ArticlePreviewComponent,
-    //FavoriteButtonComponent,
-    //FollowButtonComponent,
-    //ListErrorsComponent,
-    //ShowAuthedDirective
   ],
   exports: [
-    //ArticleListComponent,
-    //ArticleMetaComponent,
-    //ArticlePreviewComponent,
     CommonModule,
     NavMenuComponent,
-    //FavoriteButtonComponent,
-    //FollowButtonComponent,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    //ListErrorsComponent,
     RouterModule,
-    //ShowAuthedDirective
   ]
 })
 export class SharedModule { }

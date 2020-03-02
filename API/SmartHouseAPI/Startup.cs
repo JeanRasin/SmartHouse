@@ -80,7 +80,7 @@ namespace SmartHouseAPI
                 Randomizer.Seed = new Random(randomizerSeed);
             }
 
-            services.AddSingleton(x =>
+            services.AddTransient(x =>
             {
                 string connection = Configuration.GetConnectionString("DefaultConnection");
 

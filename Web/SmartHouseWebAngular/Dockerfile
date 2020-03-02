@@ -1,21 +1,27 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+
+# base image
+FROM node:latest
+
+# install chrome for protractor tests
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+RUN apt-get update && apt-get install -yq google-chrome-stable
+
+# set working directory
 WORKDIR /app
-EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
-WORKDIR /src
-COPY ["SmartHouseWebAngular/SmartHouseWebAngular.csproj", "SmartHouseWebAngular/"]
-RUN dotnet restore "SmartHouseWebAngular/SmartHouseWebAngular.csproj"
-COPY . .
-WORKDIR "/src/SmartHouseWebAngular"
-RUN dotnet build "SmartHouseWebAngular.csproj" -c Release -o /app/build
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
-FROM build AS publish
-RUN dotnet publish "SmartHouseWebAngular.csproj" -c Release -o /app/publish
+# install and cache app dependencies
+COPY ./ClientApp/package.json /app/package.json
+RUN npm install
+RUN npm install -g @angular/cli@7.3.9
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SmartHouseWebAngular.dll"]
+# add app
+COPY ./ClientApp /app
+
+# start app
+CMD ng serve --host 0.0.0.0
+

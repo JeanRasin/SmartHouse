@@ -2,8 +2,18 @@
 version: '3.6'
 
 services:
-  aspnetcorespa:
-   # image: ${DOCKER_REGISTRY-}aspnetcorespa
+  front_angular:
+    build:
+      context: ./Web/SmartHouseWebAngular/
+      dockerfile: Web/SmartHouseWebAngular/Dockerfile
+   # environment:
+    # - SmartHouseWebAngularDir: "./Web/SmartHouseWebAngular/"
+    networks:
+      - app-network
+    ports:
+        - 4444:4200
+
+  api:
     build:
       context: .
       dockerfile: SmartHouse/Dockerfile
@@ -20,7 +30,7 @@ services:
     ports:
         - 27010:27017
 
-  db:
+  postgres:
     image: postgres:latest
     restart: always
     ports:
@@ -32,7 +42,6 @@ services:
       POSTGRES_USER: 'postgres'
     volumes:
       - database_data:/var/lib/postgresql/data
-
 
 volumes:
   database_data:

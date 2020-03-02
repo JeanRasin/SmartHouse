@@ -44,12 +44,6 @@ import { MatTreeModule } from '@angular/material/tree'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
-//import { NavMenuComponent } from './nav-menu/nav-menu.component';
-//import { HomeComponent } from './home/home.component';
-//import { CounterComponent } from './counter/counter.component';
-//import { FetchDataComponent } from './fetch-data/fetch-data.component';
-//import { WeatherComponent } from './weather/weather.component';
-//import { LoggerComponent } from './logger/logger.component'
 import { LoggerModule } from './logger/logger.module'
 import { SharedModule } from './shared';
 import { GoalModule } from './goal/goal.module';
@@ -57,21 +51,10 @@ import { WeatherModule } from './weather/weather.module';
 import { HomeModule } from './home/home.module';
 import { WindowDialogComponent } from './shared/window-dialog';
 
-const rootRouting: ModuleWithProviders = RouterModule.forRoot([], { useHash: true });
-
 @NgModule({
   declarations: [
     AppComponent,
-   // NavMenuComponent,
-    //HomeModule,
-   // HomeComponent,
-    //CounterComponent,
-    //FetchDataComponent,
-   // WeatherComponent,
-   // LoggerComponent,
-   // GoalComponent,
     WindowDialogComponent,
-   // GoalDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -121,18 +104,10 @@ const rootRouting: ModuleWithProviders = RouterModule.forRoot([], { useHash: tru
     LoggerModule,
     HomeModule,
     RouterModule.forRoot([])
-    //RouterModule.forRoot([
-    //  { path: '', component: HomeComponent, pathMatch: 'full' },
-    //  //{ path: 'counter', component: CounterComponent },
-    //  //{ path: 'fetch-data', component: FetchDataComponent },
-    //  //{ path: 'weather', component: WeatherComponent },
-    //  //{ path: 'logger', component: LoggerComponent },
-    // // { path: 'goal', m},  //, component: GoalModule 
-    //])
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [//todo:???
+  entryComponents: [
     WindowDialogComponent,
   ]
 })
