@@ -10,7 +10,7 @@ import { WindowDialogComponent } from '../shared/window-dialog';
 import { HttpGoalService } from '../shared/services';
 
 @Component({
-  selector: 'goal-component',
+  selector: 'app-goal-component',
   templateUrl: './goal.component.html',
   styleUrls: ['./goal.component.scss'],
   providers: [HttpGoalService]
@@ -92,8 +92,7 @@ export class GoalComponent implements OnInit {
             this.check(id, false);
           }
         });
-    }
-    else {
+    } else {
       this.check(id, true);
     }
   }
@@ -134,12 +133,13 @@ export class GoalComponent implements OnInit {
     dialogConfig.data.done = done;
 
     const dialogRef = this.dialog.open(GoalDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(
-      data => {
-        if (data != null) {
-          this.update(id, data.name);
-        }
-      });
+    dialogRef
+    .afterClosed()
+    .subscribe(d => {
+      if (d != null) {
+        this.update(id, data.name);
+      }
+    });
   }
 
   private delete(id: string) {
@@ -181,23 +181,23 @@ export class GoalComponent implements OnInit {
     });
   }
 
-  private setDataSource(id: string, name: string = undefined, done: boolean = undefined) {
-    const item = this.dataSource.data.filter(d => d.id === id)[0];
+  /**
+   * Set data source.
+   */
+  private setDataSource(id: string, name: string = null, done: any = null) {
+    let item = this.dataSource.data.filter(d => d.id === id)[0];
     if (item != null) {
 
-      if (name !== undefined) {
+      if (name !== null) {
         item.name = name;
       }
 
-      if (done !== undefined) {
+      if (done !== null) {
         item.done = done;
       }
 
       this.dataSource = new MatTableDataSource<Goal>(this.dataSource.data);
       this.dataSource.paginator = this.paginator;
-    }
-    else {
-      //error
     }
   }
 }

@@ -1,4 +1,4 @@
-import { EventId } from "./event-id";
+import { EventId } from './event-id';
 
 export class Logger {
   logLevel: number;

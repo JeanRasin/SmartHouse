@@ -62,3 +62,47 @@ and join discussions with other Yii users.
 
 The Yii Developer Team
 http://www.yiiframework.com
+
+
+
+
+
+
+
+Пакеты
+Ангуляр
+[Angular CLI](https://github.com/angular/angular-cli) version 8.3.14.
+Компоненты
+@angular/material": "~8.2.2"
+
+Запустить проект
+npm start. Страница с проектом будет по адресу http://localhost:4200
+
+Запустить тесты
+npm test. Страница с юнит тестами откроется по адресу http://localhost:9876
+
+Запустить интеграцонные тесты
+npm e2e.
+
+
+Docker
+docker build -t shwa . - сделать образ.
+docker run -p  4200:4200 -p 9876:9876 shwa - запустить образ. 4200 порт проекта. 9876 порт для тестов.
+
+Mock API
+Mock REST реализован с помощью программы SoapUI. Путь к проекту "/Other/SoapUI Services/SoapUI-HTTP-API.xml" Проект использует адрес API http://localhost:55673
+
+
+
+
+
+protractor проект тестирования e2e
+karma unit tests
+
+
+
+
+
+
+
+

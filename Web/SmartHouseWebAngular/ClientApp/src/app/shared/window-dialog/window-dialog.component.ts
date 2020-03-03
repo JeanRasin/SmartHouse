@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogTypeEnum } from '../enums';
 import { DialogData } from '../models';
 
 @Component({
-  selector: 'window-dialog',
+  selector: 'app-window-dialog',
   templateUrl: 'window-dialog.component.html',
   styleUrls: ['window-dialog.component.scss']
 })

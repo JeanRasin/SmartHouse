@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { OperationEnum } from '../enums';
 import { DialogData } from '../models';
 
 @Component({
-  selector: 'goal-dialog',
+  selector: 'app-goal-dialog',
   templateUrl: './goal-dialog.component.html',
   styleUrls: ['./goal-dialog.component.scss']
 })

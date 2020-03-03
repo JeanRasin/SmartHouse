@@ -4,7 +4,7 @@ import { Logger } from '../shared/models';
 import { HttpLoggerService } from '../shared/services';
 
 @Component({
-  selector: 'logger-component',
+  selector: 'app-logger-component',
   templateUrl: './logger.component.html',
   styleUrls: ['logger.component.scss'],
   providers: [HttpLoggerService]
