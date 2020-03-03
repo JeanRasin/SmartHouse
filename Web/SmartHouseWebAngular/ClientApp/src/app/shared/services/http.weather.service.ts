@@ -17,7 +17,7 @@ export class HttpWeatherService {
   /**
    * Get weather.
    */
-  get() : Observable<Weather> {
+  public get(): Observable<Weather> {
     return this.http.get<Weather>(`${this.baseUrl}/api/weather`);
   }
 }

@@ -9,6 +9,11 @@ import { GoalDialogComponent } from '../shared/goal-helpers';
 import { WindowDialogComponent } from '../shared/window-dialog';
 import { HttpGoalService } from '../shared/services';
 
+export enum tableSorting {
+  goals = 'goals',
+  all = 'all'
+};
+
 @Component({
   selector: 'app-goal-component',
   templateUrl: './goal.component.html',
@@ -17,6 +22,7 @@ import { HttpGoalService } from '../shared/services';
 })
 export class GoalComponent implements OnInit {
   displayedColumns: string[] = ['check', 'name', 'dateCreate', 'remove'];
+
   dataSource: MatTableDataSource<Goal>;
 
   faTrashAlt = faTrashAlt;
@@ -40,9 +46,9 @@ export class GoalComponent implements OnInit {
     });
   }
 
-  onValChange(value: string) {
+  onValChange(value: tableSorting) {
     switch (value) {
-      case 'goals':
+      case tableSorting.goals:
         this.httpService.get().subscribe((data: Goal[]) => {
           this.dataSource = new MatTableDataSource<Goal>(data);
           this.dataSource.paginator = this.paginator;
@@ -50,7 +56,7 @@ export class GoalComponent implements OnInit {
           console.log(error);
         });
         break;
-      case 'all':
+      case tableSorting.all:
         this.httpService.getAll().subscribe((data: Goal[]) => {
           this.dataSource = new MatTableDataSource<Goal>(data);
           this.dataSource.paginator = this.paginator;
@@ -134,12 +140,12 @@ export class GoalComponent implements OnInit {
 
     const dialogRef = this.dialog.open(GoalDialogComponent, dialogConfig);
     dialogRef
-    .afterClosed()
-    .subscribe(d => {
-      if (d != null) {
-        this.update(id, data.name);
-      }
-    });
+      .afterClosed()
+      .subscribe(d => {
+        if (d != null) {
+          this.update(id, data.name);
+        }
+      });
   }
 
   private delete(id: string) {

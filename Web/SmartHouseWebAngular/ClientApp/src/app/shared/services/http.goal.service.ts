@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
+import { Goal } from '..';
 
 /**
  * Goal service.
@@ -11,27 +13,28 @@ export class HttpGoalService {
   baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) { }
-  get() {
-    return this.http.get(`${this.baseUrl}/api/goal`);
+
+  public get(): Observable<Goal[]> {
+    return this.http.get<Goal[]>(`${this.baseUrl}/api/goal`);
   }
 
-  getAll() {
-    return this.http.get(`${this.baseUrl}/api/goal/getAll`);
+  public getAll(): Observable<Goal[]> {
+    return this.http.get<Goal[]>(`${this.baseUrl}/api/goal/getAll`);
   }
 
-  delete(id: string) {
-    return this.http.delete(`${this.baseUrl}/api/goal/${id}`);
+  public delete(id: string): Observable<object> {
+    return this.http.delete<object>(`${this.baseUrl}/api/goal/${id}`);
   }
 
-  check(id: string, done: boolean) {
-    return this.http.put(`${this.baseUrl}/api/goal/done`, { id: id, done: done });
+  public check(id: string, done: boolean): Observable<object> {
+    return this.http.put<object>(`${this.baseUrl}/api/goal/done`, { id: id, done: done });
   }
 
-  create(name: string) {
-    return this.http.post(`${this.baseUrl}/api/goal`, { name: name });
+  public create(name: string): Observable<Goal> {
+    return this.http.post<Goal>(`${this.baseUrl}/api/goal`, { name: name });
   }
 
-  edit(id: string, name: string) {
-    return this.http.put(`${this.baseUrl}/api/goal`, { id: id, name: name });
+  public edit(id: string, name: string): Observable<object> {
+    return this.http.put<object>(`${this.baseUrl}/api/goal`, { id: id, name: name });
   }
 }

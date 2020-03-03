@@ -17,7 +17,7 @@ export class HttpLoggerService {
   /**
    * Get logs.
    */
-  get(): Observable<Logger[]> {
+  public get(): Observable<Logger[]> {
     return this.http.get<Logger[]>(`${this.baseUrl}/api/logger`);
   }
 }
