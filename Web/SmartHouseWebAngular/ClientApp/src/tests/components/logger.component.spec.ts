@@ -1,22 +1,11 @@
-import { NO_ERRORS_SCHEMA, ModuleWithProviders } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Logger, HttpLoggerService } from 'src/app/shared';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { LoggerComponent } from 'src/app/logger/logger.component';
-import { BrowserModule } from '@angular/platform-browser';
 import { MatTableModule, MatPaginatorModule } from '@angular/material';
-import { RouterModule } from '@angular/router';
 
 describe('Logger component', () => {
-
-  // const logRouting: ModuleWithProviders = RouterModule.forChild([
-  //   {
-  //     path: 'log',
-  //     component: LoggerComponent,
-  //   }
-  // ]);
-
   const testData: Logger[] = [
     {
       logLevel: 5,
@@ -49,7 +38,7 @@ describe('Logger component', () => {
       id: 'a649305f03a1407b2d1e7a0e619f7a71'
     }];
 
-    const testDataInitial  = Object.assign([], testData);
+  const testDataInitial = Object.assign([], testData);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -57,9 +46,6 @@ describe('Logger component', () => {
         LoggerComponent
       ],
       imports: [
-        // HttpClientTestingModule,
-        //  logRouting,
-        //   BrowserModule,
         MatTableModule,
         MatPaginatorModule
       ],

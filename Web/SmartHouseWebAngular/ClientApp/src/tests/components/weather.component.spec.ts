@@ -2,7 +2,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { WeatherComponent } from 'src/app/weather';
 import { HttpWeatherService, Weather } from 'src/app/shared';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 describe('Weather component', () => {
@@ -21,9 +20,6 @@ describe('Weather component', () => {
     TestBed.configureTestingModule({
       declarations: [
         WeatherComponent
-      ],
-      imports: [
-      //  HttpClientTestingModule,
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
