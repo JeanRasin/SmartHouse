@@ -23,7 +23,7 @@ describe('Weather component', () => {
         WeatherComponent
       ],
       imports: [
-        HttpClientTestingModule,
+      //  HttpClientTestingModule,
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
@@ -56,7 +56,7 @@ describe('Weather component', () => {
     const messageText = 'Error receiving data.';
     let serviceSpy = jasmine.createSpyObj('HttpWeatherService', ['get']);
     serviceSpy.get = (): Observable<Weather> => {
-      const subject = new BehaviorSubject<Weather>(null);
+      let subject = new BehaviorSubject<Weather>(null);
       subject.error({ message: messageText });
       return subject.asObservable();
     };

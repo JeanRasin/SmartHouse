@@ -30,7 +30,7 @@ export class LoggerComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
     }, error => {
       console.log(error);
-      this.error = error;
+      this.error = error.message;
     });
   }
 }
