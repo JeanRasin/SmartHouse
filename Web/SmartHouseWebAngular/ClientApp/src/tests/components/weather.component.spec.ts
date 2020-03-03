@@ -1,12 +1,8 @@
-import { ModuleWithProviders, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed, async } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { WeatherComponent } from 'src/app/weather';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
 import { HttpWeatherService, Weather } from 'src/app/shared';
-import { RouterModule } from '@angular/router';
-import { LoggerComponent } from 'src/app/logger/logger.component';
-import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 describe('Weather component', () => {
@@ -21,18 +17,7 @@ describe('Weather component', () => {
     feelsLike: -5.23
   };
 
-  let serviceSpy: HttpWeatherService;
-
-  // const dataStub = (): Observable<Weather> => {
-  //   const subject = new BehaviorSubject<Weather>(testData);
-  //   const result = subject.asObservable();
-  //   return result;
-  //   //  return Observable.of(testData);
-  // };
-
   beforeEach(() => {
-
-
     TestBed.configureTestingModule({
       declarations: [
         WeatherComponent
@@ -40,20 +25,8 @@ describe('Weather component', () => {
       imports: [
         HttpClientTestingModule,
       ],
-      // providers: [
-      //   //  HttpWeatherService
-      //   { provide: HttpWeatherService, useValue: serviceSpy },
-      // ],
       schemas: [NO_ERRORS_SCHEMA],
     });
-    // .overrideComponent(WeatherComponent, {
-    //   set: {
-    //     providers: [
-    //       { provide: HttpWeatherService, useValue: serviceSpy }
-    //     ]
-    //   }
-    // })
-    // .compileComponents();
   });
 
   it('get weather data', () => {
@@ -69,18 +42,14 @@ describe('Weather component', () => {
           { provide: HttpWeatherService, useValue: serviceSpy }
         ]
       }
-    })
-      .compileComponents();
+    }).compileComponents();
 
     const fixture = TestBed.createComponent(WeatherComponent);
     const weatherComponent = fixture.debugElement.componentInstance;
     weatherComponent.ngOnInit();
-    // fixture.whenStable();
 
-    debugger;
     expect(weatherComponent.error).toBeNull();
     expect(weatherComponent.weatherData).toEqual(testData);
-
   });
 
   it('get weather error', () => {
@@ -107,7 +76,6 @@ describe('Weather component', () => {
     expect(weatherComponent.error).not.toBeNull();
     expect(weatherComponent.error).toEqual(messageText);
   });
-
 
 });
 
