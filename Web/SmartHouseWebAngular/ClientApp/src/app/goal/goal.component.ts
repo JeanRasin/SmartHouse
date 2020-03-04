@@ -12,7 +12,7 @@ import { HttpGoalService } from '../shared/services';
 export enum tableSorting {
   goals = 'goals',
   all = 'all'
-};
+}
 
 @Component({
   selector: 'app-goal-component',
@@ -191,7 +191,7 @@ export class GoalComponent implements OnInit {
    * Set data source.
    */
   private setDataSource(id: string, name: string = null, done: any = null) {
-    let item = this.dataSource.data.filter(d => d.id === id)[0];
+    const item = this.dataSource.data.filter(d => d.id === id)[0];
     if (item != null) {
 
       if (name !== null) {

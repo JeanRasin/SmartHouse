@@ -60,7 +60,7 @@ namespace SmartHouseAPI.Controllers
 
         // POST: api/goal
         /// <summary>
-        /// 
+        /// Create goal.
         /// </summary>
         /// <remarks>
         /// Sample request: todo:!!!
@@ -75,11 +75,11 @@ namespace SmartHouseAPI.Controllers
         /// </remarks>
         /// <param name="data"></param>
         /// <returns></returns>
-        [HttpPost()]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Create(GoalCreateInput data)
+       public IActionResult Create([FromBody]GoalCreateInput data)
         {
             if (!ModelState.IsValid)
             {
@@ -88,6 +88,8 @@ namespace SmartHouseAPI.Controllers
 
             GoalModel result = goalWork.Create(data.Name);
             return Created(Url.RouteUrl(result.Id), result);
+
+            //  return null;
         }
 
         // PUT: api/goal

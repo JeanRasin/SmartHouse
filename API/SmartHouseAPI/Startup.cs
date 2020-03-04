@@ -162,7 +162,7 @@ namespace SmartHouseAPI
             app.UseMiddleware<RequestResponseLoggingMiddleware>(requestResponseHandler);
             */
 
-            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+           // app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseMiddleware<ExceptionMiddleware>();
        

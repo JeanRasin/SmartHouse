@@ -14,7 +14,7 @@ export class WeatherComponent implements OnInit {
   constructor(private httpService: HttpWeatherService) { }
 
   ngOnInit() {
-    const result = this.httpService.get()
+    const result = this.httpService.get();
 
     result.subscribe((data: Weather) => {
       this.weatherData = data;
