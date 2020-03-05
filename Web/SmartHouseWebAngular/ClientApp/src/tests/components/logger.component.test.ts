@@ -56,6 +56,8 @@ export class LoggerComponentTest {
       });
 
       it('get logger data', () => {
+
+        // Arrange
         const serviceSpy = jasmine.createSpyObj('HttpLoggerService', ['get']);
         serviceSpy.get = (): Observable<Logger[]> => {
           const subject = new BehaviorSubject<Logger[]>(testData);
@@ -72,14 +74,19 @@ export class LoggerComponentTest {
 
         const fixture = TestBed.createComponent(LoggerComponent);
         const loggerComponent = fixture.debugElement.componentInstance;
+
+        // Act
         loggerComponent.ngOnInit();
 
+        // Assert
         expect(loggerComponent.error).toBeNull();
         expect(loggerComponent.dataSource).not.toBeNull();
         expect(loggerComponent.dataSource.data).not.toEqual(testDataInitial);
       });
 
       it('get logger error', () => {
+
+        // Arrange
         const messageText = 'Error receiving data.';
         const serviceSpy = jasmine.createSpyObj('HttpLoggerService', ['get']);
         serviceSpy.get = (): Observable<Logger[]> => {
@@ -98,8 +105,11 @@ export class LoggerComponentTest {
 
         const fixture = TestBed.createComponent(LoggerComponent);
         const loggerComponent = fixture.debugElement.componentInstance;
+
+        // Act
         loggerComponent.ngOnInit();
 
+        // Assert
         expect(loggerComponent.error).not.toBeNull();
         expect(loggerComponent.error).toEqual(messageText);
       });

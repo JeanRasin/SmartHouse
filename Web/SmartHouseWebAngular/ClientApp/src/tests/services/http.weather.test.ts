@@ -28,16 +28,25 @@ export class WeatherServiceTest {
       }));
 
       it('create wether service', () => {
+
+        // Arrange
         const service: HttpWeatherService = TestBed.get(HttpWeatherService);
+
+        // Assert
         expect(service).toBeTruthy();
       });
 
       it('#get get weather', inject([HttpTestingController, HttpWeatherService],
         (httpMock: HttpTestingController, service: HttpWeatherService) => {
+
+          // Act
           service.get().subscribe(data => {
+
+            // Assert
             expect(data).toEqual(dataWeather);
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/weather`);
           expect(request.request.method).toBe('GET');
           request.flush(dataWeather);

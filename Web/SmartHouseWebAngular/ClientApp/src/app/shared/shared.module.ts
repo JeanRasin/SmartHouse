@@ -6,8 +6,8 @@ import { MatInputModule } from '@angular/material';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RouterModule } from '@angular/router';
-import { GoalDialogComponent } from './goal-helpers';
 import { NavMenuComponent } from './nav-menu';
+import { GoalDialogCreateComponent, GoalDialogEditComponent } from './goal-helpers';
 
 @NgModule({
   imports: [
@@ -21,7 +21,8 @@ import { NavMenuComponent } from './nav-menu';
     RouterModule,
   ],
   declarations: [
-    GoalDialogComponent,
+    GoalDialogCreateComponent,
+    GoalDialogEditComponent,
     NavMenuComponent
   ],
   exports: [

@@ -4,15 +4,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { faCheckCircle, faCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Goal } from '../shared/models';
-import { OperationEnum, DialogTypeEnum } from '../shared/enums';
-import { GoalDialogComponent } from '../shared/goal-helpers';
+import { DialogTypeEnum, tableGoalSorting } from '../shared/enums';
+import { GoalDialogCreateComponent, GoalDialogEditComponent } from '../shared/goal-helpers';
 import { WindowDialogComponent } from '../shared/window-dialog';
 import { HttpGoalService } from '../shared/services';
-
-export enum tableSorting {
-  goals = 'goals',
-  all = 'all'
-}
 
 @Component({
   selector: 'app-goal-component',
@@ -23,7 +18,13 @@ export enum tableSorting {
 export class GoalComponent implements OnInit {
   displayedColumns: string[] = ['check', 'name', 'dateCreate', 'remove'];
 
-  dataSource: MatTableDataSource<Goal>;
+  private _dataSource: MatTableDataSource<Goal>;
+  public get dataSource(): MatTableDataSource<Goal> {
+    return this._dataSource;
+  }
+  public set dataSource(value: MatTableDataSource<Goal>) {
+    this._dataSource = value;
+  }
 
   faTrashAlt = faTrashAlt;
   faCheckCircle = faCheckCircle;
@@ -46,9 +47,9 @@ export class GoalComponent implements OnInit {
     });
   }
 
-  onValChange(value: tableSorting) {
+  onValChange(value: tableGoalSorting) {
     switch (value) {
-      case tableSorting.goals:
+      case tableGoalSorting.goals:
         this.httpService.get().subscribe((data: Goal[]) => {
           this.dataSource = new MatTableDataSource<Goal>(data);
           this.dataSource.paginator = this.paginator;
@@ -56,7 +57,7 @@ export class GoalComponent implements OnInit {
           console.log(error);
         });
         break;
-      case tableSorting.all:
+      case tableGoalSorting.all:
         this.httpService.getAll().subscribe((data: Goal[]) => {
           this.dataSource = new MatTableDataSource<Goal>(data);
           this.dataSource.paginator = this.paginator;
@@ -109,14 +110,14 @@ export class GoalComponent implements OnInit {
       height: '260px',
       autoFocus: true,
       data: {
-        type: OperationEnum.Create,
         name: null
       }
     };
-    const dialogRef = this.dialog.open(GoalDialogComponent, dialogConfig);
+
+    const dialogRef = this.dialog.open(GoalDialogCreateComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
-        if (data != null) {
+        if (data && data.name) {
           this.create(data.name);
         }
       });
@@ -127,7 +128,6 @@ export class GoalComponent implements OnInit {
       width: '450px',
       height: '260px',
       data: {
-        type: OperationEnum.Update,
         name: null,
         done: null
       }
@@ -138,12 +138,12 @@ export class GoalComponent implements OnInit {
     dialogConfig.data.name = data.name;
     dialogConfig.data.done = done;
 
-    const dialogRef = this.dialog.open(GoalDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(GoalDialogEditComponent, dialogConfig);
     dialogRef
       .afterClosed()
       .subscribe(d => {
-        if (d != null) {
-          this.update(id, data.name);
+        if (d && d.name && d.done) {
+          this.update(id, d.name, d.done);
         }
       });
   }
@@ -179,10 +179,10 @@ export class GoalComponent implements OnInit {
     });
   }
 
-  private update(id: string, name: string) {
-    this.httpService.edit(id, name).subscribe(() => {
-      this.setDataSource(id, name);
-    }, error => {
+  private update(id: string, name: string, done: boolean) {
+    this.httpService.edit(id, name, done).subscribe(() => {
+      this.setDataSource(id, name, done);
+    }, (error: any) => {
       console.log(error);
     });
   }

@@ -60,16 +60,25 @@ export class GoalServiceTest {
       }));
 
       it('#create goal service', () => {
+
+        // Arrange
         const service: HttpGoalService = TestBed.get(HttpGoalService);
+
+        // Assert
         expect(service).toBeTruthy();
       });
 
       it('#get get array goals', inject([HttpTestingController, HttpGoalService],
         (httpMock: HttpTestingController, service: HttpGoalService) => {
+
+          // Act
           service.get().subscribe(data => {
+
+            // Assert
             expect(data).toEqual(dataLog);
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/goal`);
           expect(request.request.method).toBe('GET');
           request.flush(dataLog, responseOk200);
@@ -78,10 +87,15 @@ export class GoalServiceTest {
 
       it('#getAll get all array goals', inject([HttpTestingController, HttpGoalService],
         (httpMock: HttpTestingController, service: HttpGoalService) => {
+
+          // Act
           service.getAll().subscribe(data => {
+
+            // Assert
             expect(data).toEqual(dataLog);
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/goal/getAll`);
           expect(request.request.method).toBe('GET');
           request.flush(dataLog, responseOk200);
@@ -90,12 +104,18 @@ export class GoalServiceTest {
 
       it('#delete delete goal', inject([HttpTestingController, HttpGoalService],
         (httpMock: HttpTestingController, service: HttpGoalService) => {
+
+          // Arrange
           const id = '0037c991-eb6d-2819-491c-221a1c9c01a8';
 
+          // Act
           service.delete(id).subscribe(data => {
+
+            // Assert
             expect(data).toBeTruthy();
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/goal/${id}`);
           expect(request.request.method).toBe('DELETE');
           request.flush({}, responseOk200);
@@ -104,14 +124,22 @@ export class GoalServiceTest {
 
       it('#delete delete goal not found id', inject([HttpTestingController, HttpGoalService],
         (httpMock: HttpTestingController, service: HttpGoalService) => {
+
+          // Arrange
           const id = '0037c991-eb6d-2819-491c-221a1c9c01a8';
 
+          // Act
           service.delete(id).subscribe(data => {
+
+            // Assert
             expect(data).toBeTruthy();
           }, error => {
+
+            // Assert
             expect(error.status).toEqual(404);
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/goal/${id}`);
           expect(request.request.method).toBe('DELETE');
           request.flush({}, responseNotFound404);
@@ -120,12 +148,19 @@ export class GoalServiceTest {
 
       it('#done check goal', inject([HttpTestingController, HttpGoalService],
         (httpMock: HttpTestingController, service: HttpGoalService) => {
+
+          // Arrange
           const id = '0037c991-eb6d-2819-491c-221a1c9c01a8';
           const done = true;
+
+          // Act
           service.check(id, done).subscribe(data => {
+
+            // Assert
             expect(data).toEqual({});
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/goal/done`);
           expect(request.request.method).toBe('PUT');
           request.flush({}, responseOk200);
@@ -134,14 +169,23 @@ export class GoalServiceTest {
 
       it('#done check goal not found id', inject([HttpTestingController, HttpGoalService],
         (httpMock: HttpTestingController, service: HttpGoalService) => {
+
+          // Arrange
           const id = '0037c991-eb6d-2819-491c-221a1c9c01a0';
           const done = true;
+
+          // Act
           service.check(id, done).subscribe(data => {
+
+            // Assert
             expect(data).toEqual({});
           }, error => {
+
+            // Assert
             expect(error.status).toEqual(404);
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/goal/done`);
           expect(request.request.method).toBe('PUT');
           request.flush({}, responseNotFound404);
@@ -150,6 +194,8 @@ export class GoalServiceTest {
 
       it('#create create goal', inject([HttpTestingController, HttpGoalService],
         (httpMock: HttpTestingController, service: HttpGoalService) => {
+
+          // Arrange
           const name = 'test name';
 
           const result: Goal = {
@@ -160,11 +206,15 @@ export class GoalServiceTest {
             done: false
           };
 
+          // Act
           service.create(name).subscribe(data => {
+
+            // Assert
             expect(data).toBeTruthy();
             expect(data).toEqual(result);
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/goal`);
           expect(request.request.method).toBe('POST');
           request.flush(result, responseOk200);
@@ -173,13 +223,20 @@ export class GoalServiceTest {
 
       it('#edit edit goal', inject([HttpTestingController, HttpGoalService],
         (httpMock: HttpTestingController, service: HttpGoalService) => {
+
+          // Arrange
           const id = '735f337f-755a-4db6-19ef-a092f0c82c8c';
           const name = 'test name';
+          const done = true;
 
-          service.edit(id, name).subscribe(data => {
+          // Act
+          service.edit(id, name, done).subscribe(data => {
+
+            // Assert
             expect(data).toEqual({});
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/goal`);
           expect(request.request.method).toBe('PUT');
           request.flush({}, responseOk200);
@@ -188,15 +245,24 @@ export class GoalServiceTest {
 
       it('#edit edit goal', inject([HttpTestingController, HttpGoalService],
         (httpMock: HttpTestingController, service: HttpGoalService) => {
+
+          // Arrange
           const id = '735f337f-755a-4db6-19ef-a092f0c82c8c';
           const name = 'test name';
+          const done = true;
 
-          service.edit(id, name).subscribe(data => {
+          // Act
+          service.edit(id, name, done).subscribe(data => {
+
+            // Assert
             expect(data).toEqual({});
           }, error => {
+
+            // Assert
             expect(error.status).toEqual(404);
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/goal`);
           expect(request.request.method).toBe('PUT');
           request.flush({}, responseNotFound404);

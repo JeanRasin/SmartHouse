@@ -5,8 +5,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { SharedModule } from '../shared';
-import { GoalDialogComponent } from '../shared/goal-helpers';
+import { SharedModule, GoalDialogCreateComponent, GoalDialogEditComponent } from '../shared';
 import { GoalComponent } from './goal.component';
 
 const goalRouting: ModuleWithProviders = RouterModule.forChild([
@@ -30,7 +29,8 @@ const goalRouting: ModuleWithProviders = RouterModule.forChild([
     GoalComponent
   ],
   entryComponents: [
-    GoalDialogComponent
+    GoalDialogCreateComponent,
+    GoalDialogEditComponent
   ]
 })
 export class GoalModule { }

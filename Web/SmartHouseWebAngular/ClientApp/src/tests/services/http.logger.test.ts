@@ -51,17 +51,26 @@ export class LoggerServiceTest {
 
       it('create logger service', inject([HttpTestingController, HttpLoggerService],
         (service: HttpLoggerService) => {
+
+          // Arrange
           service = TestBed.get(HttpLoggerService);
+
+          // Assert
           expect(service).toBeTruthy();
         })
       );
 
       it('#get get array loggers', inject([HttpTestingController, HttpLoggerService],
         (httpMock: HttpTestingController, service: HttpLoggerService) => {
+
+          // Act
           service.get().subscribe(data => {
+
+            // Assert
             expect(data).toEqual(dataLog);
           });
 
+          // Assert
           const request = httpMock.expectOne(`${service.baseUrl}/api/logger`);
           expect(request.request.method).toBe('GET');
           request.flush(dataLog);

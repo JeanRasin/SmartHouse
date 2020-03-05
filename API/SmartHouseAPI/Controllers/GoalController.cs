@@ -63,13 +63,11 @@ namespace SmartHouseAPI.Controllers
         /// Create goal.
         /// </summary>
         /// <remarks>
-        /// Sample request: todo:!!!
+        /// Sample request:
         ///
-        ///     POST /Todo
+        ///     POST
         ///     {
-        ///        "id": 1,
         ///        "name": "Item1",
-        ///        "isComplete": true
         ///     }
         ///
         /// </remarks>
@@ -88,18 +86,31 @@ namespace SmartHouseAPI.Controllers
 
             GoalModel result = goalWork.Create(data.Name);
             return Created(Url.RouteUrl(result.Id), result);
-
-            //  return null;
         }
 
         // PUT: api/goal
+        /// <summary>
+        /// Update goal.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT
+        ///     {
+        ///        "id": "c55940df-c000-c450-1601-5e9aa3ed8bbc",
+        ///        "name": "Item1",
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPut()]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[ProducesResponseType(typeof(GoalUpdateInput), StatusCodes.Status500InternalServerError)]
-        public IActionResult Update(GoalUpdateInput data)
+        public IActionResult Update([FromBody]GoalUpdateInput data)
         {
             if (!ModelState.IsValid)
             {
@@ -136,11 +147,26 @@ namespace SmartHouseAPI.Controllers
         }
 
         // PUT: api/goal/done/
+        /// <summary>
+        /// Done goal.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT 
+        ///     {
+        ///        "id": "c55940df-c000-c450-1601-5e9aa3ed8bbc",
+        ///        "done": "true",
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPut("done")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Done(GoalDoneInput data)
+        public IActionResult Done([FromBody]GoalDoneInput data)
         {
             try
             {

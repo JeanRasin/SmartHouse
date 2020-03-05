@@ -1,11 +1,13 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Goal, SharedModule, HttpGoalService } from 'src/app/shared';
+import { Goal, SharedModule, HttpGoalService, tableGoalSorting } from 'src/app/shared';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { MatTableModule, MatPaginatorModule, MatButtonToggleModule, MatButtonModule, MatDialogModule, MatDialog } from '@angular/material';
-import { GoalComponent, tableSorting } from 'src/app/goal/goal.component';
+import { MatTableModule, MatPaginatorModule, MatButtonToggleModule, MatButtonModule, MatDialogModule, MatDialog, MatTableDataSource } from '@angular/material';
+import { GoalComponent } from 'src/app/goal/goal.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MatDialogMock } from '../mocks/matdialogmock';
+import { MatDialogMock } from '../mocks/mat-dialog-mock';
+import { MatDialogCreateMock } from '../mocks/mat-dialog-create-mock';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 export class GoalComponentTest {
     static test() {
@@ -13,6 +15,7 @@ export class GoalComponentTest {
         // todo: сделать проверку на то если нет связи с апи.
         describe('Goal component', () => {
 
+            // #region region  test data
             const testData: Goal[] = [
                 {
                     id: 'c55940df-c000-c450-1601-5e9aa3ed8bbc',
@@ -107,8 +110,21 @@ export class GoalComponentTest {
                     dateUpdate: new Date('1997-01-01T05:01:22.705185'),
                     done: true
                 }];
+            // #endregion
+
+            let serviceSpy: any;
 
             beforeEach(() => {
+                serviceSpy = jasmine.createSpyObj('HttpGoalService', ['get']);
+                serviceSpy.get = (): Observable<Goal[]> => {
+                    const subject = new BehaviorSubject<Goal[]>(testData);
+                    return subject.asObservable();
+                };
+                serviceSpy.getAll = (): Observable<Goal[]> => {
+                    const subject = new BehaviorSubject<Goal[]>(testDataAll);
+                    return subject.asObservable();
+                };
+
                 TestBed.configureTestingModule({
                     declarations: [
                         GoalComponent
@@ -123,68 +139,55 @@ export class GoalComponentTest {
                     ],
                     schemas: [NO_ERRORS_SCHEMA],
                 });
-            });
-
-            it('get goal data', () => {
-                const serviceSpy = jasmine.createSpyObj('HttpGoalService', ['get']);
-                serviceSpy.get = (): Observable<Goal[]> => {
-                    const subject = new BehaviorSubject<Goal[]>(testData);
-                    return subject.asObservable();
-                };
 
                 TestBed.overrideComponent(GoalComponent, {
                     set: {
                         providers: [
-                            { provide: HttpGoalService, useValue: serviceSpy }
+                            { provide: HttpGoalService, useValue: serviceSpy },
                         ]
                     }
                 }).compileComponents();
+            });
 
+            it('get goal data', () => {
+
+                // Arrange
                 const fixture = TestBed.createComponent(GoalComponent);
                 const component = fixture.debugElement.componentInstance;
+
+                // Act
                 component.ngOnInit();
 
+                // Assert
                 expect(component.dataSource).not.toBeNull();
             });
 
             it('event onValChange goals', () => {
-                const serviceSpy = jasmine.createSpyObj('HttpGoalService', ['get']);
-                serviceSpy.get = (): Observable<Goal[]> => {
-                    const subject = new BehaviorSubject<Goal[]>(testData);
-                    return subject.asObservable();
-                };
-                serviceSpy.getAll = (): Observable<Goal[]> => {
-                    const subject = new BehaviorSubject<Goal[]>(testDataAll);
-                    return subject.asObservable();
-                };
 
-                TestBed.overrideComponent(GoalComponent, {
-                    set: {
-                        providers: [
-                            { provide: HttpGoalService, useValue: serviceSpy }
-                        ]
-                    }
-                }).compileComponents();
-
+                // Arrange
                 const fixture = TestBed.createComponent(GoalComponent);
                 const component = fixture.debugElement.componentInstance;
                 // await fixture.whenStable();
 
-                component.onValChange(tableSorting.goals);
+                // Act
+                component.onValChange(tableGoalSorting.goals);
 
+                // Assert
                 expect(component.dataSource).not.toBeNull();
                 expect(component.dataSource.data).toEqual(testData);
 
-                component.onValChange(tableSorting.all);
+                // Act
+                component.onValChange(tableGoalSorting.all);
 
+                // Assert
                 expect(component.dataSource).not.toBeNull();
                 expect(component.dataSource.data).toEqual(testDataAll);
 
             });
 
             it('event onDelete', () => {
-                const serviceSpy = jasmine.createSpyObj('HttpGoalService', ['']);
 
+                // Arrange
                 TestBed.overrideComponent(GoalComponent, {
                     set: {
                         providers: [
@@ -197,21 +200,20 @@ export class GoalComponentTest {
                 const fixture = TestBed.createComponent(GoalComponent);
                 const component = fixture.debugElement.componentInstance;
 
-                const someObject = jasmine.createSpyObj('component', ['delete']);
-                someObject.delete = () => { };
-
                 spyOn(component.dialog, 'open').and.callThrough();
                 spyOn(component, 'delete');
 
+                // Act
                 component.onDelete('c55940df-c000-c450-1601-5e9aa3ed8bbc');
 
+                // Assert
                 expect(component.dialog.open).toHaveBeenCalled();
                 expect(component.delete).toHaveBeenCalled();
             });
 
             it('event onCheck true', () => {
-                const serviceSpy = jasmine.createSpyObj('HttpGoalService', ['']);
 
+                // Arrange
                 TestBed.overrideComponent(GoalComponent, {
                     set: {
                         providers: [
@@ -224,21 +226,20 @@ export class GoalComponentTest {
                 const fixture = TestBed.createComponent(GoalComponent);
                 const component = fixture.debugElement.componentInstance;
 
-                const someObject = jasmine.createSpyObj('component', ['check']);
-                someObject.check = () => { };
-
                 spyOn(component.dialog, 'open').and.callThrough();
                 spyOn(component, 'check');
 
+                // Act
                 component.onCheck('c55940df-c000-c450-1601-5e9aa3ed8bbc', true);
 
+                // Assert
                 expect(component.dialog.open).toHaveBeenCalled();
                 expect(component.check).toHaveBeenCalled();
             });
 
             it('event onCheck false', () => {
-                const serviceSpy = jasmine.createSpyObj('HttpGoalService', ['']);
 
+                // Arrange
                 TestBed.overrideComponent(GoalComponent, {
                     set: {
                         providers: [
@@ -251,22 +252,68 @@ export class GoalComponentTest {
                 const fixture = TestBed.createComponent(GoalComponent);
                 const component = fixture.debugElement.componentInstance;
 
-                const someObject = jasmine.createSpyObj('component', ['check']);
-                someObject.check = () => { };
-
                 spyOn(component.dialog, 'open').and.callThrough();
                 spyOn(component, 'check');
 
+                // Act
                 component.onCheck('c55940df-c000-c450-1601-5e9aa3ed8bbc', false);
 
+                // Assert
                 expect(component.dialog.open).not.toHaveBeenCalled();
                 expect(component.check).toHaveBeenCalled();
             });
 
             it('event onCreate', () => {
 
+                // Arrange
+                TestBed.overrideComponent(GoalComponent, {
+                    set: {
+                        providers: [
+                            { provide: HttpGoalService, useValue: serviceSpy },
+                            { provide: MatDialog, useClass: MatDialogCreateMock }
+                        ]
+                    }
+                }).compileComponents();
 
+                const fixture = TestBed.createComponent(GoalComponent);
+                const component = fixture.debugElement.componentInstance;
 
+                spyOn(component.dialog, 'open').and.callThrough();
+                spyOn(component, 'create');
+
+                // Act
+                component.onCreate();
+
+                // Assert
+                expect(component.dialog.open).toHaveBeenCalled();
+                expect(component.create).toHaveBeenCalled();
+            });
+
+            it('event onUpdate', () => {
+
+                // Arrange
+                TestBed.overrideComponent(GoalComponent, {
+                    set: {
+                        providers: [
+                            { provide: HttpGoalService, useValue: serviceSpy },
+                            { provide: MatDialog, useClass: MatDialogCreateMock }
+                        ]
+                    }
+                }).compileComponents();
+
+                const fixture = TestBed.createComponent(GoalComponent);
+                const component = fixture.debugElement.componentInstance;
+
+                spyOn(component.dialog, 'open').and.callThrough();
+                spyOn(component, 'update');
+                spyOnProperty(component, 'dataSource').and.returnValue(new MatTableDataSource<Goal>(testData));
+
+                // Act
+                component.onUpdate('c55940df-c000-c450-1601-5e9aa3ed8bbc', true);
+
+                // Assert
+                expect(component.dialog.open).toHaveBeenCalled();
+                expect(component.update).toHaveBeenCalledWith(jasmine.any(String), jasmine.any(String), jasmine.any(Boolean));
             });
 
         });

@@ -15,8 +15,12 @@ export class AppComponentTest {
       }));
 
       it('should create the app', () => {
+
+        // Arrange
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.debugElement.componentInstance;
+
+        // Assert
         expect(app).toBeTruthy();
       });
 

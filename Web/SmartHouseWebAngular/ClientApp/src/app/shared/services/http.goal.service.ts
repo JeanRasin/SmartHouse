@@ -34,7 +34,7 @@ export class HttpGoalService {
     return this.http.post<Goal>(`${this.baseUrl}/api/goal`, { name: name });
   }
 
-  public edit(id: string, name: string): Observable<object> {
-    return this.http.put<object>(`${this.baseUrl}/api/goal`, { id: id, name: name });
+  public edit(id: string, name: string, done:boolean): Observable<object> {
+    return this.http.put<object>(`${this.baseUrl}/api/goal`, { id: id, name: name, done: done });
   }
 }

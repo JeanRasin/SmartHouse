@@ -28,6 +28,8 @@ export class WeatherComponentTest {
       });
 
       it('get weather data', () => {
+
+        // Arrange
         const serviceSpy = jasmine.createSpyObj('HttpWeatherService', ['get']);
         serviceSpy.get = (): Observable<Weather> => {
           const subject = new BehaviorSubject<Weather>(testData);
@@ -44,13 +46,18 @@ export class WeatherComponentTest {
 
         const fixture = TestBed.createComponent(WeatherComponent);
         const weatherComponent = fixture.debugElement.componentInstance;
+
+        // Act
         weatherComponent.ngOnInit();
 
+        // Assert
         expect(weatherComponent.error).toBeNull();
         expect(weatherComponent.weatherData).toEqual(testData);
       });
 
       it('get weather error', () => {
+
+         // Arrange
         const messageText = 'Error receiving data.';
         const serviceSpy = jasmine.createSpyObj('HttpWeatherService', ['get']);
         serviceSpy.get = (): Observable<Weather> => {
@@ -69,8 +76,11 @@ export class WeatherComponentTest {
 
         const fixture = TestBed.createComponent(WeatherComponent);
         const weatherComponent = fixture.debugElement.componentInstance;
+
+        // Act
         weatherComponent.ngOnInit();
 
+        // Assert
         expect(weatherComponent.error).not.toBeNull();
         expect(weatherComponent.error).toEqual(messageText);
       });
