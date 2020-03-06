@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatButtonToggleGroup, MatDialog, MatDialogConfig } from '@angular/material';
+import { MatButtonToggleGroup, MatDialog, MatDialogConfig, MatSort, MatSortable } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { faCheckCircle, faCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -30,18 +30,22 @@ export class GoalComponent implements OnInit {
   faCheckCircle = faCheckCircle;
   faCircle = faCircle;
 
-  paginator: MatPaginator;
   pageSize = 5;
 
   constructor(private httpService: HttpGoalService, private dialog: MatDialog) { }
 
   @ViewChild(MatButtonToggleGroup, { static: true }) group: MatButtonToggleGroup;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   ngOnInit() {
     this.group.value = 'goals';
     this.httpService.get().subscribe((data: Goal[]) => {
       this.dataSource = new MatTableDataSource<Goal>(data);
       this.dataSource.paginator = this.paginator;
+
+      this.sort.sort(({ id: 'dateUpdate', start: 'asc' }) as MatSortable);
+      this.dataSource.sort = this.sort;
     }, error => {
       console.log(error);
     });
@@ -126,7 +130,7 @@ export class GoalComponent implements OnInit {
   onUpdate(id: string, done: boolean) {
     const dialogConfig: MatDialogConfig = {
       width: '450px',
-      height: '260px',
+      height: '280px',
       data: {
         name: null,
         done: null
@@ -142,7 +146,7 @@ export class GoalComponent implements OnInit {
     dialogRef
       .afterClosed()
       .subscribe(d => {
-        if (d && d.name && d.done) {
+        if (d && d.name) {
           this.update(id, d.name, d.done);
         }
       });
@@ -152,7 +156,6 @@ export class GoalComponent implements OnInit {
     this.httpService.delete(id).subscribe(() => {
       const index = this.dataSource.data.findIndex(d => d.id === id);
       this.dataSource.data.splice(index, 1);
-      this.dataSource = new MatTableDataSource<Goal>(this.dataSource.data);
       this.dataSource.paginator = this.paginator;
     }, error => {
       console.log(error);
@@ -169,11 +172,8 @@ export class GoalComponent implements OnInit {
 
   private create(name: string) {
     this.httpService.create(name).subscribe((data: Goal) => {
-
-      this.dataSource.data.push(data);
-      this.dataSource = new MatTableDataSource<Goal>(this.dataSource.data);
+      this.dataSource.data.unshift(data);
       this.dataSource.paginator = this.paginator;
-
     }, error => {
       console.log(error);
     });
@@ -192,7 +192,7 @@ export class GoalComponent implements OnInit {
    */
   private setDataSource(id: string, name: string = null, done: any = null) {
     const item = this.dataSource.data.filter(d => d.id === id)[0];
-    if (item != null) {
+    if (item !== null) {
 
       if (name !== null) {
         item.name = name;
@@ -202,7 +202,6 @@ export class GoalComponent implements OnInit {
         item.done = done;
       }
 
-      this.dataSource = new MatTableDataSource<Goal>(this.dataSource.data);
       this.dataSource.paginator = this.paginator;
     }
   }

@@ -155,7 +155,7 @@ namespace BusinessTest
             var goalWork = new GoalWork(mockGoalRepository.Object);
 
             // Act
-            goalWork.Update(Guid.NewGuid(), "test name");
+            goalWork.Update(Guid.NewGuid(), "test name", true);
 
             //Assert
             mockGoalRepository.Verify(v => v.Update(It.IsAny<GoalModel>()), Times.Once);
@@ -172,7 +172,7 @@ namespace BusinessTest
             var goalWork = new GoalWork(mockGoalRepository.Object);
 
             //Act & Assert
-            Assert.Throws<KeyNotFoundException>(() => goalWork.Update(Guid.NewGuid(), "test name"));
+            Assert.Throws<KeyNotFoundException>(() => goalWork.Update(Guid.NewGuid(), "test name", true));
         }
         #endregion
 

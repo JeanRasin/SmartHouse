@@ -1,10 +1,14 @@
-<h1 mat-dialog-title>{{data.title}}</h1>
+<h1 mat-dialog-title>Edit goal</h1>
 <mat-dialog-content [formGroup]="form">
   <p>
-    {{data.description}}
+    Enter goal description.
   </p>
   <mat-form-field>
-    <textarea matInput min="0" max="100" required placeholder="Text goal" formControlName="name" value="{{name}}"></textarea>
+    <mat-checkbox class="example-margin" [(ngModel)]="done" formControlName="done">
+      Mark done
+    </mat-checkbox>
+    <textarea matInput min="0" max="100" required placeholder="Text goal" formControlName="name"
+      value="{{name}}"></textarea>
   </mat-form-field>
 </mat-dialog-content>
 

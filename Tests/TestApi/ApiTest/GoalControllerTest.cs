@@ -191,7 +191,7 @@ namespace ApiTest
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "test name");
 
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>()));
+            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>()));
 
             var goalController = new GoalController(mockGoalWork.Object); 
             var result = goalController.Update(inputData) as NoContentResult;
@@ -206,7 +206,7 @@ namespace ApiTest
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "");
 
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>()));
+            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>()));
 
             var goalController = new GoalController(mockGoalWork.Object);
             goalController.ModelState.AddModelError("key", "error message");
@@ -220,7 +220,7 @@ namespace ApiTest
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "test text");
 
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>())).Throws<KeyNotFoundException>();
+            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
 
             var goalController = new GoalController(mockGoalWork.Object);
 
@@ -233,7 +233,7 @@ namespace ApiTest
             var inputData = new GoalUpdateInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), "test text");
 
             var mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>())).Throws<Exception>();
+            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<Exception>();
 
             var goalController = new GoalController(mockGoalWork.Object);
 

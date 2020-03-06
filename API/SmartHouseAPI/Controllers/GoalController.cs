@@ -119,7 +119,7 @@ namespace SmartHouseAPI.Controllers
 
             try
             {
-                goalWork.Update(data.Id, data.Name);
+                goalWork.Update(data.Id, data.Name, data.Done);
                 return NoContent();
             }
             catch (KeyNotFoundException)

@@ -48,11 +48,6 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
             this.logger = logger;
         }
 
-        //public OpenWeatherMapService(Dictionary<string, string> parm, HttpMessageHandler handler = null) : this(null, parm, handler)
-        //{
-
-        //}
-
         public async Task<WeatherModel> GetWeatherAsync()
         {
             return await GetWeatherAsync(null);

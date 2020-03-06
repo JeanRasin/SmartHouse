@@ -61,7 +61,7 @@ namespace SmartHouse.Business.Data
             return result;
         }
 
-        public void Update(Guid id, string name)
+        public void Update(Guid id, string name, bool done)
         {
             GoalModel result = repository.GetGoal(id);
 
@@ -71,6 +71,7 @@ namespace SmartHouse.Business.Data
             }
 
             result.Name = name;
+            result.Done = done;
 
             repository.Update(result);
             repository.Save();

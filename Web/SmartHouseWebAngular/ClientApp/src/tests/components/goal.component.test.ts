@@ -7,7 +7,6 @@ import { GoalComponent } from 'src/app/goal/goal.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatDialogMock } from '../mocks/mat-dialog-mock';
 import { MatDialogCreateMock } from '../mocks/mat-dialog-create-mock';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 export class GoalComponentTest {
     static test() {
