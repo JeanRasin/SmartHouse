@@ -35,7 +35,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
             }
 
             this.httpClient = httpClient;
-            
+
             data = (parm["url"], parm["city"], parm["api"]);
 
             this.httpClient.BaseAddress = new Uri(data.url);
@@ -64,19 +64,13 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 
         public async Task<WeatherModel> GetWeatherAsync(CancellationToken? token)
         {
-            //var IsCancellationRequested = token.GetValueOrDefault().IsCancellationRequested;
-            //if (IsCancellationRequested == true)
-            //{
-            //    throw new OperationCanceledException("Operation aborted by token.");
-            //}
-
             try
             {
                 var b = true;
                 HttpResponseMessage response = null;
                 while (b)
                 {
-                     response = await httpClient.GetAsync($"/data/2.5/weather?q={data.city}&APPID={data.api}&units=metric");
+                    response = await httpClient.GetAsync($"/data/2.5/weather?q={data.city}&APPID={data.api}&units=metric");
 
                     HttpRequestException ex;
                     switch (response.StatusCode)
@@ -91,9 +85,8 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                             if (token == null)
                             {
                                 throw ex;
-                                // await GetWeatherAsync(token);
                             }
-                            
+
                             break;
                         default:
                             b = false;
@@ -103,13 +96,8 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                     var IsCancellationRequested = token.GetValueOrDefault().IsCancellationRequested;
                     if (IsCancellationRequested == true)
                     {
-                       //var invalidOperationEx = new InvalidOperationException("Expected timeout exception");
-                       // LogErrorWrite(invalidOperationEx);
-                       // throw invalidOperationEx;
-                         throw new OperationCanceledException("Operation aborted by token.");
+                        throw new OperationCanceledException("Operation aborted by token.");
                     }
-
-                   // response.EnsureSuccessStatusCode();
                 }
 
                 string requestJson = JsonSerializer.Serialize(response.RequestMessage);
@@ -124,17 +112,6 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 
                 return result;
             }
-            //catch (HttpRequestException ex)
-            //{
-            //    LogErrorWrite(ex);
-
-            //    if (token == null)
-            //    {
-            //        throw ex;
-            //    }
-
-            //    await GetWeatherAsync(token);
-            //}
             catch (OperationCanceledException ex)
             {
                 LogErrorWrite(ex);
@@ -145,8 +122,6 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 LogErrorWrite(ex);
                 throw ex;
             }
-
-           // return null;
         }
 
         private void LogErrorWrite(Exception ex)

@@ -13,9 +13,6 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-
-// ≈сть проблемы с токеном из-за потери кода.
-
 namespace TestService
 {
     [TestFixture]
@@ -32,11 +29,13 @@ namespace TestService
             };
 
         private HttpClient httpClient;
+        private OpenWeatherMapService service;
 
         [SetUp]
         public void Setup()
         {
             httpClient = new HttpClient(mockHttp);
+            service = new OpenWeatherMapService(parm, httpClient);
 
             // Random constant.
             Randomizer.Seed = new Random(1338);
@@ -133,7 +132,6 @@ namespace TestService
         {
             // Arrange
             mockHttp.Fallback.Respond(mediaTypeJson, response);
-            var service = new OpenWeatherMapService(parm, httpClient);
 
             // Act & Assert
             Assert.ThrowsAsync<JsonException>(service.GetWeatherAsync);
@@ -147,8 +145,6 @@ namespace TestService
         {
             // Arrange
             mockHttp.Fallback.Respond(status);
-
-            var service = new OpenWeatherMapService(parm, httpClient);
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<HttpRequestException>(() => service.GetWeatherAsync());
@@ -172,8 +168,6 @@ namespace TestService
                 await Task.Delay(2000);
                 tokenSource.Cancel();
             });
-
-            var service = new OpenWeatherMapService(parm, httpClient);
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<InvalidOperationException>(() => service.GetWeatherAsync(token));
@@ -221,8 +215,6 @@ namespace TestService
             // Arrange
             mockHttp.Fallback.Throw(new Exception());
 
-            var service = new OpenWeatherMapService(parm, httpClient);
-
             // Act & Assert
             Assert.ThrowsAsync<Exception>(service.GetWeatherAsync);
         }
@@ -258,8 +250,6 @@ namespace TestService
                 return await Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
             });
 
-            var service = new OpenWeatherMapService(parm, httpClient);
-
             // Act & Assert
             Assert.ThrowsAsync<InvalidOperationException>(service.GetWeatherAsync);
         }
@@ -281,8 +271,6 @@ namespace TestService
             });
 
             mockHttp.Fallback.Respond(mediaTypeJson, responseJson);
-
-            var service = new OpenWeatherMapService(parm, httpClient);
 
             // Act
             var result = await service.GetWeatherAsync();
