@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using SmartHouse.Service.Weather.OpenWeatherMap.Model;
@@ -15,14 +16,18 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 {
     public class OpenWeatherMapService : IWeatherService, IDisposable
     {
+        const int TimeOutMilSec = 1000;
+
         protected readonly (string url, string city, string api) data;
 
         protected readonly ILogger<OpenWeatherMapService> logger;
-        protected readonly HttpClient client;
+        protected readonly HttpClient httpClient;
+        protected readonly Mapper mapper;
 
         protected readonly string[] keys = { "city", "api", "url" };
 
-        public OpenWeatherMapService(IDictionary<string, string> parm, HttpMessageHandler handler = null, ILogger<OpenWeatherMapService> logger = null)
+        //public OpenWeatherMapService(IDictionary<string, string> parm, HttpMessageHandler handler = null, ILogger<OpenWeatherMapService> logger = null)
+        public OpenWeatherMapService(IDictionary<string, string> parm, HttpClient httpClient, ILogger<OpenWeatherMapService> logger = null)
         {
             parm = new Dictionary<string, string>(parm, StringComparer.OrdinalIgnoreCase);
 
@@ -31,21 +36,36 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 throw new Exception("Not parameters.");
             }
 
-            if (handler == null)
-            {
-                client = new HttpClient();
-            }
-            else
-            {
-                client = new HttpClient(handler);
-            }
+            this.httpClient = httpClient;
+
+            //if (handler == null)
+            //{
+            //    client = new HttpClient();
+            //}
+            //else
+            //{
+            //    client = new HttpClient(handler);
+            //}
 
             data = (parm["url"], parm["city"], parm["api"]);
 
-            client.BaseAddress = new Uri(data.url);
-            client.Timeout = TimeSpan.FromMilliseconds(1000);
+            this.httpClient.BaseAddress = new Uri(data.url);
+            this.httpClient.Timeout = TimeSpan.FromMilliseconds(TimeOutMilSec);
 
             this.logger = logger;
+
+            // Config AutoMapper.
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<WeatherResponse, WeatherModel>()
+                .ForMember("Temp", opt => opt.MapFrom(src => src.Main.Temp))
+                .ForMember("WindSpeed", opt => opt.MapFrom(src => (int)src.Wind.Speed))
+                .ForMember("WindDeg", opt => opt.MapFrom(src => src.Wind.Deg))
+                .ForMember("City", opt => opt.MapFrom(src => src.Name))
+                .ForMember("FeelsLike", opt => opt.MapFrom(src => src.Main.FeelsLike))
+                .ForMember("Pressure", opt => opt.MapFrom(src => src.Main.Pressure))
+                .ForMember("Humidity", opt => opt.MapFrom(src => src.Main.Humidity))
+                .ForMember("Description", opt => opt.MapFrom(src => src.Weather.Count() > 0 ? string.Join("; ", src.Weather.Select(s => s.Description)) : string.Empty)));
+
+            mapper = new Mapper(config);
         }
 
         public async Task<WeatherModel> GetWeatherAsync()
@@ -63,7 +83,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 
             try
             {
-                var response = await client.GetAsync($"/data/2.5/weather?q={data.city}&APPID={data.api}&units=metric");
+                var response = await httpClient.GetAsync($"/data/2.5/weather?q={data.city}&APPID={data.api}&units=metric");
                 response.EnsureSuccessStatusCode();
 
                 string requestJson = JsonSerializer.Serialize(response.RequestMessage);
@@ -72,18 +92,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 string stringResult = await response.Content.ReadAsStringAsync();
                 WeatherResponse rawWeather = JsonSerializer.Deserialize<WeatherResponse>(stringResult);
 
-                var result = new WeatherModel
-                {
-                    Temp = rawWeather.Main.Temp,
-                    WindSpeed = (int)rawWeather.Wind.Speed,
-                    WindDeg = rawWeather.Wind.Deg,
-                    City = rawWeather.Name,
-                    FeelsLike = rawWeather.Main.FeelsLike,
-                    Pressure = rawWeather.Main.Pressure,
-                    Humidity = rawWeather.Main.Humidity
-                };
-
-                result.Description = rawWeather.Weather.Count() > 0 ? string.Join("; ", rawWeather.Weather.Select(s => s.Description)) : string.Empty;
+                WeatherModel result = mapper.Map<WeatherResponse, WeatherModel>(rawWeather);
 
                 LogInfoWrite(stringResult);
 
@@ -135,7 +144,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
             {
                 if (disposing)
                 {
-                    client.Dispose();
+                    httpClient.Dispose();
                 }
             }
             disposed = true;

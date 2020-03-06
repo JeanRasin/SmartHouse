@@ -23,6 +23,7 @@ using SmartHouseAPI.Middleware;
 using SmartHouseAPI.Contexts;
 using static SmartHouseAPI.Middleware.RequestResponseLoggingMiddleware;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace SmartHouseAPI
 {
@@ -126,7 +127,7 @@ namespace SmartHouseAPI
             IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
 
             // OpenWeatherMap service.
-            services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(parm, logger: x.GetRequiredService<ILogger<OpenWeatherMapService>>()));
+            services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(parm, new HttpClient(), logger: x.GetRequiredService<ILogger<OpenWeatherMapService>>()));
             // GisMeteo service.
             //services.AddTransient<IWeatherService, GisMeteoService>(); 
         }

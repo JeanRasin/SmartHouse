@@ -15,9 +15,13 @@ namespace TestService
         [Test]
         public async Task Get_Success_WeatherModelItem()
         {
+            // Arrange
             var service = new GisMeteoService();
+
+            // Act
             WeatherModel result = await service.GetWeatherAsync();
 
+            // Assert
             Assert.IsNotNull(result);
         }
     }
