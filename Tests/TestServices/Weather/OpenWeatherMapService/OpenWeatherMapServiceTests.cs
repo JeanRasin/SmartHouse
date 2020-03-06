@@ -140,7 +140,23 @@ namespace TestService
         }
 
         /// <summary>
-        /// Server error 503. Repeat requests for a certain time then cause interruption with a token. !!!
+        /// Server error 503.
+        /// </summary>
+        [TestCase(HttpStatusCode.ServiceUnavailable)]
+        public void Http_RequestNotToken_Status503(HttpStatusCode status)
+        {
+            // Arrange
+            mockHttp.Fallback.Respond(status);
+
+            var service = new OpenWeatherMapService(parm, httpClient);
+
+            // Act & Assert
+            var ex = Assert.ThrowsAsync<HttpRequestException>(() => service.GetWeatherAsync());
+            Assert.AreEqual("503", ex.Message);
+        }
+
+        /// <summary>
+        /// Server error 503. Repeat requests for a certain time then cause interruption with a token.
         /// </summary>
         [TestCase(HttpStatusCode.ServiceUnavailable)]
         public void Http_Request_Status503(HttpStatusCode status)
@@ -160,12 +176,12 @@ namespace TestService
             var service = new OpenWeatherMapService(parm, httpClient);
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<HttpRequestException>(() => service.GetWeatherAsync(token));
-            Assert.AreEqual("Response status code does not indicate success: 503 (Service Unavailable).", ex.Message);
+            var ex = Assert.ThrowsAsync<InvalidOperationException>(() => service.GetWeatherAsync(token));
+            Assert.AreEqual("Expected timeout exception", ex.Message);
         }
 
         /// <summary>
-        /// Server error 401. Repeat requests for a certain time then cause interruption with a token. !!!
+        /// Server error 401. Repeat requests for a certain time then cause interruption with a token. 
         /// </summary>
         [TestCase(HttpStatusCode.Unauthorized)]
         public void Http_Request_Status401(HttpStatusCode status)
@@ -193,7 +209,7 @@ namespace TestService
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<HttpRequestException>(() => service.GetWeatherAsync(token));
-            Assert.AreEqual("Response status code does not indicate success: 401 (Unauthorized).", ex.Message);
+            Assert.AreEqual("401", ex.Message);
         }
 
         /// <summary>
@@ -229,7 +245,7 @@ namespace TestService
         }
 
         /// <summary>
-        /// !!!
+        /// Timeout request.
         /// </summary>
         [Test]
         public void Http_Request_TimeOut()
@@ -237,7 +253,7 @@ namespace TestService
             // Arrange
             mockHttp.Fallback.Respond(async () =>
             {
-                await Task.Delay(20000);
+                await Task.Delay(2000);
 
                 return await Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
             });
