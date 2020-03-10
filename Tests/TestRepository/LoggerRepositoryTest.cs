@@ -75,13 +75,7 @@ namespace RepositoryTest
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                 .Generate();
 
-         //   var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()));
-
-          //  var context = new Mock<ILoggerContext>();
-           // context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
-
-          //  var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
 
             // Act
             repository.Create(testData);
@@ -123,14 +117,8 @@ namespace RepositoryTest
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                 .Generate();
 
-           // var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()))
                 .Throws(MongoWriteExceptionObj());
-
-           // var context = new Mock<ILoggerContext>();
-            //context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
-
-          //  var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
 
             // Act & Assert
             Assert.Throws<MongoWriteException>(() => repository.Create(testData));
@@ -148,14 +136,8 @@ namespace RepositoryTest
             // Arrange
             List<LoggerModel> items = loggerModelFaker.Generate(2);
 
-           // var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new MockAsyncCursor<LoggerModel>(items));
-
-           // var context = new Mock<ILoggerContext>();
-           // context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
-
-          //  var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
 
             // Act
             List<LoggerModel> result = (await repository.QueryAsync()).ToList();
@@ -177,23 +159,10 @@ namespace RepositoryTest
         {
             // Arrange
             List<LoggerModel> items = loggerModelFaker.Generate(1);
-
-            //string str = System.Text.Json.JsonSerializer.Serialize(items, new System.Text.Json.JsonSerializerOptions
-            //{
-            //    PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
-            //    WriteIndented = true
-            //});
-
             LoggerModel item = items.Single();
 
-           // var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new MockAsyncCursor<LoggerModel>(items));
-
-            // var context = new Mock<ILoggerContext>();
-            // context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
-
-            //  var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
 
             // Act
             List<LoggerModel> result = (await repository.QueryAsync(s => s.Id == item.Id)).ToList();
