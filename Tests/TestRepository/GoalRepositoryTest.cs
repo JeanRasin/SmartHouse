@@ -12,57 +12,20 @@ using Xunit;
 
 namespace RepositoryTest
 {
-    public class MockedDbContextFixture : IDisposable
-    {
-        public GoalContext MockedDbContext { get; private set; }
-
-        public MockedDbContextFixture()
-        {
-            MockedDbContext = Create.MockedDbContextFor<GoalContext>();
-        }
-
-        #region dispose
-        private bool disposed = false;
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    MockedDbContext.Dispose();
-                }
-            }
-            disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
-    }
-
     /// <summary>
     /// https://github.com/rgvlee/EntityFrameworkCore.Testing
     /// </summary>
     [CollectionDefinition("Goal repository")]
-    public class GoalRepositoryTest : IClassFixture<MockedDbContextFixture>
+    public class GoalRepositoryTest
     {
         private static readonly GoalModel itemTestData = GetTestData();
         private readonly GoalContext mockedDbContext;
         private readonly GoalRepository repository;
         private readonly Mock<GoalContext> dbContextMock;
 
-        public GoalRepositoryTest(MockedDbContextFixture mockedDbContextFixture)
+        public GoalRepositoryTest()
         {
-            // itemTestData = testData.Single();
-
-             mockedDbContext = Create.MockedDbContextFor<GoalContext>();
-
-           // mockedDbContext = mockedDbContextFixture.MockedDbContext;
-
+            mockedDbContext = Create.MockedDbContextFor<GoalContext>();
             repository = new GoalRepository(mockedDbContext);
             dbContextMock = Mock.Get(mockedDbContext);
         }
@@ -115,17 +78,14 @@ namespace RepositoryTest
         }
 
         #region GetGoals
+        /// <summary>
+        /// Get goals.
+        /// </summary>
         [Fact]
         public void GetGoals_GoalModelItems()
         {
-            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
-
-            // var repository = new GoalRepository(mockedDbContext);
-
             // Act
             IEnumerable<GoalModel> items = repository.GetGoals();
-
-            // Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
 
             // Assert
             dbContextMock.VerifyGet(v => v.Goals, "Property was not called.");
@@ -134,14 +94,15 @@ namespace RepositoryTest
         #endregion
 
         #region GetGoal 
+        /// <summary>
+        /// Get goal by id.
+        /// </summary>
         [Fact]
         public void GetGoal_GoalModelItem()
         {
-            //   GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
             // Arrange
             mockedDbContext.Goals.Add(itemTestData);
 
-            //var repository = new GoalRepository(mockedDbContext);
             // Act
             GoalModel result = repository.GetGoal(itemTestData.Id);
 
@@ -150,28 +111,24 @@ namespace RepositoryTest
             Assert.Equal(itemTestData, result);
         }
 
+        /// <summary>
+        /// Get goal key id not found. Throw exception KeyNotFoundException.
+        /// </summary>
         [Fact]
         public void GetGoal_KeyNotFound_KeyNotFoundException()
         {
-            //  GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
-            //var repository = new GoalRepository(mockedDbContext);
-
             // Act & Assert
             Assert.Throws<KeyNotFoundException>(() => repository.GetGoal(Guid.NewGuid()));
         }
         #endregion
 
         #region Create 
+        /// <summary>
+        /// Create goal.
+        /// </summary>
         [Fact]
         public void Create_Success()
         {
-            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
-
-            // Arrange
-           // Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
-
-            // var repository = new GoalRepository(mockedDbContext);
-
             // Act
             repository.Create(itemTestData);
 
@@ -183,16 +140,14 @@ namespace RepositoryTest
         #endregion
 
         #region Remove
+        /// <summary>
+        /// Remove goal.
+        /// </summary>
         [Fact]
         public void Remove_Success()
         {
-            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
-
             // Arrange
-           // Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
             mockedDbContext.Goals.Add(itemTestData);
-
-            // var repository = new GoalRepository(mockedDbContext);
 
             // Act
             repository.Remove(itemTestData.Id);
@@ -203,28 +158,25 @@ namespace RepositoryTest
             Assert.Equal(EntityState.Deleted, itemState);
         }
 
+        /// <summary>
+        /// Remove goal key id not found. Throw exception KeyNotFoundException.
+        /// </summary>
         [Fact]
         public void Remove_KeyNotFound_KeyNotFoundException()
         {
-            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
-
-            // var repository = new GoalRepository(mockedDbContext);
-
             // Act && Assert
             Assert.Throws<KeyNotFoundException>(() => repository.Remove(Guid.NewGuid()));
         }
         #endregion
 
         #region Update
+        /// <summary>
+        /// Update goal.
+        /// </summary>
         [Fact]
         public void Update_Success()
         {
-            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
-
-            // var repository = new GoalRepository(mockedDbContext);
-
             // Arrange
-           // Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
             repository.Create(itemTestData);
 
             // Act
@@ -236,13 +188,12 @@ namespace RepositoryTest
             Assert.Equal(EntityState.Modified, itemState);
         }
 
+        /// <summary>
+        /// Update goal key id not found. Throw exception KeyNotFoundException.
+        /// </summary>
         [Fact]
         public void Update_KeyNotFound_KeyNotFoundException()
         {
-            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
-
-            //  var repository = new GoalRepository(mockedDbContext);
-
             // Act & Assert
             Assert.Throws<KeyNotFoundException>(() => repository.Update(itemTestData));
         }

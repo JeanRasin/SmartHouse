@@ -20,6 +20,11 @@ namespace SmartHouse.Infrastructure.Data
             return db.Goals;
         }
 
+        /// <summary>
+        /// Get goal by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public GoalModel GetGoal(Guid id)
         {
             GoalModel result = db.Goals.Find(id);
@@ -32,11 +37,19 @@ namespace SmartHouse.Infrastructure.Data
             return result;
         }
 
+        /// <summary>
+        /// Create goal.
+        /// </summary>
+        /// <param name="data"></param>
         public void Create(GoalModel data)
         {
             db.Entry(data).State = EntityState.Added;
         }
 
+        /// <summary>
+        /// Remove goal by id.
+        /// </summary>
+        /// <param name="id"></param>
         public void Remove(Guid id)
         {
             var goal = db.Goals.Find(id);
@@ -50,6 +63,10 @@ namespace SmartHouse.Infrastructure.Data
             }
         }
 
+        /// <summary>
+        /// Update goal.
+        /// </summary>
+        /// <param name="data"></param>
         public void Update(GoalModel data)
         {
             var goal = db.Goals.Find(data.Id);
@@ -63,6 +80,9 @@ namespace SmartHouse.Infrastructure.Data
             }
         }
 
+        /// <summary>
+        /// Save changes.
+        /// </summary>
         public void Save()
         {
             db.SaveChanges();
