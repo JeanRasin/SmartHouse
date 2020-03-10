@@ -13,11 +13,24 @@ namespace BusinessTest
     [CollectionDefinition("Goal work")]
     public class GoalWorkTest
     {
-        private readonly List<GoalModel> testDataItems;
-        private readonly GoalModel testDataItem;
+        private static List<GoalModel> testDataItems;
+        private static GoalModel testDataItem;
+
+        private readonly Mock<IGoalRepository<GoalModel>> mockGoalRepository;
+        private readonly GoalWork goalWork;
 
         public GoalWorkTest()
         {
+            GetTestData();
+
+            mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+
+            goalWork = new GoalWork(mockGoalRepository.Object);
+        }
+
+        static void GetTestData()
+        {
+            // Random constant.
             Randomizer.Seed = new Random(1338);
 
             testDataItems = new Faker<GoalModel>()
@@ -44,9 +57,9 @@ namespace BusinessTest
         public void GetGoalAll_OrderByDescendingDateUpdate_GoalModelItems()
         {
             //Arrange
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+          //  var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.GetGoals()).Returns(testDataItems);
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+           // var goalWork = new GoalWork(mockGoalRepository.Object);
 
             // Act
             IEnumerable<GoalModel> result = goalWork.GetGoalAll();
@@ -77,9 +90,9 @@ namespace BusinessTest
             // Exactly what would be true.
             testData[0].Done = true;
 
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+           // var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.GetGoals()).Returns(testData);
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+           // var goalWork = new GoalWork(mockGoalRepository.Object);
 
             // Act
             IEnumerable<GoalModel> result = goalWork.GetGoals();
@@ -96,9 +109,9 @@ namespace BusinessTest
         public void GetGoal_Success_GoalModelItem()
         {
             //Arrange
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+           // var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(testDataItem);
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+            //var goalWork = new GoalWork(mockGoalRepository.Object);
 
             // Act
             GoalModel result = goalWork.GetGoal(Guid.NewGuid());
@@ -112,9 +125,9 @@ namespace BusinessTest
         public void GetGoal_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+           // var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+           // var goalWork = new GoalWork(mockGoalRepository.Object);
 
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => goalWork.GetGoal(Guid.NewGuid()));
@@ -126,11 +139,11 @@ namespace BusinessTest
         public void Create_Success_GoalModelItem()
         {
             //Arrange
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+           // var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.Create(It.IsAny<GoalModel>())).Verifiable();
             mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+           // var goalWork = new GoalWork(mockGoalRepository.Object);
 
             // Act
             GoalModel result = goalWork.Create("test name");
@@ -147,12 +160,12 @@ namespace BusinessTest
         public void Update_Success()
         {
             //Arrange
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+           // var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(testDataItem);
             mockGoalRepository.Setup(s => s.Update(It.IsAny<GoalModel>())).Verifiable();
             mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+            //var goalWork = new GoalWork(mockGoalRepository.Object);
 
             // Act
             goalWork.Update(Guid.NewGuid(), "test name", true);
@@ -166,10 +179,10 @@ namespace BusinessTest
         public void Update_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+           // var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
 
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+           // var goalWork = new GoalWork(mockGoalRepository.Object);
 
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => goalWork.Update(Guid.NewGuid(), "test name", true));
@@ -181,12 +194,12 @@ namespace BusinessTest
         public void Delete_Success()
         {
             //Arrange
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+           // var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(testDataItem);
             mockGoalRepository.Setup(s => s.Remove(It.IsAny<Guid>())).Verifiable();
             mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+          // var goalWork = new GoalWork(mockGoalRepository.Object);
 
             // Act
             goalWork.Delete(Guid.NewGuid());
@@ -200,10 +213,10 @@ namespace BusinessTest
         public void Delete_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+            //var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
 
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+          //  var goalWork = new GoalWork(mockGoalRepository.Object);
 
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => goalWork.Delete(Guid.NewGuid()));
@@ -217,12 +230,12 @@ namespace BusinessTest
             //Arrange
             GoalModel testDataItem = testDataItems.First();
 
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+           // var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.GetGoals()).Returns(testDataItems);
             mockGoalRepository.Setup(s => s.Update(It.IsAny<GoalModel>())).Verifiable();
             mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+           // var goalWork = new GoalWork(mockGoalRepository.Object);
 
             // Act
             goalWork.Done(testDataItem.Id, !testDataItem.Done);
@@ -236,10 +249,10 @@ namespace BusinessTest
         public void Done_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+           // var mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
             mockGoalRepository.Setup(s => s.GetGoals()).Returns(testDataItems);
 
-            var goalWork = new GoalWork(mockGoalRepository.Object);
+          //  var goalWork = new GoalWork(mockGoalRepository.Object);
 
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => goalWork.Done(Guid.NewGuid(), true));

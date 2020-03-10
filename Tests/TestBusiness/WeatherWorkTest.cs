@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace TestBusiness
+namespace BusinessTest
 {
     [CollectionDefinition("Weather work")]
     public class WeatherWorkTest
