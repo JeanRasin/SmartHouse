@@ -12,31 +12,81 @@ using Xunit;
 
 namespace RepositoryTest
 {
+    public class MockedDbContextFixture : IDisposable
+    {
+        public GoalContext MockedDbContext { get; private set; }
+
+        public MockedDbContextFixture()
+        {
+            MockedDbContext = Create.MockedDbContextFor<GoalContext>();
+        }
+
+        #region dispose
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    MockedDbContext.Dispose();
+                }
+            }
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+    }
+
     /// <summary>
     /// https://github.com/rgvlee/EntityFrameworkCore.Testing
     /// </summary>
     [CollectionDefinition("Goal repository")]
-    public class GoalRepositoryTest
+    public class GoalRepositoryTest : IClassFixture<MockedDbContextFixture>
     {
-        private readonly GoalModel itemTestData;
+        private static readonly GoalModel itemTestData = GetTestData();
+        private readonly GoalContext mockedDbContext;
+        private readonly GoalRepository repository;
+        private readonly Mock<GoalContext> dbContextMock;
 
-        public GoalRepositoryTest()
+        public GoalRepositoryTest(MockedDbContextFixture mockedDbContextFixture)
         {
-            List<GoalModel> testData = new Faker<GoalModel>()
+            // itemTestData = testData.Single();
+
+             mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+
+           // mockedDbContext = mockedDbContextFixture.MockedDbContext;
+
+            repository = new GoalRepository(mockedDbContext);
+            dbContextMock = Mock.Get(mockedDbContext);
+        }
+
+        static GoalModel GetTestData()
+        {
+            // Random constant.
+            Randomizer.Seed = new Random(1338);
+
+            GoalModel result = new Faker<GoalModel>()
           .StrictMode(true)
           .RuleFor(o => o.Id, f => f.Random.Uuid())
           .RuleFor(o => o.Name, f => f.Random.Words(3))
           .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
           .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
           .RuleFor(o => o.Done, f => f.Random.Bool())
-          .Generate(1);
+          .Generate();
 
-            itemTestData = testData.Single();
+            return result;
         }
 
-        #region Just in case
+        #region Just in case 
         /// <summary>
-        /// Mock dbSet.
+        /// Mock dbSet. todo: возможно пригадится.
         /// </summary>
         /// <remarks>
         /// https://stackoverflow.com/questions/37630564/how-to-mock-up-dbcontext
@@ -68,13 +118,16 @@ namespace RepositoryTest
         [Fact]
         public void GetGoals_GoalModelItems()
         {
-            GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
 
-            var repository = new GoalRepository(mockedDbContext);
+            // var repository = new GoalRepository(mockedDbContext);
+
+            // Act
             IEnumerable<GoalModel> items = repository.GetGoals();
 
-            Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
+            // Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
 
+            // Assert
             dbContextMock.VerifyGet(v => v.Goals, "Property was not called.");
             Assert.Equal(items.Count(), mockedDbContext.Goals.Count());
         }
@@ -84,12 +137,15 @@ namespace RepositoryTest
         [Fact]
         public void GetGoal_GoalModelItem()
         {
-            GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            //   GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            // Arrange
             mockedDbContext.Goals.Add(itemTestData);
 
-            var repository = new GoalRepository(mockedDbContext);
+            //var repository = new GoalRepository(mockedDbContext);
+            // Act
             GoalModel result = repository.GetGoal(itemTestData.Id);
 
+            // Assert
             Assert.NotNull(result);
             Assert.Equal(itemTestData, result);
         }
@@ -97,9 +153,10 @@ namespace RepositoryTest
         [Fact]
         public void GetGoal_KeyNotFound_KeyNotFoundException()
         {
-            GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
-            var repository = new GoalRepository(mockedDbContext);
+            //  GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            //var repository = new GoalRepository(mockedDbContext);
 
+            // Act & Assert
             Assert.Throws<KeyNotFoundException>(() => repository.GetGoal(Guid.NewGuid()));
         }
         #endregion
@@ -108,14 +165,18 @@ namespace RepositoryTest
         [Fact]
         public void Create_Success()
         {
-            GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
 
-            var repository = new GoalRepository(mockedDbContext);
+            // Arrange
+           // Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
+
+            // var repository = new GoalRepository(mockedDbContext);
+
+            // Act
             repository.Create(itemTestData);
 
-            Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
+            // Assert
             EntityState itemState = mockedDbContext.Entry(itemTestData).State;
-
             dbContextMock.Verify(v => v.Entry(itemTestData), Times.Exactly(2), "Entry was not called.");
             Assert.Equal(EntityState.Added, itemState);
         }
@@ -125,15 +186,19 @@ namespace RepositoryTest
         [Fact]
         public void Remove_Success()
         {
-            GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+
+            // Arrange
+           // Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
             mockedDbContext.Goals.Add(itemTestData);
 
-            var repository = new GoalRepository(mockedDbContext);
+            // var repository = new GoalRepository(mockedDbContext);
+
+            // Act
             repository.Remove(itemTestData.Id);
 
-            Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
+            // Assert
             EntityState itemState = mockedDbContext.Entry(itemTestData).State;
-
             dbContextMock.Verify(v => v.Entry(itemTestData), Times.Exactly(2), "Entry was not called.");
             Assert.Equal(EntityState.Deleted, itemState);
         }
@@ -141,10 +206,11 @@ namespace RepositoryTest
         [Fact]
         public void Remove_KeyNotFound_KeyNotFoundException()
         {
-            GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
 
-            var repository = new GoalRepository(mockedDbContext);
+            // var repository = new GoalRepository(mockedDbContext);
 
+            // Act && Assert
             Assert.Throws<KeyNotFoundException>(() => repository.Remove(Guid.NewGuid()));
         }
         #endregion
@@ -153,15 +219,19 @@ namespace RepositoryTest
         [Fact]
         public void Update_Success()
         {
-            GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
 
-            var repository = new GoalRepository(mockedDbContext);
+            // var repository = new GoalRepository(mockedDbContext);
+
+            // Arrange
+           // Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
             repository.Create(itemTestData);
+
+            // Act
             repository.Update(itemTestData);
 
-            Mock<GoalContext> dbContextMock = Mock.Get(mockedDbContext);
+            // Assert
             EntityState itemState = mockedDbContext.Entry(itemTestData).State;
-
             dbContextMock.Verify(v => v.Entry(itemTestData), Times.Exactly(3), "Entry was not called.");
             Assert.Equal(EntityState.Modified, itemState);
         }
@@ -169,10 +239,11 @@ namespace RepositoryTest
         [Fact]
         public void Update_KeyNotFound_KeyNotFoundException()
         {
-            GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            // GoalContext mockedDbContext = Create.MockedDbContextFor<GoalContext>();
 
-            var repository = new GoalRepository(mockedDbContext);
+            //  var repository = new GoalRepository(mockedDbContext);
 
+            // Act & Assert
             Assert.Throws<KeyNotFoundException>(() => repository.Update(itemTestData));
         }
         #endregion
