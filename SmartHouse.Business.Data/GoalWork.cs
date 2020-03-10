@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SmartHouse.Business.Data
 {
-    public class GoalWork : IGoalWork<GoalModel> 
+    public class GoalWork : IGoalWork<GoalModel>
     {
         private readonly IGoalRepository<GoalModel> repository;
 
@@ -21,6 +21,10 @@ namespace SmartHouse.Business.Data
             repository = goalRepository;
         }
 
+        /// <summary>
+        /// Get all the goals.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<GoalModel> GetGoalAll()
         {
             IOrderedEnumerable<GoalModel> result = repository
@@ -29,6 +33,10 @@ namespace SmartHouse.Business.Data
             return result;
         }
 
+        /// <summary>
+        /// Get outstanding goals.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<GoalModel> GetGoals()
         {
             IOrderedEnumerable<GoalModel> result = repository
@@ -39,6 +47,11 @@ namespace SmartHouse.Business.Data
             return result;
         }
 
+        /// <summary>
+        /// Get goal by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public GoalModel GetGoal(Guid id)
         {
             GoalModel result = repository.GetGoal(id);
@@ -51,6 +64,11 @@ namespace SmartHouse.Business.Data
             return result;
         }
 
+        /// <summary>
+        /// Create a goal.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public GoalModel Create(string name)
         {
             var result = new GoalModel(name);
@@ -61,6 +79,12 @@ namespace SmartHouse.Business.Data
             return result;
         }
 
+        /// <summary>
+        /// Update goal.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="done"></param>
         public void Update(Guid id, string name, bool done)
         {
             GoalModel result = repository.GetGoal(id);
@@ -77,6 +101,10 @@ namespace SmartHouse.Business.Data
             repository.Save();
         }
 
+        /// <summary>
+        /// Delete goal by id.
+        /// </summary>
+        /// <param name="id"></param>
         public void Delete(Guid id)
         {
             GoalModel result = repository.GetGoal(id);
@@ -90,6 +118,11 @@ namespace SmartHouse.Business.Data
             repository.Save();
         }
 
+        /// <summary>
+        /// Mark goal.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="done"></param>
         public void Done(Guid id, bool done)
         {
             GoalModel result = repository
