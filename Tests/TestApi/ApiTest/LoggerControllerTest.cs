@@ -58,11 +58,7 @@ namespace ApiTest
         public void GetLoggerAsync_Success_LoggerModelItems()
         {
             // Arrange
-            // var mockLogger = new Mock<ILoggerWork>();
-
             mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult(loggerList));
-
-            //  var loggerController = new LoggerController(mockLogger.Object);
 
             // Act
             var result = loggerController.GetLoggerAsync().Result as OkObjectResult;
@@ -78,12 +74,8 @@ namespace ApiTest
         [Fact]
         public void GetLoggerAsync_IdNotFound_NotFoundExceptionStatus404()
         {
-            // var mockLogger = new Mock<ILoggerWork>();
-
             // Arrange
             mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult<IEnumerable<LoggerModel>>(null));
-
-            // var loggerController = new LoggerController(mockLogger.Object);
 
             // Act & Assert
             Assert.ThrowsAsync<NotFoundException>(() => loggerController.GetLoggerAsync());
@@ -95,12 +87,8 @@ namespace ApiTest
         [Fact]
         public void GetLoggerAsync_Exception_ExceptionStatus500()
         {
-            // var mockLogger = new Mock<ILoggerWork>();
-
             // Arrange
             mockLogger.Setup(m => m.GetLoggerAsync()).Throws<Exception>();
-
-            //  var loggerController = new LoggerController(mockLogger.Object);
 
             // Act & Assert
             Assert.ThrowsAsync<Exception>(() => loggerController.GetLoggerAsync());
