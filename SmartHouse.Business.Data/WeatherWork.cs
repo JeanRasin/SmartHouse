@@ -13,18 +13,32 @@ namespace SmartHouse.Business.Data
 
         private readonly IWeatherService weatherService;
 
+        /// <summary>
+        /// Create a WeatherWork.
+        /// </summary>
+        /// <param name="weatherService"></param>
+        /// <param name="timeOutSec">Waiting time for the weather service.</param>
         public WeatherWork(IWeatherService weatherService, int timeOutSec = 30)
         {
             this.weatherService = weatherService;
             TimeOutSec = timeOutSec * 1000;
         }
 
+        /// <summary>
+        /// Get weather.
+        /// </summary>
+        /// <returns></returns>
         public async Task<WeatherModel> GetWeatherAsync()
         {
             var cts = new CancellationTokenSource();
             return await GetWeatherAsync(cts);
         }
 
+        /// <summary>
+        /// Get weather with a token.
+        /// </summary>
+        /// <param name="tokenSource"></param>
+        /// <returns></returns>
         public async Task<WeatherModel> GetWeatherAsync(CancellationTokenSource tokenSource = default)
         {
             CancellationToken token = tokenSource.Token;
@@ -40,7 +54,7 @@ namespace SmartHouse.Business.Data
                 tokenSource.Cancel();
                 return await task;
             }
-            catch (HttpRequestException ex)//todo:???
+            catch (HttpRequestException ex)
             {
                 throw ex;
             }
