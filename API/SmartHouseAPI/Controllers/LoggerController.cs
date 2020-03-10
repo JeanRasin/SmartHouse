@@ -24,6 +24,7 @@ namespace SmartHouseAPI.Controllers
         /// </summary>
         /// <returns>Returns list logs</returns>
         /// <response code="200">Returns list logs</response>
+        /// <response code="404">Not data</response>
         /// <response code="500">Internal server error</response>  
         // GET api/logger
         [HttpGet]
@@ -42,6 +43,5 @@ namespace SmartHouseAPI.Controllers
 
             return Ok(result);
         }
-
     }
 }
