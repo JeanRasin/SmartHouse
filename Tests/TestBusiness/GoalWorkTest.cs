@@ -13,43 +13,32 @@ namespace BusinessTest
     [CollectionDefinition("Goal work")]
     public class GoalWorkTest
     {
-        private static List<GoalModel> testDataItems;
-        private static GoalModel testDataItem;
+        private static readonly List<GoalModel> testDataItems = GetTestData();
+        private static readonly GoalModel testDataItem = testDataItems.First();
 
         private readonly Mock<IGoalRepository<GoalModel>> mockGoalRepository;
         private readonly GoalWork goalWork;
 
         public GoalWorkTest()
         {
-            GetTestData();
-
             mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
-
             goalWork = new GoalWork(mockGoalRepository.Object);
         }
 
-        static void GetTestData()
+        static List<GoalModel> GetTestData(int n = 10)
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
 
-            testDataItems = new Faker<GoalModel>()
+            List<GoalModel> result = new Faker<GoalModel>()
                  .StrictMode(true)
                  .RuleFor(o => o.Id, f => f.Random.Uuid())
                  .RuleFor(o => o.Name, f => f.Random.Words(3))
                  .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                  .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                  .RuleFor(o => o.Done, f => f.Random.Bool())
-                 .Generate(10);
-
-            testDataItem = new Faker<GoalModel>()
-                 .StrictMode(true)
-                 .RuleFor(o => o.Id, f => f.Random.Uuid())
-                 .RuleFor(o => o.Name, f => f.Random.Words(3))
-                 .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                 .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                 .RuleFor(o => o.Done, f => f.Random.Bool())
-                 .Generate();
+                 .Generate(n);
+            return result;
         }
 
         #region GetGoalAll
@@ -235,8 +224,6 @@ namespace BusinessTest
         public void Done_Success()
         {
             //Arrange
-            GoalModel testDataItem = testDataItems.First();
-
             mockGoalRepository.Setup(s => s.GetGoals()).Returns(testDataItems);
             mockGoalRepository.Setup(s => s.Update(It.IsAny<GoalModel>())).Verifiable();
             mockGoalRepository.Setup(s => s.Save()).Verifiable();

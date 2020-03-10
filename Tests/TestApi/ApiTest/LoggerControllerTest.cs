@@ -27,12 +27,12 @@ namespace ApiTest
             loggerController = new LoggerController(mockLogger.Object);
         }
 
-        static IEnumerable<LoggerModel> GetTestData()
+        static IEnumerable<LoggerModel> GetTestData(int n = 10)
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
 
-            var eventIdFaker = new Faker<SmartHouse.Domain.Core.EventId>()
+            SmartHouse.Domain.Core.EventId eventIdFaker = new Faker<SmartHouse.Domain.Core.EventId>()
                   .RuleFor(o => o.StateId, f => f.Random.Int(1, 10))
                   .RuleFor(o => o.Name, f => f.Random.String2(10))
                   .Generate();
@@ -45,7 +45,7 @@ namespace ApiTest
                 .RuleFor(o => o.LogLevel, f => f.PickRandom<LogLevel>())
                 .RuleFor(o => o.Message, f => f.Random.Words(20))
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
-                .Generate(10);
+                .Generate(n);
 
             return result;
         }
