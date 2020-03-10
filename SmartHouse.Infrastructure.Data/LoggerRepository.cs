@@ -24,32 +24,47 @@ namespace SmartHouse.Infrastructure.Data
             CategoryName = categoryName;
         }
 
+        /// <summary>
+        /// Create record.
+        /// </summary>
+        /// <param name="model"></param>
         public void Create(T model)
         {
             model.CategoryName = CategoryName;
             Collection.InsertOne(model);
         }
 
-        //public T Find(object id)
-        //{
-        //    if (!ObjectId.TryParse(id.ToString(), out ObjectId objectId))
-        //    {
-        //        return null;
-        //    }
+        /* todo: возможно пригодится.
+        public T Find(object id)
+        {
+            if (!ObjectId.TryParse(id.ToString(), out ObjectId objectId))
+            {
+                return null;
+            }
 
-        //    var filterId = Builders<T>.Filter.Eq("_id", objectId);
-        //    var model = Collection.Find(filterId).FirstOrDefault();
+            var filterId = Builders<T>.Filter.Eq("_id", objectId);
+            var model = Collection.Find(filterId).FirstOrDefault();
 
-        //    return model;
-        //}
+            return model;
+        }
+        */
 
+        /// <summary>
+        /// Get all entries.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<T>> QueryAsync()
         {
             var result = await Collection.FindAsync<T>(FilterDefinition<T>.Empty).GetAwaiter().GetResult().ToListAsync();
             return result;
         }
 
-        public async Task<List<T>> QueryAsync(Expression<Func<T, bool>> filter)
+        /// <summary>
+        /// Filter entries.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> filter)
         {
             var result = await Collection.FindAsync<T>(filter).GetAwaiter().GetResult().ToListAsync();
             return result;

@@ -27,8 +27,13 @@ namespace RepositoryTest
         private readonly Faker<EventId> eventIdFaker;
         private readonly Faker<LoggerModel> loggerModelFaker;
 
+        private readonly Mock<IMongoCollection<LoggerModel>> collection;
+        private readonly Mock<ILoggerContext> context;
+        private readonly LoggerRepository<LoggerModel> repository;
+
         public LoggerRepositoryTest()
         {
+            // Random constant.
             Randomizer.Seed = new Random(1338);
 
             eventIdFaker = new Faker<EventId>()
@@ -43,12 +48,23 @@ namespace RepositoryTest
                 .RuleFor(o => o.LogLevel, f => f.PickRandom<LogLevel>())
                 .RuleFor(o => o.Message, f => f.Random.Words(20))
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)));
+
+            collection = new Mock<IMongoCollection<LoggerModel>>();
+
+            context = new Mock<ILoggerContext>();
+            context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
+
+            repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
         }
 
         #region Create
+        /// <summary>
+        /// Create logger.
+        /// </summary>
         [Fact]
         public void Create_Success()
         {
+            // Arrange
             LoggerModel testData = new Faker<LoggerModel>()
                 .StrictMode(true)
                 .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
@@ -59,31 +75,38 @@ namespace RepositoryTest
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                 .Generate();
 
-            var collection = new Mock<IMongoCollection<LoggerModel>>();
+         //   var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()));
 
-            var context = new Mock<ILoggerContext>();
-            context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
+          //  var context = new Mock<ILoggerContext>();
+           // context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
 
-            var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
+          //  var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
+
+            // Act
             repository.Create(testData);
 
+            // Assert
             collection.Verify(v => v.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Once, "InsertOne was not called.");
         }
 
+        /// <summary>
+        /// Throw exception MongoWriteException.
+        /// </summary>
         [Fact]
         public void Create_IdNotFound_MongoWriteException()
         {
+            // Arrange
             static MongoWriteException MongoWriteExceptionObj()
             {
                 var connectionId = new ConnectionId(new ServerId(new ClusterId(1), new DnsEndPoint("localhost", 27017)), 2);
                 var innerException = new Exception("inner");
 
-                var ctor = typeof(WriteError).GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)[0];
-                var writeError = (WriteError)ctor.Invoke(new object[] { ServerErrorCategory.Uncategorized, 1, "writeError", new BsonDocument("details", "writeError") });
+                ConstructorInfo ctor = typeof(WriteError).GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)[0];
+                WriteError writeError = (WriteError)ctor.Invoke(new object[] { ServerErrorCategory.Uncategorized, 1, "writeError", new BsonDocument("details", "writeError") });
 
                 ctor = typeof(WriteConcernError).GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)[0];
-                var writeConcernError = (WriteConcernError)ctor.Invoke(new object[] { 1, "writeConcernError", "", new BsonDocument("details", "writeConcernError") });
+                WriteConcernError writeConcernError = (WriteConcernError)ctor.Invoke(new object[] { 1, "writeConcernError", "", new BsonDocument("details", "writeConcernError") });
 
                 return new MongoWriteException(connectionId, writeError, writeConcernError, innerException);
             };
@@ -100,35 +123,44 @@ namespace RepositoryTest
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                 .Generate();
 
-            var collection = new Mock<IMongoCollection<LoggerModel>>();
+           // var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()))
                 .Throws(MongoWriteExceptionObj());
 
-            var context = new Mock<ILoggerContext>();
-            context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
+           // var context = new Mock<ILoggerContext>();
+            //context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
 
-            var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
+          //  var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
 
+            // Act & Assert
             Assert.Throws<MongoWriteException>(() => repository.Create(testData));
         }
         #endregion
 
         #region Query
+        /// <summary>
+        /// Get all the loggers.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task Query_All_Data()
         {
-            var items = loggerModelFaker.Generate(2);
+            // Arrange
+            List<LoggerModel> items = loggerModelFaker.Generate(2);
 
-            var collection = new Mock<IMongoCollection<LoggerModel>>();
+           // var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new MockAsyncCursor<LoggerModel>(items));
 
-            var context = new Mock<ILoggerContext>();
-            context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
+           // var context = new Mock<ILoggerContext>();
+           // context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
 
-            var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
+          //  var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
+
+            // Act
             List<LoggerModel> result = (await repository.QueryAsync()).ToList();
 
+            // Assert
             collection.Verify(v => v.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()), "FindAsync was not called.");
             Assert.NotNull(result);
             Assert.Equal(items, result);
@@ -136,33 +168,40 @@ namespace RepositoryTest
         #endregion
 
         #region QueryFilter
+        /// <summary>
+        /// Get filtered data.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task QueryFilter_FilterId_Data()
         {
+            // Arrange
             List<LoggerModel> items = loggerModelFaker.Generate(1);
 
-            string str = System.Text.Json.JsonSerializer.Serialize(items, new System.Text.Json.JsonSerializerOptions
-            {
-                PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            });
+            //string str = System.Text.Json.JsonSerializer.Serialize(items, new System.Text.Json.JsonSerializerOptions
+            //{
+            //    PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+            //    WriteIndented = true
+            //});
 
             LoggerModel item = items.Single();
 
-            var collection = new Mock<IMongoCollection<LoggerModel>>();
+           // var collection = new Mock<IMongoCollection<LoggerModel>>();
             collection.Setup(m => m.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new MockAsyncCursor<LoggerModel>(items));
 
-            var context = new Mock<ILoggerContext>();
-            context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
+            // var context = new Mock<ILoggerContext>();
+            // context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
 
-            var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
+            //  var repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
 
-            var query = await repository.QueryAsync(s => s.Id == item.Id);
+            // Act
+            List<LoggerModel> result = (await repository.QueryAsync(s => s.Id == item.Id)).ToList();
 
+            // Assert
             collection.Verify(v => v.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()), "FindAsync was not called.");
-            Assert.NotNull(query);
-            Assert.Equal(items, query);
+            Assert.NotNull(result);
+            Assert.Equal(items, result);
         }
         #endregion
     }

@@ -11,7 +11,7 @@ namespace SmartHouse.Domain.Interfaces
        // T Find(object id);
         void Create(T model);
         Task<IEnumerable<T>> QueryAsync();
-        Task<List<T>> QueryAsync(Expression<Func<T, bool>> filter);
+        Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> filter);
        // Task<List<T>> QueryAsync(FilterDefinition<T> filter);
     }
 }
