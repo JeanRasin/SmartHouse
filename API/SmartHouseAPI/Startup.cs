@@ -115,7 +115,7 @@ namespace SmartHouseAPI
                     loggerContext.EnsureCreated();
                 }
 
-                services.AddTransient<ILoggerWork>(x => new LoggerWork(loggerContext, "General category"));//x.GetRequiredService<ILoggerContext>()
+                services.AddTransient<ILoggerWork>(x => new LoggerWork(new LoggerRepository<LoggerModel>(loggerContext, "General category")));//x.GetRequiredService<ILoggerContext>()
                // services.AddSingleton(loggerContext);
             }
             else

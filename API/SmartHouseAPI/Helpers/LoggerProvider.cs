@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartHouse.Business.Data;
+using SmartHouse.Domain.Core;
 using SmartHouse.Infrastructure.Data;
 
 namespace SmartHouseAPI.Helpers
@@ -13,7 +14,8 @@ namespace SmartHouseAPI.Helpers
         }
         public ILogger CreateLogger(string categoryName)
         {
-            return new LoggerWork(context, categoryName);
+            var loggerRepository = new LoggerRepository<LoggerModel>(context, categoryName);
+            return new LoggerWork(loggerRepository);
         }
 
         public void Dispose()

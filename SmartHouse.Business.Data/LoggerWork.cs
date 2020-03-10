@@ -13,15 +13,21 @@ namespace SmartHouse.Business.Data
     {
         private readonly ILoggerRepository<LoggerModel> repository;
 
-        public LoggerWork(ILoggerContext context, string categoryName)//todo: лищнее или нет.
-        {
-            repository = new LoggerRepository<LoggerModel>(context, categoryName);
-        }
+        //public LoggerWork(ILoggerContext context, string categoryName)//todo: лищнее или нет.
+        //{
+        //    repository = new LoggerRepository<LoggerModel>(context, categoryName);
+        //}
         public LoggerWork(ILoggerRepository<LoggerModel> repository)
         {
             this.repository = repository;
         }
 
+        /// <summary>
+        /// Stub.
+        /// </summary>
+        /// <typeparam name="TState"></typeparam>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public IDisposable BeginScope<TState>(TState state)
         {
             return null;
@@ -33,12 +39,25 @@ namespace SmartHouse.Business.Data
             return result;
         }
 
+        /// <summary>
+        /// Enabled stub.
+        /// </summary>
+        /// <param name="logLevel"></param>
+        /// <returns></returns>
         public bool IsEnabled(LogLevel logLevel)
         {
-            //return logLevel == LogLevel.Trace;
             return true;
         }
 
+        /// <summary>
+        /// Write log.
+        /// </summary>
+        /// <typeparam name="TState"></typeparam>
+        /// <param name="logLevel"></param>
+        /// <param name="eventId"></param>
+        /// <param name="state"></param>
+        /// <param name="exception"></param>
+        /// <param name="formatter"></param>
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             if (formatter != null)

@@ -13,11 +13,21 @@ namespace BusinessTest
     [CollectionDefinition("Logger work")]
     public class LoggerWorkTest
     {
+        private readonly Mock<ILoggerRepository<LoggerModel>> mockLoggerRepository;
+        private readonly LoggerWork loggerWork;
+
+        public LoggerWorkTest()
+        {
+            mockLoggerRepository = new Mock<ILoggerRepository<LoggerModel>>();
+            loggerWork = new LoggerWork(mockLoggerRepository.Object);
+        }
+
         #region GetLoggerAsync
         [Fact]
         public async void GetLoggerAsync_LoggerModelItems()
         {
-            //Arrange
+            // Arrange
+            // Random constant.
             Randomizer.Seed = new Random(1338);
 
             var eventIdFaker = new Faker<SmartHouse.Domain.Core.EventId>()
@@ -35,14 +45,14 @@ namespace BusinessTest
                          .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                          .Generate(10);
 
-            var mockLoggerRepository = new Mock<ILoggerRepository<LoggerModel>>();
+          //  var mockLoggerRepository = new Mock<ILoggerRepository<LoggerModel>>();
             mockLoggerRepository.Setup(s => s.QueryAsync()).ReturnsAsync(loggerList);
-            var loggerWork = new LoggerWork(mockLoggerRepository.Object);
+          //  var loggerWork = new LoggerWork(mockLoggerRepository.Object);
 
             // Act
             IEnumerable<LoggerModel> result = await loggerWork.GetLoggerAsync();
 
-            //Assert
+            // Assert
             Assert.Equal(result, loggerList);
         }
         #endregion
@@ -57,11 +67,11 @@ namespace BusinessTest
                 return exception?.Message ?? state.ToString();
             };
 
-            var mockLoggerRepository = new Mock<ILoggerRepository<LoggerModel>>();
+           // var mockLoggerRepository = new Mock<ILoggerRepository<LoggerModel>>();
             mockLoggerRepository
                 .Setup(s => s.Create(It.IsAny<LoggerModel>()))
                 .Verifiable();
-            var loggerWork = new LoggerWork(mockLoggerRepository.Object);
+           // var loggerWork = new LoggerWork(mockLoggerRepository.Object);
 
 
             // Act
@@ -81,11 +91,11 @@ namespace BusinessTest
         public void Log_FormatterIsNull_LogWrite()
         {
             //Arrange
-            var mockLoggerRepository = new Mock<ILoggerRepository<LoggerModel>>();
+           // var mockLoggerRepository = new Mock<ILoggerRepository<LoggerModel>>();
             mockLoggerRepository
                 .Setup(s => s.Create(It.IsAny<LoggerModel>()))
                 .Verifiable();
-            var loggerWork = new LoggerWork(mockLoggerRepository.Object);
+           // var loggerWork = new LoggerWork(mockLoggerRepository.Object);
 
 
             // Act
@@ -107,8 +117,9 @@ namespace BusinessTest
         public void BeginScope_null()
         {
             //Arrange
-            var mockLoggerRepository = Mock.Of<ILoggerRepository<LoggerModel>>();
-            var loggerWork = new LoggerWork(mockLoggerRepository);
+            //var mockLoggerRepository = Mock.Of<ILoggerRepository<LoggerModel>>();
+            //var loggerWork = new LoggerWork(mockLoggerRepository);
+
 
             // Act
             IDisposable result = loggerWork.BeginScope(new object());
@@ -124,8 +135,8 @@ namespace BusinessTest
         public void IsEnabled_true()
         {
             //Arrange
-            var mockLoggerRepository =  Mock.Of<ILoggerRepository<LoggerModel>>();
-            var loggerWork = new LoggerWork(mockLoggerRepository);
+            //var mockLoggerRepository =  Mock.Of<ILoggerRepository<LoggerModel>>();
+            //var loggerWork = new LoggerWork(mockLoggerRepository);
 
             // Act
             bool result = loggerWork.IsEnabled(new LogLevel());
