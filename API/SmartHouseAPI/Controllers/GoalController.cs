@@ -109,7 +109,6 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[ProducesResponseType(typeof(GoalUpdateInput), StatusCodes.Status500InternalServerError)]
         public IActionResult Update([FromBody]GoalUpdateInput data)
         {
             if (!ModelState.IsValid)

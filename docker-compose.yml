@@ -4,23 +4,23 @@ version: '3.6'
 services:
   front_angular:
     build:
-      context: ./Web/SmartHouseWebAngular/
+      context: ./Web/
       dockerfile: Web/SmartHouseWebAngular/Dockerfile
    # environment:
     # - SmartHouseWebAngularDir: "./Web/SmartHouseWebAngular/"
     networks:
       - app-network
     ports:
-        - 4444:4200
+        - 4203:4200
 
   api:
     build:
       context: .
-      dockerfile: SmartHouse/Dockerfile
+      dockerfile: Dockerfile
     networks:
       - app-network
     ports:
-        - 8888:80
+        - 83:80
 
   mongo:
     image: mongo:latest
@@ -28,13 +28,13 @@ services:
     networks:
         - app-network
     ports:
-        - 27010:27017
+        - 27013:27017
 
   postgres:
     image: postgres:latest
     restart: always
     ports:
-        - 5435:5432
+        - 5433:5432
     networks:
         - app-network
     environment:
