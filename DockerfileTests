@@ -1,7 +1,3 @@
-#FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
-#WORKDIR /app
-#EXPOSE 83
-
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["/API", "./API"]
@@ -11,14 +7,27 @@ COPY ["/SmartHouse.Domain.Interfaces", "./SmartHouse.Domain.Interfaces"]
 COPY ["/SmartHouse.Infrastructure.Data", "./SmartHouse.Infrastructure.Data"]
 COPY ["/SmartHouse.Service.Weather.OpenWeatherService", "./SmartHouse.Service.Weather.OpenWeatherService"]
 COPY ["/SmartHouse.Service.Wether.Gismeteo", "./SmartHouse.Service.Wether.Gismeteo"]
-COPY ["/SmartHouse.Service.Wether.Gismeteo", "./SmartHouse.Service.Wether.Gismeteo"]
 COPY ["/SmartHouse.Services.Interfaces", "./SmartHouse.Services.Interfaces"]
 COPY ["/Tests", "./Tests"]
 
 RUN dotnet restore "Tests/TestBusiness/BusinessTest.csproj"
 RUN dotnet restore "Tests/TestRepository/RepositoryTest.csproj"
-RUN dotnet restore "Tests/TestApi/RepositoryTest.csproj"
+RUN dotnet restore "Tests/TestApi/ApiTest.csproj"
+RUN dotnet restore "Tests/TestApiIntegration/ApiIntegrationTest.csproj"
 COPY . .
 WORKDIR "Tests"
 RUN dotnet build "TestBusiness/BusinessTest.csproj" -c Release -o /app/build/TestBusiness
 RUN dotnet build "TestRepository/RepositoryTest.csproj" -c Release -o /app/build/TestRepository
+RUN dotnet build "TestApi/ApiTest.csproj" -c Release -o /app/build/TestApi
+RUN dotnet build "TestApiIntegration/ApiIntegrationTest.csproj" -c Release -o /app/build/TestApiIntegration
+
+FROM build AS publish
+RUN dotnet publish "TestBusiness/BusinessTest.csproj" -c Release -o /app/publish/TestBusiness
+RUN dotnet publish "TestRepository/RepositoryTest.csproj" -c Release -o /app/publish/TestRepository
+RUN dotnet publish "TestApi/ApiTest.csproj" -c Release -o /app/publish/TestApi
+RUN dotnet publish "TestApiIntegration/ApiIntegrationTest.csproj" -c Release -o /app/publish/TestApiIntegration
+
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+RUN dotnet vstest TestRepository/RepositoryTest.dll TestBusiness/BusinessTest.dll TestApi/ApiTest.dll TestApiIntegration/ApiIntegrationTest.dll

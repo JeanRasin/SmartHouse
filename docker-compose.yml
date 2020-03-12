@@ -21,6 +21,10 @@ services:
       - app-smart-house-network
     ports:
       - 55673:80
+  tests:
+    build:
+      context: .
+      dockerfile: DockerfileTests
   mongo:
     image: mongo:latest
     restart: always
