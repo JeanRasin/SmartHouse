@@ -10,24 +10,24 @@ COPY ["/SmartHouse.Service.Wether.Gismeteo", "./SmartHouse.Service.Wether.Gismet
 COPY ["/SmartHouse.Services.Interfaces", "./SmartHouse.Services.Interfaces"]
 COPY ["/Tests", "./Tests"]
 
-RUN dotnet restore "Tests/TestBusiness/BusinessTest.csproj"
-RUN dotnet restore "Tests/TestRepository/RepositoryTest.csproj"
-RUN dotnet restore "Tests/TestApi/ApiTest.csproj"
-RUN dotnet restore "Tests/TestApiIntegration/ApiIntegrationTest.csproj"
+RUN dotnet restore Tests/TestBusiness/BusinessTest.csproj; dotnet restore Tests/TestRepository/RepositoryTest.csproj; dotnet restore Tests/TestApi/ApiTest.csproj; dotnet restore Tests/TestApiIntegration/ApiIntegrationTest.csproj; dotnet restore Tests/TestServices/ServicesTest.csproj
+#RUN dotnet restore Tests/TestRepository/RepositoryTest.csproj
+#RUN dotnet restore Tests/TestApi/ApiTest.csproj
+#RUN dotnet restore Tests/TestApiIntegration/ApiIntegrationTest.csproj
 COPY . .
 WORKDIR "Tests"
-RUN dotnet build "TestBusiness/BusinessTest.csproj" -c Release -o /app/build/TestBusiness
-RUN dotnet build "TestRepository/RepositoryTest.csproj" -c Release -o /app/build/TestRepository
-RUN dotnet build "TestApi/ApiTest.csproj" -c Release -o /app/build/TestApi
-RUN dotnet build "TestApiIntegration/ApiIntegrationTest.csproj" -c Release -o /app/build/TestApiIntegration
+RUN dotnet build "TestBusiness/BusinessTest.csproj" -c Release -o /app/build/TestBusiness; dotnet build "TestRepository/RepositoryTest.csproj" -c Release -o /app/build/TestRepository; dotnet build "TestApi/ApiTest.csproj" -c Release -o /app/build/TestApi; dotnet build "TestApiIntegration/ApiIntegrationTest.csproj" -c Release -o /app/build/TestApiIntegration; dotnet build "TestServices/ServicesTest.csproj" -c Release -o /app/build/TestServices
+#RUN dotnet build "TestRepository/RepositoryTest.csproj" -c Release -o /app/build/TestRepository
+#RUN dotnet build "TestApi/ApiTest.csproj" -c Release -o /app/build/TestApi
+#RUN dotnet build "TestApiIntegration/ApiIntegrationTest.csproj" -c Release -o /app/build/TestApiIntegration
 
 FROM build AS publish
-RUN dotnet publish "TestBusiness/BusinessTest.csproj" -c Release -o /app/publish/TestBusiness
-RUN dotnet publish "TestRepository/RepositoryTest.csproj" -c Release -o /app/publish/TestRepository
-RUN dotnet publish "TestApi/ApiTest.csproj" -c Release -o /app/publish/TestApi
-RUN dotnet publish "TestApiIntegration/ApiIntegrationTest.csproj" -c Release -o /app/publish/TestApiIntegration
+RUN dotnet publish "TestBusiness/BusinessTest.csproj" -c Release -o /app/publish/TestBusiness; dotnet publish "TestRepository/RepositoryTest.csproj" -c Release -o /app/publish/TestRepository; dotnet publish "TestApi/ApiTest.csproj" -c Release -o /app/publish/TestApi; dotnet publish "TestApiIntegration/ApiIntegrationTest.csproj" -c Release -o /app/publish/TestApiIntegration; dotnet publish "TestServices/ServicesTest.csproj" -c Release -o /app/publish/TestServices
+#RUN dotnet publish "TestRepository/RepositoryTest.csproj" -c Release -o /app/publish/TestRepository
+#RUN dotnet publish "TestApi/ApiTest.csproj" -c Release -o /app/publish/TestApi
+#RUN dotnet publish "TestApiIntegration/ApiIntegrationTest.csproj" -c Release -o /app/publish/TestApiIntegration
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN dotnet vstest TestRepository/RepositoryTest.dll TestBusiness/BusinessTest.dll TestApi/ApiTest.dll TestApiIntegration/ApiIntegrationTest.dll
+RUN dotnet vstest TestRepository/RepositoryTest.dll TestBusiness/BusinessTest.dll TestApi/ApiTest.dll TestApiIntegration/ApiIntegrationTest.dll TestServices/ServicesTest.dll
