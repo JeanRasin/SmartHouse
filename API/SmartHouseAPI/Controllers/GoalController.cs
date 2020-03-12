@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
@@ -12,6 +13,7 @@ namespace SmartHouseAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
+    //[EnableCors("AllowAll")]
     public class GoalController : ControllerBase
     {
         private readonly IGoalWork<GoalModel> goalWork;

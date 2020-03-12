@@ -29,7 +29,6 @@ namespace SmartHouseAPI
 {
     public class Startup
     {
-        
         private ILoggerContext loggerContext = null;
         private IWebHostEnvironment CurrentEnvironment { get; set; }
         private bool IsLogger { get { return Convert.ToBoolean(Configuration["Logger"]); } }
@@ -61,6 +60,36 @@ namespace SmartHouseAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
+
+            //services.AddCors(c =>
+            //{
+            //    c.AddPolicy("AllowOrigin", options => options.WithOrigins("http://localhost:4200"));
+            //});
+
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowLocalhost",
+            //    builder => builder
+            //   // .AllowAnyOrigin()
+            //   // .AllowAnyHeader()
+            //    .AllowAnyMethod()
+            //   // .AllowCredentials()
+            //    //.SetPreflightMaxAge(TimeSpan.FromDays(5))
+            //    );
+            //});
+
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowAll",
+            //        builder =>
+            //        {
+            //            builder
+            //            //.AllowAnyOrigin()
+            //            .AllowAnyMethod();
+            //           // .AllowAnyHeader()
+            //            //.AllowCredentials();
+            //        });
+            //});
 
             services.AddControllersWithViews(options =>
             {
@@ -137,6 +166,13 @@ namespace SmartHouseAPI
         {
             if (env.IsDevelopment())
             {
+                //app.AddDefaultPolicy(builder =>
+                //{
+                //    builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+                //});
+
+                 
+
                 //app.UseDeveloperExceptionPage();
                 app.UseExceptionHandler("/error-local-development");
             }
@@ -183,6 +219,10 @@ namespace SmartHouseAPI
                 c.SwaggerEndpoint("/api/docs/v1/swagger.json", "AnnexUI API V1");
                 c.RoutePrefix = "api/docs";
             });
+
+            app.UseCors(builder => builder.WithOrigins(Configuration["FrontSitesCors"]).WithMethods("GET", "POST", "PUT", "done"));
+            //app.UseCors("AllowLocalhost");
+           // app.UseCors("AllowAll");
 
             // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
