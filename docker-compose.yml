@@ -1,3 +1,4 @@
+#docker-compose.yml (Extended config for DEVELOPMENT env.)
 version: '3.6'
 services:
   front_angular:
@@ -16,7 +17,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - FrontSitesCors=${FRONT_CORS_URLS}
+      - FrontUrlsCors=${FRONT_CORS_URLS}
       - MongoDbLoggerConnection:Connection=mongodb://mongo:27017
       - ConnectionStrings:DefaultConnection=Host=postgres;Port=5432;Database=postgres;Username=postgres;Password=postgres;
     networks:
@@ -26,10 +27,6 @@ services:
     depends_on: 
       - mongo
       - postgres
-  tests:
-    build:
-      context: .
-      dockerfile: DockerfileTests
   mongo:
     image: mongo:latest
     restart: always

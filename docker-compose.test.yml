@@ -1,0 +1,7 @@
+#docker-compose.test.yml (Extended config for DEVELOPMENT env.)
+version: '3.6'
+services:
+  tests:
+    build:
+      context: .
+      dockerfile: DockerfileTests

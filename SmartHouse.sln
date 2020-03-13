@@ -25,8 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{3C1401A9-96A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AF0545F2-B894-4C1F-9E1B-020189E9AEC5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{DF7506FB-7E64-461E-95A2-EB921476E4E9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{2CBC1038-49A6-48D7-8A67-3A7BFBAA3842}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{A27952EC-6C9C-4EBE-9B83-39B53BC1572A}"
@@ -42,12 +40,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHouse.Service.Weather.OpenWeatherMap", "SmartHouse.Service.Weather.OpenWeatherService\SmartHouse.Service.Weather.OpenWeatherMap.csproj", "{964612C6-EA9F-4758-96B9-16C74A504763}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository", "Repository", "{34614C80-B14B-4D9B-9B30-E909FA7B73FA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SoapUI Services", "SoapUI Services", "{859EFBD0-B428-4D99-BA07-9969F1B7786E}"
-	ProjectSection(SolutionItems) = preProject
-		Other\SoapUI Services\OpenWeatherMap-soapui-project.xml = Other\SoapUI Services\OpenWeatherMap-soapui-project.xml
-		Other\SoapUI Services\SoapUI-SmartHouse.xml = Other\SoapUI Services\SoapUI-SmartHouse.xml
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHouseWebAngular", "Web\SmartHouseWebAngular\SmartHouseWebAngular.csproj", "{D2189AC1-362B-45C4-BABA-8CD8A67497B8}"
 EndProject
@@ -70,6 +62,19 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiTest", "Tests\TestApi\ApiTest.csproj", "{B0384EDA-2F9B-43F2-900F-C8A572A52702}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiIntegrationTest", "Tests\TestApiIntegration\ApiIntegrationTest.csproj", "{FBEF1028-218D-483D-A345-AE409A5934FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B385FDF5-7CD7-4A94-B9A0-B67137DC83C7}"
+	ProjectSection(SolutionItems) = preProject
+		REDAME.md = REDAME.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SoapUI Services", "SoapUI Services", "{EB05DB48-C376-4832-AD86-08854A3C34BF}"
+	ProjectSection(SolutionItems) = preProject
+		Other\SoapUI Services\project-temp-8189705805873460637.xml = Other\SoapUI Services\project-temp-8189705805873460637.xml
+		Other\SoapUI Services\SoapUI-HTTP-API.xml = Other\SoapUI Services\SoapUI-HTTP-API.xml
+		Other\SoapUI Services\SoapUI-OpenWeatherMap.xml = Other\SoapUI Services\SoapUI-OpenWeatherMap.xml
+		Other\SoapUI Services\SoapUI-SmartHouse.xml = Other\SoapUI Services\SoapUI-SmartHouse.xml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -158,7 +163,6 @@ Global
 		{A9C3FDF8-7F01-4581-A08C-8B6EE8E34421} = {D72292B5-6F94-4B00-9B5B-8CBA8A13957B}
 		{964612C6-EA9F-4758-96B9-16C74A504763} = {A9C3FDF8-7F01-4581-A08C-8B6EE8E34421}
 		{34614C80-B14B-4D9B-9B30-E909FA7B73FA} = {AF0545F2-B894-4C1F-9E1B-020189E9AEC5}
-		{859EFBD0-B428-4D99-BA07-9969F1B7786E} = {DF7506FB-7E64-461E-95A2-EB921476E4E9}
 		{D2189AC1-362B-45C4-BABA-8CD8A67497B8} = {9082F792-2578-400F-914B-2A38E5FCAA0D}
 		{82CE058F-9EC8-4426-A913-4A6A340C3AA7} = {3C1401A9-96A8-4E93-98BE-369F38628F00}
 		{8D97ACB4-0164-426A-B555-BDB65507DB64} = {3C1401A9-96A8-4E93-98BE-369F38628F00}
@@ -169,6 +173,7 @@ Global
 		{B3F8CEAD-7F26-4CE5-8050-4F8CB194277E} = {AF0545F2-B894-4C1F-9E1B-020189E9AEC5}
 		{B0384EDA-2F9B-43F2-900F-C8A572A52702} = {91C3603F-AA24-47CD-8F51-B5911BD35B80}
 		{FBEF1028-218D-483D-A345-AE409A5934FB} = {B3F8CEAD-7F26-4CE5-8050-4F8CB194277E}
+		{EB05DB48-C376-4832-AD86-08854A3C34BF} = {B385FDF5-7CD7-4A94-B9A0-B67137DC83C7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9277942-AB87-49EB-8D2D-082A2C092696}
