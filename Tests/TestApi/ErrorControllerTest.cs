@@ -77,7 +77,7 @@ namespace ApiTest
             }
         }
 
-        [Fact]
+       /* [Fact]
         public void ErrorLocalDevelopment_WhenCalled_ErrorData()
         {
             var mockErrorWork = new Mock<IWebHostEnvironment>();
@@ -116,7 +116,7 @@ namespace ApiTest
             //    errorController.
             //});
 
-            /* */
+           
             var mockfeatureCollection = new Mock<IFeatureCollection>();
             mockfeatureCollection.Setup(m => m.Get<IExceptionHandlerFeature>()).Returns(() =>
            {
@@ -152,6 +152,6 @@ namespace ApiTest
 
             Assert.IsType<ObjectResult>(result);
         }
-
+        */
     }
 }
