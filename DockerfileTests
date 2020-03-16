@@ -17,11 +17,6 @@ RUN dotnet restore Tests/TestBusiness/BusinessTest.csproj; \
 	dotnet restore Tests/TestServices/ServicesTest.csproj
 COPY . .
 WORKDIR "Tests"
-#RUN dotnet build "TestBusiness/BusinessTest.csproj" -c Release -o /app/build/TestBusiness; \
-#	dotnet build "TestRepository/RepositoryTest.csproj" -c Release -o /app/build/TestRepository; \
-#	dotnet build "TestApi/ApiTest.csproj" -c Release -o /app/build/TestApi; \
-#	dotnet build "TestApiIntegration/ApiIntegrationTest.csproj" -c Release -o /app/build/TestApiIntegration; \
-#	dotnet build "TestServices/ServicesTest.csproj" -c Release -o /app/build/TestServices
 
 FROM build AS publish
 RUN dotnet publish "TestBusiness/BusinessTest.csproj" -c Release -o /app/publish/TestBusiness; \
