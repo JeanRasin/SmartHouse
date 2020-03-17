@@ -25,16 +25,16 @@ namespace SmartHouseAPI.Middleware
             {
                 await _next(httpContext);
             }
-            catch (ModelStateException ex)
-            {
-                _logger.LogError(new EventId(2), ex, "ModelStateException");
-                throw ex;
-            }
-            catch (KeyNotFoundException ex)
-            {
-                _logger.LogError(new EventId(1), ex, "NotFoundException");
-                throw ex;
-            }
+            //catch (ModelStateException ex)
+            //{
+            //    _logger.LogError(new EventId(2), ex, "ModelStateException");
+            //    throw ex;
+            //}
+            //catch (KeyNotFoundException ex)
+            //{
+            //    _logger.LogError(new EventId(1), ex, "NotFoundException");
+            //    throw ex;
+            //}
             catch (Exception ex)
             {
                 _logger.LogError(new EventId(0), ex, "Exception");

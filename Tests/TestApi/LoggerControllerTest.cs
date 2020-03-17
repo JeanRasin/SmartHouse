@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
-using SmartHouseAPI.ApiException;
 using SmartHouseAPI.Controllers;
 using System;
 using System.Collections.Generic;
@@ -66,19 +65,6 @@ namespace ApiTest
             // Assert
             Assert.IsAssignableFrom<IEnumerable<LoggerModel>>(result.Value);
             Assert.Equal(result.Value, _loggerList);
-        }
-
-        /// <summary>
-        /// Not data logger.
-        /// </summary>
-        [Fact]
-        public void GetLoggerAsync_IdNotFound_NotFoundExceptionStatus404()
-        {
-            // Arrange
-            _mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult<IEnumerable<LoggerModel>>(null));
-
-            // Act & Assert
-            Assert.ThrowsAsync<NotFoundException>(() => _loggerController.GetLoggerAsync());
         }
 
         /// <summary>

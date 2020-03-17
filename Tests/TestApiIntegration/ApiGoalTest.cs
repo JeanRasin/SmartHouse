@@ -1,62 +1,26 @@
+using SmartHouse.Domain.Core;
+using SmartHouseAPI.InputModel;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using SmartHouse.Domain.Core;
-using SmartHouseAPI;
-using SmartHouseAPI.InputModel;
 using Xunit;
 
 namespace ApiIntegrationTest
 {
-    public class WarehouseTests : IClassFixture<TestFixture>
+    public class ApiGoalTest : IClassFixture<TestFixture>
     {
         private readonly HttpClient _ñlient;
         private readonly GoalModel _itemTestData;
         private readonly JsonSerializerOptions _serializerOptions;
 
-        public WarehouseTests(TestFixture fixture)
+        public ApiGoalTest(TestFixture fixture)
         {
             _ñlient = fixture.Client;
             _serializerOptions = fixture.SerializerOptions;
-
-            //_ñlient = new HttpClient
-            //{
-            //    BaseAddress = new Uri("http://localhost:55673/")
-            //};
-            //_ñlient.DefaultRequestHeaders.Accept.Clear();
-            //_ñlient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            //_itemTestData
-
-            //_serializerOptions = new JsonSerializerOptions
-            //{
-            //    PropertyNameCaseInsensitive = true,
-            //   // WriteIndented = false
-            //};
-        }
-
-        [Fact]
-        public async Task TestGetStockItemsAsync()
-        {
-           
-            // Arrange
-            var request = "/api/weather";
-
-            // Act
-            var response = await _ñlient.GetAsync(request);
-            var value = await response.Content.ReadAsStringAsync();
-
-            // Assert
-            response.EnsureSuccessStatusCode();
-           
-            Assert.True(true);
         }
 
         [Fact]
@@ -142,7 +106,7 @@ namespace ApiIntegrationTest
         }
 
         [Fact]
-        public async Task GetGoal_Success_StatusCode404()
+        public async Task GetGoal_Error_StatusCode404()
         {
             // Arrange
             var request = $"/api/goal/{Guid.NewGuid()}";
@@ -179,7 +143,7 @@ namespace ApiIntegrationTest
         }
 
         [Fact]
-        public async Task Create_Success_StatusCode400()
+        public async Task Create_Error_StatusCode400()
         {
             // Arrange
             var request = $"/api/goal";
@@ -192,11 +156,9 @@ namespace ApiIntegrationTest
             // Act
             HttpResponseMessage response = await _ñlient.PostAsync(request, stringContent);
             string value = await response.Content.ReadAsStringAsync();
-            GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);//todo: exception deserialize model
 
             // Assert
             Assert.NotEmpty(value);
-            Assert.NotNull(item);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
@@ -225,7 +187,7 @@ namespace ApiIntegrationTest
         }
 
         [Fact]
-        public async Task Upddate_Success_StatusCode404()
+        public async Task Upddate_Error_StatusCode404()
         {
             // Arrange
             var request = $"/api/goal";
@@ -247,7 +209,7 @@ namespace ApiIntegrationTest
         }
 
         [Fact]
-        public async Task Upddate_Success_StatusCode400()
+        public async Task Upddate_Error_StatusCode400()
         {
             // Arrange
             var request = $"/api/goal";
@@ -287,7 +249,7 @@ namespace ApiIntegrationTest
         }
 
         [Fact]
-        public async Task Delete_Success_StatusCode404()
+        public async Task Delete_Error_StatusCode404()
         {
             // Arrange
             var request = $"/api/goal/{Guid.NewGuid()}";

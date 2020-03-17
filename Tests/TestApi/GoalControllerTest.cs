@@ -139,8 +139,12 @@ namespace ApiTest
             // Arrange
             _mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
 
-            // Act & Assert
-            Assert.Throws<NotFoundException>(() => _goalController.GetGoal(Guid.NewGuid()));
+            // Act
+            var result = _goalController.GetGoal(Guid.NewGuid()) as NotFoundObjectResult;
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         /// <summary>
@@ -212,8 +216,12 @@ namespace ApiTest
             _mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(_goalDataItem);
             _goalController.ModelState.AddModelError("key", "error message");
 
-            // Act & Assert
-            Assert.Throws<ModelStateException>(() => _goalController.Create(inputParam));
+            // Act
+            var result = _goalController.Create(inputParam) as BadRequestObjectResult;
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
         }
         #endregion
 
@@ -247,8 +255,12 @@ namespace ApiTest
             _mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>()));
             _goalController.ModelState.AddModelError("key", "error message");
 
-            // Act & Assert
-            Assert.Throws<ModelStateException>(() => _goalController.Update(inputData));
+            // Act
+            var result = _goalController.Update(inputData) as BadRequestObjectResult;
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
         }
 
         /// <summary>
@@ -261,8 +273,12 @@ namespace ApiTest
             var inputData = new GoalUpdateDto(Guid.NewGuid(), "test text");
             _mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
 
-            // Act & Assert
-            Assert.Throws<NotFoundException>(() => _goalController.Update(inputData));
+            // Act
+            var result = _goalController.Update(inputData) as NotFoundObjectResult;
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         /// <summary>
@@ -307,8 +323,12 @@ namespace ApiTest
             // Arrange
             _mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>())).Throws<KeyNotFoundException>();
 
-            // Act & Assert
-            Assert.Throws<NotFoundException>(() => _goalController.Delete(Guid.NewGuid()));
+            // Act
+            var result = _goalController.Delete(Guid.NewGuid()) as NotFoundObjectResult;
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
         /// <summary>
@@ -354,9 +374,14 @@ namespace ApiTest
             var inputData = new GoalDoneDto(Guid.NewGuid(), true);
             _mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
 
-            // Act & Assert
-            Assert.Throws<NotFoundException>(() => _goalController.Done(inputData));
+            // Act
+            var result = _goalController.Done(inputData) as NotFoundObjectResult;
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
+
         /// <summary>
         /// Goal done exception.
         /// </summary>

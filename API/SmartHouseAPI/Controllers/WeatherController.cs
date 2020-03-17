@@ -11,11 +11,11 @@ namespace SmartHouseAPI.Controllers
     [ApiController]
     public class WeatherController : ControllerBase
     {
-        private readonly IWeatherWork weatherWork;
+        private readonly IWeatherWork _weatherWork;
 
         public WeatherController(IWeatherWork weatherWork)
         {
-            this.weatherWork = weatherWork;
+            _weatherWork = weatherWork;
         }
 
         // GET api/weather
@@ -27,11 +27,12 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetWeatherAsync()
         {
-            WeatherModel result = await weatherWork.GetWeatherAsync();
+            WeatherModel result = await _weatherWork.GetWeatherAsync();
 
             if (result == null)
             {
-                throw new NotFoundException("Weather result is null.");
+                // throw new NotFoundException("Weather result is null.");
+                return NotFound("Weather result is null.");
             }
 
             return Ok(result);
