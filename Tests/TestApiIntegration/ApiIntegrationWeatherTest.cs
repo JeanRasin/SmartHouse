@@ -1,22 +1,48 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using SmartHouse.Domain.Core;
 using SmartHouseAPI;
+using SmartHouseAPI.InputModel;
 using Xunit;
 
 namespace ApiIntegrationTest
 {
-    public class WarehouseTests : IClassFixture<TestFixture<SmartHouseAPI.Startup>>//
+    public class WarehouseTests : IClassFixture<TestFixture>
     {
-        private HttpClient Client;
+        private readonly HttpClient _ñlient;
+        private readonly GoalModel _itemTestData;
+        private readonly JsonSerializerOptions _serializerOptions;
 
-        public WarehouseTests(TestFixture<Startup> fixture)
+        public WarehouseTests(TestFixture fixture)
         {
-            Client = fixture.Client;
+            _ñlient = fixture.Client;
+            _serializerOptions = fixture.SerializerOptions;
+
+            //_ñlient = new HttpClient
+            //{
+            //    BaseAddress = new Uri("http://localhost:55673/")
+            //};
+            //_ñlient.DefaultRequestHeaders.Accept.Clear();
+            //_ñlient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //_itemTestData
+
+            //_serializerOptions = new JsonSerializerOptions
+            //{
+            //    PropertyNameCaseInsensitive = true,
+            //   // WriteIndented = false
+            //};
         }
 
-        /* [Fact]
+        [Fact]
         public async Task TestGetStockItemsAsync()
         {
            
@@ -24,14 +50,282 @@ namespace ApiIntegrationTest
             var request = "/api/weather";
 
             // Act
-            var response = await Client.GetAsync(request);
+            var response = await _ñlient.GetAsync(request);
             var value = await response.Content.ReadAsStringAsync();
 
             // Assert
             response.EnsureSuccessStatusCode();
            
             Assert.True(true);
-        } */
+        }
+
+        [Fact]
+        public async Task GetSwagger_Success_Json()
+        {
+            // Arrange
+            var request = "/api/docs/v1/swagger.json";
+
+            // Act
+            HttpResponseMessage response = await _ñlient.GetAsync(request);
+            string value = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.NotEmpty(value);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetSwagger_Success_Index()
+        {
+            // Arrange
+            var request = "/api/docs/index.html";
+
+            // Act
+            HttpResponseMessage response = await _ñlient.GetAsync(request);
+            string value = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.NotEmpty(value);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetAllGoals_Success_StatusCode200()
+        {
+            // Arrange
+            var request = "/api/goal/getAll";
+
+            // Act
+            HttpResponseMessage response = await _ñlient.GetAsync(request);
+            string value = await response.Content.ReadAsStringAsync();
+            List<GoalModel> items = JsonSerializer.Deserialize<List<GoalModel>>(value, _serializerOptions);
+
+            // Assert
+            Assert.NotEmpty(value);
+            Assert.NotNull(items);
+            Assert.True(items.Count > 0);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetGoals_Success_StatusCode200()
+        {
+            // Arrange
+            var request = "/api/goal";
+
+            // Act
+            HttpResponseMessage response = await _ñlient.GetAsync(request);
+            string value = await response.Content.ReadAsStringAsync();
+            List<GoalModel> items = JsonSerializer.Deserialize<List<GoalModel>>(value);
+
+            // Assert
+            Assert.NotEmpty(value);
+            Assert.NotNull(items);
+            Assert.True(items.Count > 0);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetGoal_Success_StatusCode200()
+        {
+            // Arrange
+            var request = $"/api/goal/333"; //todo:!!!
+
+            // Act
+            HttpResponseMessage response = await _ñlient.GetAsync(request);
+            string value = await response.Content.ReadAsStringAsync();
+            GoalModel item = JsonSerializer.Deserialize<GoalModel>(value);
+
+            // Assert
+            Assert.NotEmpty(value);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetGoal_Success_StatusCode404()
+        {
+            // Arrange
+            var request = $"/api/goal/{Guid.NewGuid()}";
+
+            // Act
+            HttpResponseMessage response = await _ñlient.GetAsync(request);
+            string value = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.NotEmpty(value);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Create_Success_StatusCode201()
+        {
+            // Arrange
+            var request = $"/api/goal";
+            var model = new GoalCreateDto
+            {
+                Name = "new goal"
+            };
+            var stringContent = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage response = await _ñlient.PostAsync(request, stringContent);
+            string value = await response.Content.ReadAsStringAsync();
+            GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);//todo: exception deserialize model
+
+            // Assert
+            Assert.NotEmpty(value);
+            Assert.NotNull(item);
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Create_Success_StatusCode400()
+        {
+            // Arrange
+            var request = $"/api/goal";
+            var model = new GoalCreateDto
+            {
+                Name = null
+            };
+            var stringContent = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage response = await _ñlient.PostAsync(request, stringContent);
+            string value = await response.Content.ReadAsStringAsync();
+            GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);//todo: exception deserialize model
+
+            // Assert
+            Assert.NotEmpty(value);
+            Assert.NotNull(item);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Upddate_Success_StatusCode204()
+        {
+            // Arrange
+            var request = $"/api/goal";
+            var model = new GoalUpdateDto
+            {
+                Id = Guid.NewGuid(),//todo:ïðàâèëüíûé id
+                Name = "test goal",
+                Done = true
+            };
+            var stringContent = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage response = await _ñlient.PutAsync(request, stringContent);
+            string value = await response.Content.ReadAsStringAsync();
+           // GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);//todo: exception deserialize model
+
+            // Assert
+            Assert.NotEmpty(value);
+           // Assert.NotNull(item);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Upddate_Success_StatusCode404()
+        {
+            // Arrange
+            var request = $"/api/goal";
+            var model = new GoalUpdateDto
+            {
+                Id = Guid.NewGuid(),
+                Name = "test goal",
+                Done = true
+            };
+            var stringContent = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage response = await _ñlient.PutAsync(request, stringContent);
+           // string value = await response.Content.ReadAsStringAsync();
+
+            // Assert
+           // Assert.Empty(value);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Upddate_Success_StatusCode400()
+        {
+            // Arrange
+            var request = $"/api/goal";
+            var model = new GoalUpdateDto
+            {
+                Id = Guid.NewGuid(),
+                Name = null,
+                Done = true
+            };
+            var stringContent = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage response = await _ñlient.PutAsync(request, stringContent);
+            //string value = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            //Assert.Empty(value);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Delete_Success_StatusCode204()
+        {
+            // Arrange
+            Guid id = Guid.NewGuid();
+            var request = $"/api/goal/{id}"; //todo:!id
+           
+            // Act
+            HttpResponseMessage response = await _ñlient.DeleteAsync(request);
+            //string value = await response.Content.ReadAsStringAsync();
+            // GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);//todo: exception deserialize model
+
+            // Assert
+            //Assert.NotEmpty(value);
+            // Assert.NotNull(item);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Delete_Success_StatusCode404()
+        {
+            // Arrange
+            var request = $"/api/goal/{Guid.NewGuid()}";
+
+            // Act
+            HttpResponseMessage response = await _ñlient.DeleteAsync(request);
+            //string value = await response.Content.ReadAsStringAsync();
+            // GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);//todo: exception deserialize model
+
+            // Assert
+            //Assert.NotEmpty(value);
+            // Assert.NotNull(item);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Done_Success_StatusCode204()
+        {
+            // Arrange
+            var request = $"/api/goal/done/";
+            var model = new GoalDoneDto
+            {
+                Id = Guid.NewGuid(),//todo:id
+                Done = true
+            };
+            var stringContent = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage response = await _ñlient.PutAsync(request, stringContent);
+            //string value = await response.Content.ReadAsStringAsync();
+            // GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);//todo: exception deserialize model
+
+            // Assert
+            //Assert.NotEmpty(value);
+            // Assert.NotNull(item);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
         /*
         [Fact]
         public async Task TestGetStockItemAsync()

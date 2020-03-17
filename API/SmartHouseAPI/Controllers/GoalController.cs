@@ -52,7 +52,8 @@ namespace SmartHouseAPI.Controllers
 
             if (result == null)
             {
-                throw new NotFoundException($"Goal object id:{id} not found.");
+                // throw new NotFoundException($"Goal object id:{id} not found.");
+                return NotFound($"Goal object id:{id} not found.");
             }
 
             return Ok(result);
@@ -81,7 +82,9 @@ namespace SmartHouseAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                throw new ModelStateException("Goal model is not valid.", ModelState);
+                //throw new ModelStateException("Goal model is not valid.", ModelState);
+                var modelStateException = new ModelStateException("Goal model is not valid.", ModelState);
+                return BadRequest(modelStateException.Message);
             }
 
             GoalModel result = _goalWork.Create(data.Name);
@@ -113,7 +116,9 @@ namespace SmartHouseAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                throw new ModelStateException("Goal model is not valid.", ModelState);
+                 //throw new ModelStateException("Goal model is not valid.", ModelState);
+                 var modelStateException = new ModelStateException("Goal model is not valid.", ModelState);
+                return BadRequest(modelStateException.Message);
             }
 
             try
@@ -123,14 +128,15 @@ namespace SmartHouseAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                throw new NotFoundException($"Goal object id:{data.Id} not found.");
+                return NotFound($"Goal object id:{data.Id} not found.");
+              //  throw new NotFoundException($"Goal object id:{data.Id} not found.");
             }
         }
 
         // DELETE: api/goal/{id}
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Delete(Guid id)
         {
@@ -141,7 +147,8 @@ namespace SmartHouseAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                throw new NotFoundException($"Goal object id:{id} not found.");
+                //throw new NotFoundException($"Goal object id:{id} not found.");
+                return NotFound($"Goal object id:{id} not found.");
             }
         }
 
@@ -174,7 +181,8 @@ namespace SmartHouseAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                throw new NotFoundException($"Goal object id:{data.Id} not found.");
+                //throw new NotFoundException($"Goal object id:{data.Id} not found.");
+                return NotFound($"Goal object id:{data.Id} not found.");
             }
         }
     }
