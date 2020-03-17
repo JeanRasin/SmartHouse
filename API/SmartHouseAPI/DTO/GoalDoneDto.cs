@@ -3,18 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SmartHouseAPI.InputModel
 {
-    public class GoalDoneInput
+    public class GoalDoneDto
     {
         [Required(ErrorMessage = "Id not null or empty.")]
         public Guid Id { get; set; }
         public bool Done { get; set; }
 
-        public GoalDoneInput()
+        public GoalDoneDto()
         {
 
         }
 
-        public GoalDoneInput(Guid id, bool done)
+        public GoalDoneDto(Guid id, bool done)
         {
             Id = id;
             Done = done;

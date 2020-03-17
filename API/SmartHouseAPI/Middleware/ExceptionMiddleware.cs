@@ -1,54 +1,47 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SmartHouseAPI.ApiException;
-using SmartHouseAPI.Helpers;
 using System;
-using System.Net;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SmartHouseAPI.Middleware
 {
     public class ExceptionMiddleware
     {
-        private readonly RequestDelegate next;
-        private readonly ILogger log;
+        private readonly ILogger _logger;
 
         public ExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
-            this.next = next;
-            log = loggerFactory.CreateLogger<RequestResponseLoggingMiddleware>();
+            _next = next;
+            _logger = loggerFactory.CreateLogger<RequestResponseLoggingMiddleware>();
         }
+
+        private readonly RequestDelegate _next;
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
             try
             {
-                await next(httpContext);
+                await _next(httpContext);
             }
-            catch(ModelStateException ex)
+            catch (ModelStateException ex)
             {
-                log.LogError(new EventId(2), ex, "ModelStateException");
+                _logger.LogError(new EventId(2), ex, "ModelStateException");
                 throw ex;
-               // await HandleModelStateExceptionAsync(httpContext, ex);
             }
-            catch(NotFoundException ex)
+            catch (KeyNotFoundException ex)
             {
-                log.LogError(new EventId(1), ex, "NotFoundException");
-               // throw ex;
-                 throw new Exception("444");
-                //await HandleExceptionNotFoundAsync(httpContext, ex);
+                _logger.LogError(new EventId(1), ex, "NotFoundException");
+                throw ex;
             }
             catch (Exception ex)
             {
-                log.LogError(new EventId(0), ex, "Exception");
+                _logger.LogError(new EventId(0), ex, "Exception");
                 throw ex;
-                // await HandleExceptionAsync(httpContext, ex);
             }
         }
+
         /*
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
@@ -87,8 +80,6 @@ namespace SmartHouseAPI.Middleware
           //  problemDetails.
 
           //  var ff = new ObjectResult(problemDetails);
-
-            //ff.
 
             //return new ObjectResult(problemDetails)
             //{

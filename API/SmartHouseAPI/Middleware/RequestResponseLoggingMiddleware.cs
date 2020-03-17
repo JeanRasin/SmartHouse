@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.IO;
-using System;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartHouseAPI.Middleware
@@ -127,7 +123,38 @@ namespace SmartHouseAPI.Middleware
     }
     */
 
-    
+    public class RequestResponseLoggingMiddleware
+    {
+        private readonly ILogger _logger;
+
+        public RequestResponseLoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
+        {
+            _next = next;
+            _logger = loggerFactory.CreateLogger<RequestResponseLoggingMiddleware>();
+        }
+
+        private readonly RequestDelegate _next;
+
+        public async Task Invoke(HttpContext context)
+        {
+            //try
+            //{
+                await _next(context);
+
+                _logger.LogInformation(
+                                 "Request {method} {url} => {statusCode}",
+                                 context.Request?.Method,
+                                 context.Request?.Path.Value,
+                                 context.Response?.StatusCode);
+            //}
+            //finally
+            //{
+
+            //}
+        }
+    }
+
+    /*
     public class RequestResponseLoggingMiddleware
     {
         private readonly RequestDelegate next;
@@ -141,6 +168,7 @@ namespace SmartHouseAPI.Middleware
 
         public async Task Invoke(HttpContext context)
         {
+           
             //First, get the incoming request
             var request = await FormatRequest(context.Request);
 
@@ -149,22 +177,49 @@ namespace SmartHouseAPI.Middleware
 
             //Create a new memory stream...
             var responseBody = new MemoryStream();
-           // using (var responseBody = new MemoryStream())// todo: dispose error
-           // {
-           //...and use that for the temporary response body
+            // using (var responseBody = new MemoryStream())// todo: dispose error
+            // {
+            //...and use that for the temporary response body
             context.Response.Body = responseBody;
-
+            
+            try
+            {
+               
                 //Continue down the Middleware pipeline, eventually returning to this class
                 await next(context);
-
+ 
                 //Format the response from the server
-                var response = await FormatResponse(context.Response);
+                string response = await FormatResponse(context.Response);
 
                 //TODO: Save log to chosen datastore
                 log.LogInformation(response);
 
                 //Copy the contents of the new memory stream (which contains the response) to the original stream, which is then returned to the client.
                 await responseBody.CopyToAsync(originalBodyStream);
+                 
+            }
+            //catch (Exception ex)
+            //{
+            //    log.LogError(new EventId(0), ex, "Exception");
+            //    throw ex;
+            //    // await HandleExceptionAsync(httpContext, ex);
+            //}
+            catch (ModelStateException ex)
+            {
+                log.LogError(new EventId(2), ex, "ModelStateException");
+                throw ex;
+            }
+            //catch(NotFoundException ex)
+            catch (KeyNotFoundException ex)
+            {
+                log.LogError(new EventId(1), ex, "NotFoundException");
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                log.LogError(new EventId(0), ex, "Exception");
+                throw ex;
+            }
             //}
         }
 
@@ -205,5 +260,6 @@ namespace SmartHouseAPI.Middleware
             return $"{response.StatusCode}: {text}";
         }
     }
-    /* */
+  */
+
 }

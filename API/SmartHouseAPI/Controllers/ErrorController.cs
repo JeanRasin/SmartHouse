@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartHouseAPI.ApiException;
 using System;
+using System.Collections.Generic;
 
 namespace SmartHouseAPI.Controllers
 {
@@ -26,11 +27,9 @@ namespace SmartHouseAPI.Controllers
                 return base.Problem(detail: context.Error?.StackTrace, title: context.Error.Message);
             }
 
-            if (context.Error is NotFoundException)
+            if (context.Error is KeyNotFoundException)
             {
                 ObjectResult result = Problem(detail: context.Error.StackTrace, title: context.Error.Message, statusCode: StatusCodes.Status404NotFound);
-                // result.
-
                 return result;
             }
             else if (context.Error is ModelStateException)
@@ -40,7 +39,8 @@ namespace SmartHouseAPI.Controllers
             }
             else
             {
-                return Problem(detail: context.Error?.StackTrace, title: context.Error?.Message);
+                ObjectResult result = Problem(detail: context.Error?.StackTrace, title: context.Error?.Message, statusCode: StatusCodes.Status500InternalServerError);
+                return result;
             }
         }
 

@@ -79,7 +79,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-       public IActionResult Create([FromBody]GoalCreateInput data)
+       public IActionResult Create([FromBody]GoalCreateDto data)
         {
             if (!ModelState.IsValid)
             {
@@ -111,7 +111,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Update([FromBody]GoalUpdateInput data)
+        public IActionResult Update([FromBody]GoalUpdateDto data)
         {
             if (!ModelState.IsValid)
             {
@@ -167,7 +167,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Done([FromBody]GoalDoneInput data)
+        public IActionResult Done([FromBody]GoalDoneDto data)
         {
             try
             {

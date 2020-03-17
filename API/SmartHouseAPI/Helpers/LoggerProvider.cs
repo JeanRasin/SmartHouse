@@ -12,6 +12,7 @@ namespace SmartHouseAPI.Helpers
         {
             this.context = context;
         }
+
         public ILogger CreateLogger(string categoryName)
         {
             var loggerRepository = new LoggerRepository<LoggerModel>(context, categoryName);

@@ -165,7 +165,7 @@ namespace ApiTest
         public void Create_Success_Status201()
         {
             // Arrange
-            var inputParam = new GoalCreateInput(goalDataItem.Name);
+            var inputParam = new GoalCreateDto(goalDataItem.Name);
             mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(goalDataItem);
 
             var mockUrlHelper = new Mock<IUrlHelper>();
@@ -194,7 +194,7 @@ namespace ApiTest
         public void Create_Exception_ExceptionStatus500()
         {
             // Arrange
-            var inputParam = new GoalCreateInput(goalDataItem.Name);
+            var inputParam = new GoalCreateDto(goalDataItem.Name);
             mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Throws<Exception>();
 
             // Act & Assert
@@ -208,7 +208,7 @@ namespace ApiTest
         public void Create_Exception_ModelStateExceptionStatus400()
         {
             // Arrange
-            var inputParam = new GoalCreateInput();
+            var inputParam = new GoalCreateDto();
             mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(goalDataItem);
             goalController.ModelState.AddModelError("key", "error message");
 
@@ -225,7 +225,7 @@ namespace ApiTest
         public void Update_Success_Status204()
         {
             // Arrange
-            var inputData = new GoalUpdateInput(Guid.NewGuid(), "test name");
+            var inputData = new GoalUpdateDto(Guid.NewGuid(), "test name");
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>()));
 
             // Act
@@ -243,7 +243,7 @@ namespace ApiTest
         public void Update_Exception_ModelStateExceptionStatus400()
         {
             // Arrange
-            var inputData = new GoalUpdateInput(Guid.NewGuid(), "");
+            var inputData = new GoalUpdateDto(Guid.NewGuid(), "");
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>()));
             goalController.ModelState.AddModelError("key", "error message");
 
@@ -258,7 +258,7 @@ namespace ApiTest
         public void Update_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
-            var inputData = new GoalUpdateInput(Guid.NewGuid(), "test text");
+            var inputData = new GoalUpdateDto(Guid.NewGuid(), "test text");
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
 
             // Act & Assert
@@ -272,7 +272,7 @@ namespace ApiTest
         public void Update_Exception_ExceptionStatus500()
         {
             // Arrange
-            var inputData = new GoalUpdateInput(Guid.NewGuid(), "test text");
+            var inputData = new GoalUpdateDto(Guid.NewGuid(), "test text");
             mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<Exception>();
 
             // Act & Assert
@@ -333,7 +333,7 @@ namespace ApiTest
         public void Done_Success_Status204()
         {
             // Arrange
-            var inputData = new GoalDoneInput(Guid.NewGuid(), true);
+            var inputData = new GoalDoneDto(Guid.NewGuid(), true);
             mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>()));
 
             // Act
@@ -351,7 +351,7 @@ namespace ApiTest
         public void Done_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
-            var inputData = new GoalDoneInput(Guid.NewGuid(), true);
+            var inputData = new GoalDoneDto(Guid.NewGuid(), true);
             mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
 
             // Act & Assert
@@ -364,7 +364,7 @@ namespace ApiTest
         public void Done_Exception_ExceptionStatus500()
         {
             // Arrange
-            var inputData = new GoalDoneInput(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), true);
+            var inputData = new GoalDoneDto(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), true);
             mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<Exception>();
 
             // Act & Assert

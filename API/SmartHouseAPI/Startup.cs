@@ -1,3 +1,4 @@
+using Bogus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,23 +7,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using SmartHouse.Business.Data;
+using SmartHouse.Domain.Core;
+using SmartHouse.Domain.Interfaces;
 using SmartHouse.Infrastructure.Data;
-using SmartHouse.Service.Weather.Gismeteo;
+using SmartHouse.Service.Weather.OpenWeatherMap;
+using SmartHouseAPI.Helpers;
+using SmartHouseAPI.Middleware;
 using System;
 using System.Collections.Generic;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
-using System.Linq;
-using SmartHouseAPI.Helpers;
-using SmartHouse.Service.Weather.OpenWeatherMap;
-using SmartHouse.Domain.Interfaces;
-using Bogus;
-using SmartHouse.Domain.Core;
-using SmartHouseAPI.Middleware;
-using SmartHouseAPI.Contexts;
-using static SmartHouseAPI.Middleware.RequestResponseLoggingMiddleware;
-using System.Diagnostics;
 using System.Net.Http;
 
 namespace SmartHouseAPI
@@ -53,7 +47,7 @@ namespace SmartHouseAPI
                      options.SuppressInferBindingSourcesForParameters = true;
                      options.SuppressModelStateInvalidFilter = true;
                      options.SuppressMapClientErrors = true;
-                   //  options.ClientErrorMapping[404].Link ="https://httpstatuses.com/404";
+                     //  options.ClientErrorMapping[404].Link ="https://httpstatuses.com/404";
                  });
             // services.AddLogging(cfg => cfg.AddConsole());
 
@@ -127,13 +121,7 @@ namespace SmartHouseAPI
                     loggerContext.EnsureCreated();
                 }
 
-                services.AddTransient<ILoggerWork>(x => new LoggerWork(new LoggerRepository<LoggerModel>(loggerContext, "General category")));//x.GetRequiredService<ILoggerContext>()
-               // services.AddSingleton(loggerContext);
-            }
-            else
-            {
-                // services.AddSingleton(null);
-                //loggerContext = null;
+                services.AddTransient<ILoggerWork>(x => new LoggerWork(new LoggerRepository<LoggerModel>(loggerContext, "General category")));
             }
 
             IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
@@ -149,13 +137,6 @@ namespace SmartHouseAPI
         {
             if (env.IsDevelopment())
             {
-                //app.AddDefaultPolicy(builder =>
-                //{
-                //    builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
-                //});
-
-                 
-
                 //app.UseDeveloperExceptionPage();
                 app.UseExceptionHandler("/error-local-development");
             }
@@ -163,29 +144,13 @@ namespace SmartHouseAPI
             {
                 app.UseExceptionHandler("/error");
             }
-
+ 
             if (IsLogger)
             {
                 loggerFactory.AddContext(loggerContext);
             }
 
             app.UseStaticFiles();
-
-            /*
-            Action<RequestProfilerModel> requestResponseHandler = requestProfilerModel =>
-            {
-                Debug.Print(requestProfilerModel.Request);
-                Debug.Print(Environment.NewLine);
-                Debug.Print(requestProfilerModel.Response);
-            };
-
-            app.UseMiddleware<RequestResponseLoggingMiddleware>(requestResponseHandler);
-            */
-
-           // app.UseMiddleware<RequestResponseLoggingMiddleware>();
-
-            app.UseMiddleware<ExceptionMiddleware>();
-       
 
             // обработка ошибок HTTP
             //app.UseStatusCodePages("text/plain", "Error. Status code : {0}");
@@ -203,12 +168,14 @@ namespace SmartHouseAPI
                 c.RoutePrefix = "api/docs";
             });
             
-            // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-
             app.UseRouting();
 
+       
             // CORS policy
             app.UseCors(allowSpecificOrigins);
+
+            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
