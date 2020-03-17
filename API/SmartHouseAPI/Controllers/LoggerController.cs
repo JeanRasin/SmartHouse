@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
@@ -13,11 +12,11 @@ namespace SmartHouseAPI.Controllers
     [ApiController]
     public class LoggerController : ControllerBase
     {
-        private readonly ILoggerWork loggerWork;
+        private readonly ILoggerWork _loggerWork;
 
         public LoggerController(ILoggerWork loggerWork)
         {
-            this.loggerWork = loggerWork;
+            _loggerWork = loggerWork;
         }
 
         /// <summary>
@@ -35,7 +34,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetLoggerAsync()
         {
-            IEnumerable<LoggerModel> result = await loggerWork.GetLoggerAsync();//todo:remove
+            IEnumerable<LoggerModel> result = await _loggerWork.GetLoggerAsync();
 
             if (result == null)
             {

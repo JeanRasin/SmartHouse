@@ -8,16 +8,16 @@ namespace SmartHouse.Infrastructure.Data
 {
     public class GoalRepository : IGoalRepository<GoalModel>
     {
-        private readonly GoalContext db;
+        private readonly GoalContext _db;
 
         public GoalRepository(GoalContext context)
         {
-            db = context;
+            _db = context;
         }
 
         public IEnumerable<GoalModel> GetGoals()
         {
-            return db.Goals;
+            return _db.Goals;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace SmartHouse.Infrastructure.Data
         /// <returns></returns>
         public GoalModel GetGoal(Guid id)
         {
-            GoalModel result = db.Goals.Find(id);
+            GoalModel result = _db.Goals.Find(id);
 
             if (result == null)
             {
@@ -43,7 +43,7 @@ namespace SmartHouse.Infrastructure.Data
         /// <param name="data"></param>
         public void Create(GoalModel data)
         {
-            db.Entry(data).State = EntityState.Added;
+            _db.Entry(data).State = EntityState.Added;
         }
 
         /// <summary>
@@ -52,10 +52,10 @@ namespace SmartHouse.Infrastructure.Data
         /// <param name="id"></param>
         public void Remove(Guid id)
         {
-            var goal = db.Goals.Find(id);
+            var goal = _db.Goals.Find(id);
             if (goal != null)
             {
-                db.Entry(goal).State = EntityState.Deleted;
+                _db.Entry(goal).State = EntityState.Deleted;
             }
             else
             {
@@ -69,10 +69,10 @@ namespace SmartHouse.Infrastructure.Data
         /// <param name="data"></param>
         public void Update(GoalModel data)
         {
-            var goal = db.Goals.Find(data.Id);
+            var goal = _db.Goals.Find(data.Id);
             if (goal != null)
             {
-                db.Entry(data).State = EntityState.Modified;
+                _db.Entry(data).State = EntityState.Modified;
             }
             else
             {
@@ -85,7 +85,7 @@ namespace SmartHouse.Infrastructure.Data
         /// </summary>
         public void Save()
         {
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         #region dispose
@@ -97,7 +97,7 @@ namespace SmartHouse.Infrastructure.Data
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    _db.Dispose();
                 }
             }
             disposed = true;

@@ -25,17 +25,18 @@ namespace SmartHouseAPI
     {
         const string allowSpecificOrigins = "_allowSpecificOrigins";
 
-        private ILoggerContext loggerContext = null;
-        private IWebHostEnvironment CurrentEnvironment { get; set; }
+        private ILoggerContext _loggerContext = null;
+        private readonly IWebHostEnvironment _currentEnvironment;
+
         private bool IsLogger { get { return Convert.ToBoolean(Configuration["Logger"]); } }
+
+        public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
-            CurrentEnvironment = env;
+            _currentEnvironment = env;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -47,11 +48,9 @@ namespace SmartHouseAPI
                      options.SuppressInferBindingSourcesForParameters = true;
                      options.SuppressModelStateInvalidFilter = true;
                      options.SuppressMapClientErrors = true;
-                     //  options.ClientErrorMapping[404].Link ="https://httpstatuses.com/404";
                  });
-            // services.AddLogging(cfg => cfg.AddConsole());
 
-            // Register the Swagger generator, defining 1 or more Swagger documents
+            // Register the Swagger generator, defining 1 or more Swagger documents.
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -79,11 +78,11 @@ namespace SmartHouseAPI
                     });
             });
 
-            if (CurrentEnvironment.IsDevelopment())
+            if (_currentEnvironment.IsDevelopment())
             {
                 int randomizerSeed = Convert.ToInt32(Configuration["RandomizerSeed"]);
 
-                // Random const;
+                // Random const.
                 Randomizer.Seed = new Random(randomizerSeed);
             }
 
@@ -91,10 +90,10 @@ namespace SmartHouseAPI
             {
                 string connection = Configuration.GetConnectionString("DefaultConnection");
 
-                var options = new DbContextOptionsBuilder<SmartHouse.Infrastructure.Data.GoalContext>();
+                var options = new DbContextOptionsBuilder<GoalContext>();
                 options.UseNpgsql(connection);
 
-                if (CurrentEnvironment.IsDevelopment())
+                if (_currentEnvironment.IsDevelopment())
                 {
                     var goalContext = new Contexts.GoalContext(options.Options);
                     goalContext.Database.EnsureCreated();
@@ -102,7 +101,7 @@ namespace SmartHouseAPI
                 }
                 else
                 {
-                    var goalContext = new SmartHouse.Infrastructure.Data.GoalContext(options.Options);
+                    var goalContext = new GoalContext(options.Options);
                     goalContext.Database.EnsureCreated();
                     return goalContext;
                 }
@@ -114,48 +113,49 @@ namespace SmartHouseAPI
             if (IsLogger)
             {
                 MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
-                loggerContext = new Contexts.LoggerContext(logConfig.Connection, logConfig.DbName);
+                _loggerContext = new Contexts.LoggerContext(logConfig.Connection, logConfig.DbName);
 
-                if (CurrentEnvironment.IsDevelopment())
+                if (_currentEnvironment.IsDevelopment())
                 {
-                    loggerContext.EnsureCreated();
+                    _loggerContext.EnsureCreated();
                 }
 
-                services.AddTransient<ILoggerWork>(x => new LoggerWork(new LoggerRepository<LoggerModel>(loggerContext, "General category")));
+                services.AddTransient<ILoggerWork>(x => new LoggerWork(new LoggerRepository<LoggerModel>(_loggerContext, "General category")));
+            }
+            else
+            {
+                services.AddLogging(cfg => cfg.AddConsole());
             }
 
             IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
 
             // OpenWeatherMap service.
             services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(parm, new HttpClient(), logger: x.GetRequiredService<ILogger<OpenWeatherMapService>>()));
+
             // GisMeteo service.
             //services.AddTransient<IWeatherService, GisMeteoService>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)//ILoggerContext loggerContext
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
                 app.UseExceptionHandler("/error-local-development");
             }
             else
             {
                 app.UseExceptionHandler("/error");
             }
- 
+
             if (IsLogger)
             {
-                loggerFactory.AddContext(loggerContext);
+                loggerFactory.AddContext(_loggerContext);
             }
 
             app.UseStaticFiles();
 
-            // обработка ошибок HTTP
-            //app.UseStatusCodePages("text/plain", "Error. Status code : {0}");
-            
-            // Creates Swagger JSON
+            // Creates Swagger JSON.
             app.UseSwagger(c =>
             {
                 c.RouteTemplate = "api/docs/{documentName}/swagger.json";
@@ -167,24 +167,21 @@ namespace SmartHouseAPI
                 c.SwaggerEndpoint("/api/docs/v1/swagger.json", "AnnexUI API V1");
                 c.RoutePrefix = "api/docs";
             });
-            
+
             app.UseRouting();
 
-       
-            // CORS policy
+            // CORS policy.
             app.UseCors(allowSpecificOrigins);
 
+            // Exception logger write.
             app.UseMiddleware<ExceptionMiddleware>();
+
+            // Logger write.
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
-                // определение маршрутов
-                // endpoints.MapControllerRoute(
-                //  name: "default",
-                //   pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

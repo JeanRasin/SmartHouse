@@ -13,16 +13,16 @@ namespace BusinessTest
     [CollectionDefinition("Goal work")]
     public class GoalWorkTest
     {
-        private static readonly List<GoalModel> testDataItems = GetTestData();
-        private static readonly GoalModel testDataItem = testDataItems.First();
+        private static readonly List<GoalModel> _testDataItems = GetTestData();
+        private static readonly GoalModel _testDataItem = _testDataItems.First();
 
-        private readonly Mock<IGoalRepository<GoalModel>> mockGoalRepository;
-        private readonly GoalWork goalWork;
+        private readonly Mock<IGoalRepository<GoalModel>> _mockGoalRepository;
+        private readonly GoalWork _goalWork;
 
         public GoalWorkTest()
         {
-            mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
-            goalWork = new GoalWork(mockGoalRepository.Object);
+            _mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+            _goalWork = new GoalWork(_mockGoalRepository.Object);
         }
 
         static List<GoalModel> GetTestData(int n = 10)
@@ -49,14 +49,14 @@ namespace BusinessTest
         public void GetGoalAll_OrderByDescendingDateUpdate_GoalModelItems()
         {
             //Arrange
-            mockGoalRepository.Setup(s => s.GetGoals()).Returns(testDataItems);
+            _mockGoalRepository.Setup(s => s.GetGoals()).Returns(_testDataItems);
 
             // Act
-            IEnumerable<GoalModel> result = goalWork.GetGoalAll();
+            IEnumerable<GoalModel> result = _goalWork.GetGoalAll();
 
             //Assert
             Assert.NotNull(result);
-            Assert.Equal(result.Count(), testDataItems.Count());
+            Assert.Equal(result.Count(), _testDataItems.Count());
 
         }
         #endregion
@@ -83,10 +83,10 @@ namespace BusinessTest
             // Exactly what would be true.
             testData[0].Done = true;
 
-            mockGoalRepository.Setup(s => s.GetGoals()).Returns(testData);
+            _mockGoalRepository.Setup(s => s.GetGoals()).Returns(testData);
 
             // Act
-            IEnumerable<GoalModel> result = goalWork.GetGoals();
+            IEnumerable<GoalModel> result = _goalWork.GetGoals();
 
             //Assert
             Assert.NotNull(result);
@@ -103,14 +103,14 @@ namespace BusinessTest
         public void GetGoal_Success_GoalModelItem()
         {
             //Arrange
-            mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(testDataItem);
+            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(_testDataItem);
 
             // Act
-            GoalModel result = goalWork.GetGoal(Guid.NewGuid());
+            GoalModel result = _goalWork.GetGoal(Guid.NewGuid());
 
             //Assert
             Assert.NotNull(result);
-            Assert.Equal(result, testDataItem);
+            Assert.Equal(result, _testDataItem);
         }
 
         /// <summary>
@@ -120,10 +120,10 @@ namespace BusinessTest
         public void GetGoal_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
+            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
 
             //Act & Assert
-            Assert.Throws<KeyNotFoundException>(() => goalWork.GetGoal(Guid.NewGuid()));
+            Assert.Throws<KeyNotFoundException>(() => _goalWork.GetGoal(Guid.NewGuid()));
         }
         #endregion
 
@@ -135,16 +135,16 @@ namespace BusinessTest
         public void Create_Success_GoalModelItem()
         {
             //Arrange
-            mockGoalRepository.Setup(s => s.Create(It.IsAny<GoalModel>())).Verifiable();
-            mockGoalRepository.Setup(s => s.Save()).Verifiable();
+            _mockGoalRepository.Setup(s => s.Create(It.IsAny<GoalModel>())).Verifiable();
+            _mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
             // Act
-            GoalModel result = goalWork.Create("test name");
+            GoalModel result = _goalWork.Create("test name");
 
             //Assert
             Assert.NotNull(result);
-            mockGoalRepository.Verify(v => v.Create(It.IsAny<GoalModel>()), Times.Once);
-            mockGoalRepository.Verify(v => v.Save(), Times.Once);
+            _mockGoalRepository.Verify(v => v.Create(It.IsAny<GoalModel>()), Times.Once);
+            _mockGoalRepository.Verify(v => v.Save(), Times.Once);
         }
         #endregion
 
@@ -156,16 +156,16 @@ namespace BusinessTest
         public void Update_Success()
         {
             //Arrange
-            mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(testDataItem);
-            mockGoalRepository.Setup(s => s.Update(It.IsAny<GoalModel>())).Verifiable();
-            mockGoalRepository.Setup(s => s.Save()).Verifiable();
+            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(_testDataItem);
+            _mockGoalRepository.Setup(s => s.Update(It.IsAny<GoalModel>())).Verifiable();
+            _mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
             // Act
-            goalWork.Update(Guid.NewGuid(), "test name", true);
+            _goalWork.Update(Guid.NewGuid(), "test name", true);
 
             //Assert
-            mockGoalRepository.Verify(v => v.Update(It.IsAny<GoalModel>()), Times.Once);
-            mockGoalRepository.Verify(v => v.Save(), Times.Once);
+            _mockGoalRepository.Verify(v => v.Update(It.IsAny<GoalModel>()), Times.Once);
+            _mockGoalRepository.Verify(v => v.Save(), Times.Once);
         }
 
         /// <summary>
@@ -175,10 +175,10 @@ namespace BusinessTest
         public void Update_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
+            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
 
             //Act & Assert
-            Assert.Throws<KeyNotFoundException>(() => goalWork.Update(Guid.NewGuid(), "test name", true));
+            Assert.Throws<KeyNotFoundException>(() => _goalWork.Update(Guid.NewGuid(), "test name", true));
         }
         #endregion
 
@@ -190,16 +190,16 @@ namespace BusinessTest
         public void Delete_Success()
         {
             //Arrange
-            mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(testDataItem);
-            mockGoalRepository.Setup(s => s.Remove(It.IsAny<Guid>())).Verifiable();
-            mockGoalRepository.Setup(s => s.Save()).Verifiable();
+            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(_testDataItem);
+            _mockGoalRepository.Setup(s => s.Remove(It.IsAny<Guid>())).Verifiable();
+            _mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
             // Act
-            goalWork.Delete(Guid.NewGuid());
+            _goalWork.Delete(Guid.NewGuid());
 
             //Assert
-            mockGoalRepository.Verify(v => v.Remove(It.IsAny<Guid>()), Times.Once);
-            mockGoalRepository.Verify(v => v.Save(), Times.Once);
+            _mockGoalRepository.Verify(v => v.Remove(It.IsAny<Guid>()), Times.Once);
+            _mockGoalRepository.Verify(v => v.Save(), Times.Once);
         }
 
         /// <summary>
@@ -209,10 +209,10 @@ namespace BusinessTest
         public void Delete_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
+            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
 
             //Act & Assert
-            Assert.Throws<KeyNotFoundException>(() => goalWork.Delete(Guid.NewGuid()));
+            Assert.Throws<KeyNotFoundException>(() => _goalWork.Delete(Guid.NewGuid()));
         }
         #endregion
 
@@ -224,16 +224,16 @@ namespace BusinessTest
         public void Done_Success()
         {
             //Arrange
-            mockGoalRepository.Setup(s => s.GetGoals()).Returns(testDataItems);
-            mockGoalRepository.Setup(s => s.Update(It.IsAny<GoalModel>())).Verifiable();
-            mockGoalRepository.Setup(s => s.Save()).Verifiable();
+            _mockGoalRepository.Setup(s => s.GetGoals()).Returns(_testDataItems);
+            _mockGoalRepository.Setup(s => s.Update(It.IsAny<GoalModel>())).Verifiable();
+            _mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
             // Act
-            goalWork.Done(testDataItem.Id, !testDataItem.Done);
+            _goalWork.Done(_testDataItem.Id, !_testDataItem.Done);
 
             //Assert
-            mockGoalRepository.Verify(v => v.Update(It.IsAny<GoalModel>()), Times.Once);
-            mockGoalRepository.Verify(v => v.Save(), Times.Once);
+            _mockGoalRepository.Verify(v => v.Update(It.IsAny<GoalModel>()), Times.Once);
+            _mockGoalRepository.Verify(v => v.Save(), Times.Once);
         }
 
         /// <summary>
@@ -243,10 +243,10 @@ namespace BusinessTest
         public void Done_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            mockGoalRepository.Setup(s => s.GetGoals()).Returns(testDataItems);
+            _mockGoalRepository.Setup(s => s.GetGoals()).Returns(_testDataItems);
 
             //Act & Assert
-            Assert.Throws<KeyNotFoundException>(() => goalWork.Done(Guid.NewGuid(), true));
+            Assert.Throws<KeyNotFoundException>(() => _goalWork.Done(Guid.NewGuid(), true));
         }
         #endregion
     }

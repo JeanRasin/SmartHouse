@@ -18,16 +18,16 @@ namespace RepositoryTest
     [CollectionDefinition("Goal repository")]
     public class GoalRepositoryTest
     {
-        private static readonly GoalModel itemTestData = GetTestData();
-        private readonly GoalContext mockedDbContext;
-        private readonly GoalRepository repository;
-        private readonly Mock<GoalContext> dbContextMock;
+        private static readonly GoalModel _itemTestData = GetTestData();
+        private readonly GoalContext _mockedDbContext;
+        private readonly GoalRepository _repository;
+        private readonly Mock<GoalContext> _dbContextMock;
 
         public GoalRepositoryTest()
         {
-            mockedDbContext = Create.MockedDbContextFor<GoalContext>();
-            repository = new GoalRepository(mockedDbContext);
-            dbContextMock = Mock.Get(mockedDbContext);
+            _mockedDbContext = Create.MockedDbContextFor<GoalContext>();
+            _repository = new GoalRepository(_mockedDbContext);
+            _dbContextMock = Mock.Get(_mockedDbContext);
         }
 
         static GoalModel GetTestData()
@@ -85,11 +85,11 @@ namespace RepositoryTest
         public void GetGoals_GoalModelItems()
         {
             // Act
-            IEnumerable<GoalModel> items = repository.GetGoals();
+            IEnumerable<GoalModel> items = _repository.GetGoals();
 
             // Assert
-            dbContextMock.VerifyGet(v => v.Goals, "Property was not called.");
-            Assert.Equal(items.Count(), mockedDbContext.Goals.Count());
+            _dbContextMock.VerifyGet(v => v.Goals, "Property was not called.");
+            Assert.Equal(items.Count(), _mockedDbContext.Goals.Count());
         }
         #endregion
 
@@ -101,14 +101,14 @@ namespace RepositoryTest
         public void GetGoal_GoalModelItem()
         {
             // Arrange
-            mockedDbContext.Goals.Add(itemTestData);
+            _mockedDbContext.Goals.Add(_itemTestData);
 
             // Act
-            GoalModel result = repository.GetGoal(itemTestData.Id);
+            GoalModel result = _repository.GetGoal(_itemTestData.Id);
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(itemTestData, result);
+            Assert.Equal(_itemTestData, result);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace RepositoryTest
         public void GetGoal_KeyNotFound_KeyNotFoundException()
         {
             // Act & Assert
-            Assert.Throws<KeyNotFoundException>(() => repository.GetGoal(Guid.NewGuid()));
+            Assert.Throws<KeyNotFoundException>(() => _repository.GetGoal(Guid.NewGuid()));
         }
         #endregion
 
@@ -130,11 +130,11 @@ namespace RepositoryTest
         public void Create_Success()
         {
             // Act
-            repository.Create(itemTestData);
+            _repository.Create(_itemTestData);
 
             // Assert
-            EntityState itemState = mockedDbContext.Entry(itemTestData).State;
-            dbContextMock.Verify(v => v.Entry(itemTestData), Times.Exactly(2), "Entry was not called.");
+            EntityState itemState = _mockedDbContext.Entry(_itemTestData).State;
+            _dbContextMock.Verify(v => v.Entry(_itemTestData), Times.Exactly(2), "Entry was not called.");
             Assert.Equal(EntityState.Added, itemState);
         }
         #endregion
@@ -147,14 +147,14 @@ namespace RepositoryTest
         public void Remove_Success()
         {
             // Arrange
-            mockedDbContext.Goals.Add(itemTestData);
+            _mockedDbContext.Goals.Add(_itemTestData);
 
             // Act
-            repository.Remove(itemTestData.Id);
+            _repository.Remove(_itemTestData.Id);
 
             // Assert
-            EntityState itemState = mockedDbContext.Entry(itemTestData).State;
-            dbContextMock.Verify(v => v.Entry(itemTestData), Times.Exactly(2), "Entry was not called.");
+            EntityState itemState = _mockedDbContext.Entry(_itemTestData).State;
+            _dbContextMock.Verify(v => v.Entry(_itemTestData), Times.Exactly(2), "Entry was not called.");
             Assert.Equal(EntityState.Deleted, itemState);
         }
 
@@ -165,7 +165,7 @@ namespace RepositoryTest
         public void Remove_KeyNotFound_KeyNotFoundException()
         {
             // Act && Assert
-            Assert.Throws<KeyNotFoundException>(() => repository.Remove(Guid.NewGuid()));
+            Assert.Throws<KeyNotFoundException>(() => _repository.Remove(Guid.NewGuid()));
         }
         #endregion
 
@@ -177,14 +177,14 @@ namespace RepositoryTest
         public void Update_Success()
         {
             // Arrange
-            repository.Create(itemTestData);
+            _repository.Create(_itemTestData);
 
             // Act
-            repository.Update(itemTestData);
+            _repository.Update(_itemTestData);
 
             // Assert
-            EntityState itemState = mockedDbContext.Entry(itemTestData).State;
-            dbContextMock.Verify(v => v.Entry(itemTestData), Times.Exactly(3), "Entry was not called.");
+            EntityState itemState = _mockedDbContext.Entry(_itemTestData).State;
+            _dbContextMock.Verify(v => v.Entry(_itemTestData), Times.Exactly(3), "Entry was not called.");
             Assert.Equal(EntityState.Modified, itemState);
         }
 
@@ -195,7 +195,7 @@ namespace RepositoryTest
         public void Update_KeyNotFound_KeyNotFoundException()
         {
             // Act & Assert
-            Assert.Throws<KeyNotFoundException>(() => repository.Update(itemTestData));
+            Assert.Throws<KeyNotFoundException>(() => _repository.Update(_itemTestData));
         }
         #endregion
     }

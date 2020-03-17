@@ -7,15 +7,15 @@ namespace SmartHouseAPI.Helpers
 {
     public class LoggerProvider : ILoggerProvider
     {
-        private readonly ILoggerContext context;
+        private readonly ILoggerContext _context;
         public LoggerProvider(ILoggerContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
         public ILogger CreateLogger(string categoryName)
         {
-            var loggerRepository = new LoggerRepository<LoggerModel>(context, categoryName);
+            var loggerRepository = new LoggerRepository<LoggerModel>(_context, categoryName);
             return new LoggerWork(loggerRepository);
         }
 

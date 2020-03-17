@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
@@ -13,14 +12,13 @@ namespace SmartHouseAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-    //[EnableCors("AllowAll")]
     public class GoalController : ControllerBase
     {
-        private readonly IGoalWork<GoalModel> goalWork;
+        private readonly IGoalWork<GoalModel> _goalWork;
 
         public GoalController(IGoalWork<GoalModel> goalWork)
         {
-            this.goalWork = goalWork;
+            _goalWork = goalWork;
         }
 
         // GET: api/goal/getAll
@@ -29,7 +27,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoalAll()
         {
-            IEnumerable<GoalModel> result = goalWork.GetGoalAll();
+            IEnumerable<GoalModel> result = _goalWork.GetGoalAll();
             return Ok(result);
         }
 
@@ -39,7 +37,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoals()
         {
-            IEnumerable<GoalModel> result = goalWork.GetGoals();
+            IEnumerable<GoalModel> result = _goalWork.GetGoals();
             return Ok(result);
         }
 
@@ -50,7 +48,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoal(Guid id)
         {
-            GoalModel result = goalWork.GetGoal(id);
+            GoalModel result = _goalWork.GetGoal(id);
 
             if (result == null)
             {
@@ -79,14 +77,14 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-       public IActionResult Create([FromBody]GoalCreateDto data)
+        public IActionResult Create([FromBody]GoalCreateDto data)
         {
             if (!ModelState.IsValid)
             {
                 throw new ModelStateException("Goal model is not valid.", ModelState);
             }
 
-            GoalModel result = goalWork.Create(data.Name);
+            GoalModel result = _goalWork.Create(data.Name);
             return Created(Url.RouteUrl(result.Id), result);
         }
 
@@ -120,7 +118,7 @@ namespace SmartHouseAPI.Controllers
 
             try
             {
-                goalWork.Update(data.Id, data.Name, data.Done);
+                _goalWork.Update(data.Id, data.Name, data.Done);
                 return NoContent();
             }
             catch (KeyNotFoundException)
@@ -138,7 +136,7 @@ namespace SmartHouseAPI.Controllers
         {
             try
             {
-                goalWork.Delete(id);
+                _goalWork.Delete(id);
                 return NoContent();
             }
             catch (KeyNotFoundException)
@@ -171,7 +169,7 @@ namespace SmartHouseAPI.Controllers
         {
             try
             {
-                goalWork.Done(data.Id, data.Done);
+                _goalWork.Done(data.Id, data.Done);
                 return NoContent();
             }
             catch (KeyNotFoundException)

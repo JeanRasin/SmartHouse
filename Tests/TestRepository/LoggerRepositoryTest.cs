@@ -24,37 +24,37 @@ namespace RepositoryTest
     [CollectionDefinition("Logger repository")]
     public class LoggerRepositoryTest
     {
-        private readonly Faker<EventId> eventIdFaker;
-        private readonly Faker<LoggerModel> loggerModelFaker;
+        private readonly Faker<EventId> _eventIdFaker;
+        private readonly Faker<LoggerModel> _loggerModelFaker;
 
-        private readonly Mock<IMongoCollection<LoggerModel>> collection;
-        private readonly Mock<ILoggerContext> context;
-        private readonly LoggerRepository<LoggerModel> repository;
+        private readonly Mock<IMongoCollection<LoggerModel>> _collection;
+        private readonly Mock<ILoggerContext> _context;
+        private readonly LoggerRepository<LoggerModel> _repository;
 
         public LoggerRepositoryTest()
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
 
-            eventIdFaker = new Faker<EventId>()
+            _eventIdFaker = new Faker<EventId>()
                 .RuleFor(o => o.StateId, f => f.Random.Int(1, 10))
                 .RuleFor(o => o.Name, f => f.Random.String2(10));
 
-            loggerModelFaker = new Faker<LoggerModel>()
+            _loggerModelFaker = new Faker<LoggerModel>()
                 .StrictMode(true)
                 .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
-                .RuleFor(o => o.EventId, f => eventIdFaker.Generate())
+                .RuleFor(o => o.EventId, f => _eventIdFaker.Generate())
                 .RuleFor(o => o.CategoryName, f => f.Random.Words(2))
                 .RuleFor(o => o.LogLevel, f => f.PickRandom<LogLevel>())
                 .RuleFor(o => o.Message, f => f.Random.Words(20))
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)));
 
-            collection = new Mock<IMongoCollection<LoggerModel>>();
+            _collection = new Mock<IMongoCollection<LoggerModel>>();
 
-            context = new Mock<ILoggerContext>();
-            context.Setup(l => l.DbSet<LoggerModel>()).Returns(collection.Object);
+            _context = new Mock<ILoggerContext>();
+            _context.Setup(l => l.DbSet<LoggerModel>()).Returns(_collection.Object);
 
-            repository = new LoggerRepository<LoggerModel>(context.Object, "test category");
+            _repository = new LoggerRepository<LoggerModel>(_context.Object, "test category");
         }
 
         #region Create
@@ -69,19 +69,19 @@ namespace RepositoryTest
                 .StrictMode(true)
                 .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
                 .RuleFor(o => o.CategoryName, f => f.Random.Words(2))
-                .RuleFor(o => o.EventId, f => eventIdFaker.Generate())
+                .RuleFor(o => o.EventId, f => _eventIdFaker.Generate())
                 .RuleFor(o => o.LogLevel, f => f.PickRandom<LogLevel>())
                 .RuleFor(o => o.Message, f => f.Random.Words())
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                 .Generate();
 
-            collection.Setup(m => m.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()));
+            _collection.Setup(m => m.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()));
 
             // Act
-            repository.Create(testData);
+            _repository.Create(testData);
 
             // Assert
-            collection.Verify(v => v.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Once, "InsertOne was not called.");
+            _collection.Verify(v => v.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Once, "InsertOne was not called.");
         }
 
         /// <summary>
@@ -111,17 +111,17 @@ namespace RepositoryTest
                 // Id null.
                 // .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
                 .RuleFor(o => o.CategoryName, f => f.Random.Words(2))
-                .RuleFor(o => o.EventId, f => eventIdFaker.Generate())
+                .RuleFor(o => o.EventId, f => _eventIdFaker.Generate())
                 .RuleFor(o => o.LogLevel, f => f.PickRandom<LogLevel>())
                 .RuleFor(o => o.Message, f => f.Random.Words())
                 .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                 .Generate();
 
-            collection.Setup(m => m.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()))
+            _collection.Setup(m => m.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()))
                 .Throws(MongoWriteExceptionObj());
 
             // Act & Assert
-            Assert.Throws<MongoWriteException>(() => repository.Create(testData));
+            Assert.Throws<MongoWriteException>(() => _repository.Create(testData));
         }
         #endregion
 
@@ -134,16 +134,16 @@ namespace RepositoryTest
         public async Task Query_All_Data()
         {
             // Arrange
-            List<LoggerModel> items = loggerModelFaker.Generate(2);
+            List<LoggerModel> items = _loggerModelFaker.Generate(2);
 
-            collection.Setup(m => m.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()))
+            _collection.Setup(m => m.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new MockAsyncCursor<LoggerModel>(items));
 
             // Act
-            List<LoggerModel> result = (await repository.QueryAsync()).ToList();
+            List<LoggerModel> result = (await _repository.QueryAsync()).ToList();
 
             // Assert
-            collection.Verify(v => v.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()), "FindAsync was not called.");
+            _collection.Verify(v => v.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()), "FindAsync was not called.");
             Assert.NotNull(result);
             Assert.Equal(items, result);
         }
@@ -158,17 +158,17 @@ namespace RepositoryTest
         public async Task QueryFilter_FilterId_Data()
         {
             // Arrange
-            List<LoggerModel> items = loggerModelFaker.Generate(1);
+            List<LoggerModel> items = _loggerModelFaker.Generate(1);
             LoggerModel item = items.Single();
 
-            collection.Setup(m => m.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()))
+            _collection.Setup(m => m.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new MockAsyncCursor<LoggerModel>(items));
 
             // Act
-            List<LoggerModel> result = (await repository.QueryAsync(s => s.Id == item.Id)).ToList();
+            List<LoggerModel> result = (await _repository.QueryAsync(s => s.Id == item.Id)).ToList();
 
             // Assert
-            collection.Verify(v => v.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()), "FindAsync was not called.");
+            _collection.Verify(v => v.FindAsync(It.IsAny<FilterDefinition<LoggerModel>>(), It.IsAny<FindOptions<LoggerModel, LoggerModel>>(), It.IsAny<CancellationToken>()), "FindAsync was not called.");
             Assert.NotNull(result);
             Assert.Equal(items, result);
         }

@@ -1,7 +1,5 @@
 ﻿using Bogus;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using SmartHouse.Domain.Core;
 using System;
 

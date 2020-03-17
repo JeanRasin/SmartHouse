@@ -9,16 +9,16 @@ namespace SmartHouse.Business.Data
 {
     public class GoalWork : IGoalWork<GoalModel>
     {
-        private readonly IGoalRepository<GoalModel> repository;
+        private readonly IGoalRepository<GoalModel> _repository;
 
         public GoalWork(GoalContext context)
         {
-            repository = new GoalRepository(context);
+            _repository = new GoalRepository(context);
         }
 
         public GoalWork(IGoalRepository<GoalModel> goalRepository)
         {
-            repository = goalRepository;
+            _repository = goalRepository;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace SmartHouse.Business.Data
         /// <returns></returns>
         public IEnumerable<GoalModel> GetGoalAll()
         {
-            IOrderedEnumerable<GoalModel> result = repository
+            IOrderedEnumerable<GoalModel> result = _repository
                   .GetGoals()
                   .OrderByDescending(p => p.DateUpdate);
             return result;
@@ -39,7 +39,7 @@ namespace SmartHouse.Business.Data
         /// <returns></returns>
         public IEnumerable<GoalModel> GetGoals()
         {
-            IOrderedEnumerable<GoalModel> result = repository
+            IOrderedEnumerable<GoalModel> result = _repository
                   .GetGoals()
                   .Where(p => p.Done == false)
                   .OrderByDescending(p => p.DateUpdate);
@@ -54,7 +54,7 @@ namespace SmartHouse.Business.Data
         /// <returns></returns>
         public GoalModel GetGoal(Guid id)
         {
-            GoalModel result = repository.GetGoal(id);
+            GoalModel result = _repository.GetGoal(id);
 
             if (result == null)
             {
@@ -73,8 +73,8 @@ namespace SmartHouse.Business.Data
         {
             var result = new GoalModel(name);
 
-            repository.Create(result);
-            repository.Save();
+            _repository.Create(result);
+            _repository.Save();
 
             return result;
         }
@@ -87,7 +87,7 @@ namespace SmartHouse.Business.Data
         /// <param name="done"></param>
         public void Update(Guid id, string name, bool done)
         {
-            GoalModel result = repository.GetGoal(id);
+            GoalModel result = _repository.GetGoal(id);
 
             if (result == null)
             {
@@ -97,8 +97,8 @@ namespace SmartHouse.Business.Data
             result.Name = name;
             result.Done = done;
 
-            repository.Update(result);
-            repository.Save();
+            _repository.Update(result);
+            _repository.Save();
         }
 
         /// <summary>
@@ -107,15 +107,15 @@ namespace SmartHouse.Business.Data
         /// <param name="id"></param>
         public void Delete(Guid id)
         {
-            GoalModel result = repository.GetGoal(id);
+            GoalModel result = _repository.GetGoal(id);
 
             if (result == null)
             {
                 throw new KeyNotFoundException($"Record id:{id} not found");
             }
 
-            repository.Remove(id);
-            repository.Save();
+            _repository.Remove(id);
+            _repository.Save();
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace SmartHouse.Business.Data
         /// <param name="done"></param>
         public void Done(Guid id, bool done)
         {
-            GoalModel result = repository
+            GoalModel result = _repository
                  .GetGoals()
                  .Where(p => p.Id == id)
                  .FirstOrDefault();
@@ -137,8 +137,8 @@ namespace SmartHouse.Business.Data
 
             result.Done = done;
 
-            repository.Update(result);
-            repository.Save();
+            _repository.Update(result);
+            _repository.Save();
         }
 
         #region dispose
@@ -150,7 +150,7 @@ namespace SmartHouse.Business.Data
             {
                 if (disposing)
                 {
-                    repository.Dispose();
+                    _repository.Dispose();
                 }
             }
             disposed = true;

@@ -16,15 +16,15 @@ namespace ApiTest
     [CollectionDefinition("Logger controller")]
     public class LoggerControllerTest
     {
-        private static readonly IEnumerable<LoggerModel> loggerList = GetTestData();
+        private static readonly IEnumerable<LoggerModel> _loggerList = GetTestData();
 
-        private readonly Mock<ILoggerWork> mockLogger;
-        private readonly LoggerController loggerController;
+        private readonly Mock<ILoggerWork> _mockLogger;
+        private readonly LoggerController _loggerController;
 
         public LoggerControllerTest()
         {
-            mockLogger = new Mock<ILoggerWork>();
-            loggerController = new LoggerController(mockLogger.Object);
+            _mockLogger = new Mock<ILoggerWork>();
+            _loggerController = new LoggerController(_mockLogger.Object);
         }
 
         static IEnumerable<LoggerModel> GetTestData(int n = 10)
@@ -58,14 +58,14 @@ namespace ApiTest
         public void GetLoggerAsync_Success_LoggerModelItems()
         {
             // Arrange
-            mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult(loggerList));
+            _mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult(_loggerList));
 
             // Act
-            var result = loggerController.GetLoggerAsync().Result as OkObjectResult;
+            var result = _loggerController.GetLoggerAsync().Result as OkObjectResult;
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<LoggerModel>>(result.Value);
-            Assert.Equal(result.Value, loggerList);
+            Assert.Equal(result.Value, _loggerList);
         }
 
         /// <summary>
@@ -75,10 +75,10 @@ namespace ApiTest
         public void GetLoggerAsync_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
-            mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult<IEnumerable<LoggerModel>>(null));
+            _mockLogger.Setup(m => m.GetLoggerAsync()).Returns(Task.FromResult<IEnumerable<LoggerModel>>(null));
 
             // Act & Assert
-            Assert.ThrowsAsync<NotFoundException>(() => loggerController.GetLoggerAsync());
+            Assert.ThrowsAsync<NotFoundException>(() => _loggerController.GetLoggerAsync());
         }
 
         /// <summary>
@@ -88,10 +88,10 @@ namespace ApiTest
         public void GetLoggerAsync_Exception_ExceptionStatus500()
         {
             // Arrange
-            mockLogger.Setup(m => m.GetLoggerAsync()).Throws<Exception>();
+            _mockLogger.Setup(m => m.GetLoggerAsync()).Throws<Exception>();
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(() => loggerController.GetLoggerAsync());
+            Assert.ThrowsAsync<Exception>(() => _loggerController.GetLoggerAsync());
         }
         #endregion
     }

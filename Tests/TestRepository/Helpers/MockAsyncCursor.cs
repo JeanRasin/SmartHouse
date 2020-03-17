@@ -8,7 +8,7 @@ namespace RepositoryTest.Helpers
 {
     public class MockAsyncCursor<T> : IAsyncCursor<T>
     {
-        private bool called = false;
+        private bool _called = false;
 
         public MockAsyncCursor(IEnumerable<T> items)
         {
@@ -19,7 +19,7 @@ namespace RepositoryTest.Helpers
 
         public bool MoveNext(CancellationToken cancellationToken = new CancellationToken())
         {
-            return !called && (called = true);
+            return !_called && (_called = true);
         }
 
         public Task<bool> MoveNextAsync(CancellationToken cancellationToken)

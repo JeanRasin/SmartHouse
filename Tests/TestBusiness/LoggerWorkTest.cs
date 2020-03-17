@@ -13,13 +13,13 @@ namespace BusinessTest
     [CollectionDefinition("Logger work")]
     public class LoggerWorkTest
     {
-        private readonly Mock<ILoggerRepository<LoggerModel>> mockLoggerRepository;
-        private readonly LoggerWork loggerWork;
+        private readonly Mock<ILoggerRepository<LoggerModel>> _mockLoggerRepository;
+        private readonly LoggerWork _loggerWork;
 
         public LoggerWorkTest()
         {
-            mockLoggerRepository = new Mock<ILoggerRepository<LoggerModel>>();
-            loggerWork = new LoggerWork(mockLoggerRepository.Object);
+            _mockLoggerRepository = new Mock<ILoggerRepository<LoggerModel>>();
+            _loggerWork = new LoggerWork(_mockLoggerRepository.Object);
         }
 
         #region GetLoggerAsync
@@ -45,10 +45,10 @@ namespace BusinessTest
                          .RuleFor(o => o.Date, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                          .Generate(10);
 
-            mockLoggerRepository.Setup(s => s.QueryAsync()).ReturnsAsync(loggerList);
+            _mockLoggerRepository.Setup(s => s.QueryAsync()).ReturnsAsync(loggerList);
 
             // Act
-            IEnumerable<LoggerModel> result = await loggerWork.GetLoggerAsync();
+            IEnumerable<LoggerModel> result = await _loggerWork.GetLoggerAsync();
 
             // Assert
             Assert.Equal(result, loggerList);
@@ -68,12 +68,12 @@ namespace BusinessTest
                 return exception?.Message ?? state.ToString();
             };
 
-            mockLoggerRepository
+            _mockLoggerRepository
                 .Setup(s => s.Create(It.IsAny<LoggerModel>()))
                 .Verifiable();
 
             // Act
-            loggerWork.Log(
+            _loggerWork.Log(
               LogLevel.Information,
                 new Microsoft.Extensions.Logging.EventId(1),
                 "text",
@@ -82,7 +82,7 @@ namespace BusinessTest
                 );
 
             // Assert
-            mockLoggerRepository.Verify(v => v.Create(It.IsAny<LoggerModel>()), Times.Once());
+            _mockLoggerRepository.Verify(v => v.Create(It.IsAny<LoggerModel>()), Times.Once());
         }
 
         /// <summary>
@@ -92,12 +92,12 @@ namespace BusinessTest
         public void Log_FormatterIsNull_LogWrite()
         {
             // Arrange
-            mockLoggerRepository
+            _mockLoggerRepository
                 .Setup(s => s.Create(It.IsAny<LoggerModel>()))
                 .Verifiable();
 
             // Act
-            loggerWork.Log(
+            _loggerWork.Log(
               LogLevel.Information,
                 new Microsoft.Extensions.Logging.EventId(1),
                 "text",
@@ -106,7 +106,7 @@ namespace BusinessTest
                 );
 
             // Assert
-            mockLoggerRepository.Verify(v => v.Create(It.IsAny<LoggerModel>()), Times.Never);
+            _mockLoggerRepository.Verify(v => v.Create(It.IsAny<LoggerModel>()), Times.Never);
         }
         #endregion
 
@@ -118,7 +118,7 @@ namespace BusinessTest
         public void BeginScope_null()
         {
             // Act
-            IDisposable result = loggerWork.BeginScope(new object());
+            IDisposable result = _loggerWork.BeginScope(new object());
 
             // Assert
             Assert.Null(result);
@@ -133,7 +133,7 @@ namespace BusinessTest
         public void IsEnabled_true()
         {
             // Act
-            bool result = loggerWork.IsEnabled(new LogLevel());
+            bool result = _loggerWork.IsEnabled(new LogLevel());
 
             // Assert
             Assert.True(result);

@@ -46,7 +46,6 @@ namespace SmartHouseAPI.Controllers
 
         [Route("/error")]
         [HttpGet]
-        // public IActionResult Error() => Problem();
         public IActionResult Error()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();

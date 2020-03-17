@@ -12,7 +12,7 @@ namespace RepositoryTest
     public class LoggerContextTest
     {
 
-        [Fact(Skip ="!!!")]
+        [Fact(Skip ="!!!")] // todo:!!!
         public void GetTableName_AttributeName()
         {
             //var loggerContext = new LoggerContext("","");

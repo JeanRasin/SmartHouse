@@ -18,17 +18,17 @@ namespace ApiTest
     [CollectionDefinition("Goal controller")]
     public class GoalControllerTest
     {
-        private static readonly List<GoalModel> goalDataItems = GetTestData();
-        private static readonly GoalModel goalDataItem = goalDataItems.First();
+        private static readonly List<GoalModel> _goalDataItems = GetTestData();
+        private static readonly GoalModel _goalDataItem = _goalDataItems.First();
 
-        private readonly Mock<IGoalWork<GoalModel>> mockGoalWork;
-        private readonly GoalController goalController;
+        private readonly Mock<IGoalWork<GoalModel>> _mockGoalWork;
+        private readonly GoalController _goalController;
 
 
         public GoalControllerTest()
         {
-            mockGoalWork = new Mock<IGoalWork<GoalModel>>();
-            goalController = new GoalController(mockGoalWork.Object);
+            _mockGoalWork = new Mock<IGoalWork<GoalModel>>();
+            _goalController = new GoalController(_mockGoalWork.Object);
         }
 
         static List<GoalModel> GetTestData(int n = 10)
@@ -56,14 +56,14 @@ namespace ApiTest
         public void GetGoalAll_All_GoalModelItems()
         {
             // Arrange
-            mockGoalWork.Setup(m => m.GetGoalAll()).Returns(goalDataItems);
+            _mockGoalWork.Setup(m => m.GetGoalAll()).Returns(_goalDataItems);
 
             // Act
-            var result = goalController.GetGoalAll() as OkObjectResult;
+            var result = _goalController.GetGoalAll() as OkObjectResult;
 
             // Assert
             Assert.IsType<List<GoalModel>>(result.Value);
-            Assert.Equal(result.Value, goalDataItems);
+            Assert.Equal(result.Value, _goalDataItems);
         }
 
         /// <summary>
@@ -73,10 +73,10 @@ namespace ApiTest
         public void GetGoalAll_Exception_ExceptionStatus500()
         {
             // Arrange
-            mockGoalWork.Setup(m => m.GetGoalAll()).Throws<Exception>();
+            _mockGoalWork.Setup(m => m.GetGoalAll()).Throws<Exception>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => goalController.GetGoalAll());
+            Assert.Throws<Exception>(() => _goalController.GetGoalAll());
         }
         #endregion
 
@@ -88,14 +88,14 @@ namespace ApiTest
         public void GetGoals_GoalModelItems()
         {
             // Arrange
-            mockGoalWork.Setup(m => m.GetGoals()).Returns(goalDataItems);
+            _mockGoalWork.Setup(m => m.GetGoals()).Returns(_goalDataItems);
 
             // Act
-            var result = goalController.GetGoals() as OkObjectResult;
+            var result = _goalController.GetGoals() as OkObjectResult;
 
             //Assert
             Assert.IsType<List<GoalModel>>(result.Value);
-            Assert.Equal(result.Value, goalDataItems);
+            Assert.Equal(result.Value, _goalDataItems);
         }
 
         /// <summary>
@@ -105,10 +105,10 @@ namespace ApiTest
         public void GetGoals_Exception_ExceptionStatus500()
         {
             // Arrange
-            mockGoalWork.Setup(m => m.GetGoals()).Throws<Exception>();
+            _mockGoalWork.Setup(m => m.GetGoals()).Throws<Exception>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => goalController.GetGoals());
+            Assert.Throws<Exception>(() => _goalController.GetGoals());
         }
         #endregion
 
@@ -120,14 +120,14 @@ namespace ApiTest
         public void GetGoal_GoalModelItem()
         {
             // Arrange
-            mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns(goalDataItem);
+            _mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns(_goalDataItem);
 
             // Act
-            var result = goalController.GetGoal(goalDataItem.Id) as OkObjectResult;
+            var result = _goalController.GetGoal(_goalDataItem.Id) as OkObjectResult;
 
             //Assert
             Assert.IsType<GoalModel>(result.Value);
-            Assert.Equal(result.Value, goalDataItem);
+            Assert.Equal(result.Value, _goalDataItem);
         }
 
         /// <summary>
@@ -137,10 +137,10 @@ namespace ApiTest
         public void GetGoal_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
-            mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
+            _mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
 
             // Act & Assert
-            Assert.Throws<NotFoundException>(() => goalController.GetGoal(Guid.NewGuid()));
+            Assert.Throws<NotFoundException>(() => _goalController.GetGoal(Guid.NewGuid()));
         }
 
         /// <summary>
@@ -150,10 +150,10 @@ namespace ApiTest
         public void GetGoal_Exception_ExceptionStatus500()
         {
             // Arrange
-            mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Throws<Exception>();
+            _mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Throws<Exception>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => goalController.GetGoal(Guid.NewGuid()));
+            Assert.Throws<Exception>(() => _goalController.GetGoal(Guid.NewGuid()));
         }
         #endregion
 
@@ -165,15 +165,15 @@ namespace ApiTest
         public void Create_Success_Status201()
         {
             // Arrange
-            var inputParam = new GoalCreateDto(goalDataItem.Name);
-            mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(goalDataItem);
+            var inputParam = new GoalCreateDto(_goalDataItem.Name);
+            _mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(_goalDataItem);
 
             var mockUrlHelper = new Mock<IUrlHelper>();
             mockUrlHelper
                 .Setup(x => x.RouteUrl(It.IsAny<UrlRouteContext>()))
-                .Returns($"http://localhost:5555/api/goal/{goalDataItem.Id}");
+                .Returns($"http://localhost:5555/api/goal/{_goalDataItem.Id}");
 
-            var goalController = new GoalController(mockGoalWork.Object)
+            var goalController = new GoalController(_mockGoalWork.Object)
             {
                 Url = mockUrlHelper.Object
             };
@@ -183,7 +183,7 @@ namespace ApiTest
 
             // Assert
             Assert.IsType<GoalModel>(result.Value);
-            Assert.Equal(result.Value, goalDataItem);
+            Assert.Equal(result.Value, _goalDataItem);
             Assert.Equal(StatusCodes.Status201Created, result.StatusCode);
         }
 
@@ -194,11 +194,11 @@ namespace ApiTest
         public void Create_Exception_ExceptionStatus500()
         {
             // Arrange
-            var inputParam = new GoalCreateDto(goalDataItem.Name);
-            mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Throws<Exception>();
+            var inputParam = new GoalCreateDto(_goalDataItem.Name);
+            _mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Throws<Exception>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => goalController.Create(inputParam));
+            Assert.Throws<Exception>(() => _goalController.Create(inputParam));
         }
 
         /// <summary>
@@ -209,11 +209,11 @@ namespace ApiTest
         {
             // Arrange
             var inputParam = new GoalCreateDto();
-            mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(goalDataItem);
-            goalController.ModelState.AddModelError("key", "error message");
+            _mockGoalWork.Setup(m => m.Create(It.IsAny<string>())).Returns(_goalDataItem);
+            _goalController.ModelState.AddModelError("key", "error message");
 
             // Act & Assert
-            Assert.Throws<ModelStateException>(() => goalController.Create(inputParam));
+            Assert.Throws<ModelStateException>(() => _goalController.Create(inputParam));
         }
         #endregion
 
@@ -226,10 +226,10 @@ namespace ApiTest
         {
             // Arrange
             var inputData = new GoalUpdateDto(Guid.NewGuid(), "test name");
-            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>()));
+            _mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>()));
 
             // Act
-            var result = goalController.Update(inputData) as NoContentResult;
+            var result = _goalController.Update(inputData) as NoContentResult;
 
             // Assert
             Assert.IsType<NoContentResult>(result);
@@ -244,11 +244,11 @@ namespace ApiTest
         {
             // Arrange
             var inputData = new GoalUpdateDto(Guid.NewGuid(), "");
-            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>()));
-            goalController.ModelState.AddModelError("key", "error message");
+            _mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>()));
+            _goalController.ModelState.AddModelError("key", "error message");
 
             // Act & Assert
-            Assert.Throws<ModelStateException>(() => goalController.Update(inputData));
+            Assert.Throws<ModelStateException>(() => _goalController.Update(inputData));
         }
 
         /// <summary>
@@ -259,10 +259,10 @@ namespace ApiTest
         {
             // Arrange
             var inputData = new GoalUpdateDto(Guid.NewGuid(), "test text");
-            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
+            _mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
 
             // Act & Assert
-            Assert.Throws<NotFoundException>(() => goalController.Update(inputData));
+            Assert.Throws<NotFoundException>(() => _goalController.Update(inputData));
         }
 
         /// <summary>
@@ -273,10 +273,10 @@ namespace ApiTest
         {
             // Arrange
             var inputData = new GoalUpdateDto(Guid.NewGuid(), "test text");
-            mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<Exception>();
+            _mockGoalWork.Setup(m => m.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<Exception>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => goalController.Update(inputData));
+            Assert.Throws<Exception>(() => _goalController.Update(inputData));
         }
         #endregion
 
@@ -288,10 +288,10 @@ namespace ApiTest
         public void Delete_Success_Status204()
         {
             // Arrange
-            mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>()));
+            _mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>()));
 
             // Act 
-            var result = goalController.Delete(Guid.NewGuid()) as NoContentResult;
+            var result = _goalController.Delete(Guid.NewGuid()) as NoContentResult;
 
             // Assert
             Assert.IsType<NoContentResult>(result);
@@ -305,10 +305,10 @@ namespace ApiTest
         public void Delete_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
-            mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>())).Throws<KeyNotFoundException>();
+            _mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>())).Throws<KeyNotFoundException>();
 
             // Act & Assert
-            Assert.Throws<NotFoundException>(() => goalController.Delete(Guid.NewGuid()));
+            Assert.Throws<NotFoundException>(() => _goalController.Delete(Guid.NewGuid()));
         }
 
         /// <summary>
@@ -318,10 +318,10 @@ namespace ApiTest
         public void Delete_Exception_ExceptionStatus500()
         {
             // Arrange
-            mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>())).Throws<Exception>();
+            _mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>())).Throws<Exception>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => goalController.Delete(Guid.NewGuid()));
+            Assert.Throws<Exception>(() => _goalController.Delete(Guid.NewGuid()));
         }
         #endregion
 
@@ -334,10 +334,10 @@ namespace ApiTest
         {
             // Arrange
             var inputData = new GoalDoneDto(Guid.NewGuid(), true);
-            mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>()));
+            _mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>()));
 
             // Act
-            var result = goalController.Done(inputData) as NoContentResult;
+            var result = _goalController.Done(inputData) as NoContentResult;
 
             // Assert
             Assert.IsType<NoContentResult>(result);
@@ -352,10 +352,10 @@ namespace ApiTest
         {
             // Arrange
             var inputData = new GoalDoneDto(Guid.NewGuid(), true);
-            mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
+            _mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<KeyNotFoundException>();
 
             // Act & Assert
-            Assert.Throws<NotFoundException>(() => goalController.Done(inputData));
+            Assert.Throws<NotFoundException>(() => _goalController.Done(inputData));
         }
         /// <summary>
         /// Goal done exception.
@@ -365,10 +365,10 @@ namespace ApiTest
         {
             // Arrange
             var inputData = new GoalDoneDto(new Guid("7dc7631d-3f1e-f8bb-166c-63b52a05db21"), true);
-            mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<Exception>();
+            _mockGoalWork.Setup(m => m.Done(It.IsAny<Guid>(), It.IsAny<bool>())).Throws<Exception>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => goalController.Done(inputData));
+            Assert.Throws<Exception>(() => _goalController.Done(inputData));
         }
         #endregion
     }

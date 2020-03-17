@@ -14,15 +14,15 @@ namespace ApiTest
     [CollectionDefinition("Weather controller")]
     public class WeatherControllerTest
     {
-        private static readonly WeatherModel wetaherData = GetTestData();
+        private static readonly WeatherModel _wetaherData = GetTestData();
 
-        private readonly Mock<IWeatherWork> mockWeatherWork;
-        private readonly WeatherController weatherController;
+        private readonly Mock<IWeatherWork> _mockWeatherWork;
+        private readonly WeatherController _weatherController;
 
         public WeatherControllerTest()
         {
-            mockWeatherWork = new Mock<IWeatherWork>();
-            weatherController = new WeatherController(mockWeatherWork.Object);
+            _mockWeatherWork = new Mock<IWeatherWork>();
+            _weatherController = new WeatherController(_mockWeatherWork.Object);
         }
 
         static WeatherModel GetTestData()
@@ -52,14 +52,14 @@ namespace ApiTest
         public void GetWeatherAsync_Success_WeatherModelItem()
         {
             // Arrange
-            mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult(wetaherData));
+            _mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult(_wetaherData));
 
             // Act
-            var result = weatherController.GetWeatherAsync().Result as OkObjectResult;
+            var result = _weatherController.GetWeatherAsync().Result as OkObjectResult;
 
             // Assert
             Assert.IsType<WeatherModel>(result.Value);
-            Assert.Equal(result.Value, wetaherData);
+            Assert.Equal(result.Value, _wetaherData);
         }
 
         /// <summary>
@@ -69,10 +69,10 @@ namespace ApiTest
         public void GetWeatherAsync_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
-            mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult<WeatherModel>(null));
+            _mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult<WeatherModel>(null));
 
             // Act Assert
-            Assert.ThrowsAsync<NotFoundException>(() => weatherController.GetWeatherAsync());
+            Assert.ThrowsAsync<NotFoundException>(() => _weatherController.GetWeatherAsync());
         }
 
         /// <summary>
@@ -82,10 +82,10 @@ namespace ApiTest
         public void GetWeatherAsync_Exception_ExceptionStatus500()
         {
             // Arrange
-            mockWeatherWork.Setup(m => m.GetWeatherAsync()).Throws<Exception>();
+            _mockWeatherWork.Setup(m => m.GetWeatherAsync()).Throws<Exception>();
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(() => weatherController.GetWeatherAsync());
+            Assert.ThrowsAsync<Exception>(() => _weatherController.GetWeatherAsync());
         }
         #endregion
     }

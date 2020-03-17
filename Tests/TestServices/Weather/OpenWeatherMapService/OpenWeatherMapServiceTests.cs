@@ -20,22 +20,22 @@ namespace TestService
     {
         const string mediaTypeJson = "application/json";
 
-        private readonly MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
-        private readonly Dictionary<string, string> parm = new Dictionary<string, string>
+        private readonly MockHttpMessageHandler _mockHttp = new MockHttpMessageHandler();
+        private readonly Dictionary<string, string> _parm = new Dictionary<string, string>
             {
                 { "url", "https://api.openweathermap.org" },
                 { "city", "Perm,ru" },
                 { "api", "f4c946ac33b35d68233bbcf83619eb58" }
             };
 
-        private HttpClient httpClient;
-        private OpenWeatherMapService service;
+        private HttpClient _httpClient;
+        private OpenWeatherMapService _service;
 
         [SetUp]
         public void Setup()
         {
-            httpClient = new HttpClient(mockHttp);
-            service = new OpenWeatherMapService(parm, httpClient);
+            _httpClient = new HttpClient(_mockHttp);
+            _service = new OpenWeatherMapService(_parm, _httpClient);
 
             // Random constant.
             Randomizer.Seed = new Random(1338);
@@ -104,10 +104,10 @@ namespace TestService
         public void Check_ParamNull_NullReferenceException(string response)
         {
             // Arrange
-            mockHttp.Fallback.Respond(mediaTypeJson, response);
+            _mockHttp.Fallback.Respond(mediaTypeJson, response);
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new OpenWeatherMapService(null, httpClient));
+            Assert.Throws<ArgumentNullException>(() => new OpenWeatherMapService(null, _httpClient));
         }
 
         /// <summary>
@@ -117,10 +117,10 @@ namespace TestService
         public void Check_ParamNot_Exception(string response)
         {
             // Arrange
-            mockHttp.Fallback.Respond(mediaTypeJson, response);
+            _mockHttp.Fallback.Respond(mediaTypeJson, response);
 
             // Act & Assert
-            var ex = Assert.Throws<Exception>(() => new OpenWeatherMapService(new Dictionary<string, string>(), httpClient));
+            var ex = Assert.Throws<Exception>(() => new OpenWeatherMapService(new Dictionary<string, string>(), _httpClient));
             Assert.AreEqual("Not parameters.", ex.Message);
         }
 
@@ -131,10 +131,10 @@ namespace TestService
         public void Http_Request_WrongResponseJsonException(string response)
         {
             // Arrange
-            mockHttp.Fallback.Respond(mediaTypeJson, response);
+            _mockHttp.Fallback.Respond(mediaTypeJson, response);
 
             // Act & Assert
-            Assert.ThrowsAsync<JsonException>(service.GetWeatherAsync);
+            Assert.ThrowsAsync<JsonException>(_service.GetWeatherAsync);
         }
 
         /// <summary>
@@ -144,10 +144,10 @@ namespace TestService
         public void Http_RequestNotToken_Status503(HttpStatusCode status)
         {
             // Arrange
-            mockHttp.Fallback.Respond(status);
+            _mockHttp.Fallback.Respond(status);
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<HttpRequestException>(() => service.GetWeatherAsync());
+            var ex = Assert.ThrowsAsync<HttpRequestException>(() => _service.GetWeatherAsync());
             Assert.AreEqual("503", ex.Message);
         }
 
@@ -158,7 +158,7 @@ namespace TestService
         public void Http_Request_Status503(HttpStatusCode status)
         {
             // Arrange
-            mockHttp.Fallback.Respond(status);
+            _mockHttp.Fallback.Respond(status);
 
             var tokenSource = new CancellationTokenSource();
             CancellationToken token = tokenSource.Token;
@@ -170,7 +170,7 @@ namespace TestService
             });
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<InvalidOperationException>(() => service.GetWeatherAsync(token));
+            var ex = Assert.ThrowsAsync<InvalidOperationException>(() => _service.GetWeatherAsync(token));
             Assert.AreEqual("Expected timeout exception", ex.Message);
         }
 
@@ -181,7 +181,7 @@ namespace TestService
         public void Http_Request_Status401(HttpStatusCode status)
         {
             // Arrange
-            mockHttp.Fallback.Respond(status);
+            _mockHttp.Fallback.Respond(status);
 
             var parm = new Dictionary<string, string>
             {
@@ -199,7 +199,7 @@ namespace TestService
                 tokenSource.Cancel();
             });
 
-            var service = new OpenWeatherMapService(parm, httpClient);
+            var service = new OpenWeatherMapService(parm, _httpClient);
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<HttpRequestException>(() => service.GetWeatherAsync(token));
@@ -213,10 +213,10 @@ namespace TestService
         public void Http_Request_Exception()
         {
             // Arrange
-            mockHttp.Fallback.Throw(new Exception());
+            _mockHttp.Fallback.Throw(new Exception());
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(service.GetWeatherAsync);
+            Assert.ThrowsAsync<Exception>(_service.GetWeatherAsync);
         }
 
         /// <summary>
@@ -226,11 +226,11 @@ namespace TestService
         public void Http_RequestException_WriteLogger()
         {
             // Arrange
-            mockHttp.Fallback.Throw(new Exception());
+            _mockHttp.Fallback.Throw(new Exception());
 
             var logger = Mock.Of<ILogger<OpenWeatherMapService>>();
 
-            var service = new OpenWeatherMapService(parm, httpClient, logger: logger);
+            var service = new OpenWeatherMapService(_parm, _httpClient, logger: logger);
 
             // Act & Assert
             Assert.ThrowsAsync<Exception>(service.GetWeatherAsync);
@@ -243,7 +243,7 @@ namespace TestService
         public void Http_Request_TimeOut()
         {
             // Arrange
-            mockHttp.Fallback.Respond(async () =>
+            _mockHttp.Fallback.Respond(async () =>
             {
                 await Task.Delay(2000);
 
@@ -251,7 +251,7 @@ namespace TestService
             });
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(service.GetWeatherAsync);
+            Assert.ThrowsAsync<InvalidOperationException>(_service.GetWeatherAsync);
         }
 
         /// <summary>
@@ -270,10 +270,10 @@ namespace TestService
                 WriteIndented = true
             });
 
-            mockHttp.Fallback.Respond(mediaTypeJson, responseJson);
+            _mockHttp.Fallback.Respond(mediaTypeJson, responseJson);
 
             // Act
-            var result = await service.GetWeatherAsync();
+            var result = await _service.GetWeatherAsync();
 
             // Assert
             Assert.IsNotNull(result);

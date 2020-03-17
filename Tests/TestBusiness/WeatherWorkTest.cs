@@ -13,11 +13,11 @@ namespace BusinessTest
     [CollectionDefinition("Weather work")]
     public class WeatherWorkTest
     {
-        private readonly Mock<IWeatherService> mockWeatherService;
+        private readonly Mock<IWeatherService> _mockWeatherService;
 
         public WeatherWorkTest()
         {
-            mockWeatherService = new Mock<IWeatherService>();
+            _mockWeatherService = new Mock<IWeatherService>();
         }
 
         #region WeatherWork
@@ -61,8 +61,8 @@ namespace BusinessTest
             }
 
             var tokenSource = new CancellationTokenSource();
-            mockWeatherService.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(MoqGetWeatherAsync(tokenSource: tokenSource, sec: 2));
-            var weatherWork = new WeatherWork(weatherService: mockWeatherService.Object, timeOutSec: 4);
+            _mockWeatherService.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(MoqGetWeatherAsync(tokenSource: tokenSource, sec: 2));
+            var weatherWork = new WeatherWork(weatherService: _mockWeatherService.Object, timeOutSec: 4);
 
             // Act
             WeatherModel weather = await weatherWork.GetWeatherAsync(tokenSource);
@@ -78,8 +78,8 @@ namespace BusinessTest
         public void GetWeatherAsync_Exception()
         {
             // Arrange
-            mockWeatherService.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Throws(new Exception());
-            var weatherWork = new WeatherWork(mockWeatherService.Object);
+            _mockWeatherService.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Throws(new Exception());
+            var weatherWork = new WeatherWork(_mockWeatherService.Object);
 
             // Act & Assert
             Assert.ThrowsAsync<Exception>(weatherWork.GetWeatherAsync);
@@ -108,8 +108,8 @@ namespace BusinessTest
             }
 
             var tokenSource = new CancellationTokenSource();
-            mockWeatherService.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(MoqGetWeatherAsync(tokenSource: tokenSource, sec: 3));
-            var weatherWork = new WeatherWork(weatherService: mockWeatherService.Object, timeOutSec: 2);
+            _mockWeatherService.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(MoqGetWeatherAsync(tokenSource: tokenSource, sec: 3));
+            var weatherWork = new WeatherWork(weatherService: _mockWeatherService.Object, timeOutSec: 2);
 
             // Act & Assert
             await Assert.ThrowsAsync<OperationCanceledException>(() => weatherWork.GetWeatherAsync(tokenSource));

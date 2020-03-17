@@ -9,9 +9,9 @@ namespace SmartHouse.Business.Data
 {
     public class WeatherWork : IWeatherWork
     {
-        public int TimeOutSec { get; }
+        private readonly IWeatherService _weatherService;
 
-        private readonly IWeatherService weatherService;
+        public int TimeOutSec { get; }
 
         /// <summary>
         /// Create a WeatherWork.
@@ -20,7 +20,7 @@ namespace SmartHouse.Business.Data
         /// <param name="timeOutSec">Waiting time for the weather service.</param>
         public WeatherWork(IWeatherService weatherService, int timeOutSec = 30)
         {
-            this.weatherService = weatherService;
+            _weatherService = weatherService;
             TimeOutSec = timeOutSec * 1000;
         }
 
@@ -47,7 +47,7 @@ namespace SmartHouse.Business.Data
             {
                 Task<WeatherModel> task = Task.Run(() =>
                {
-                   return weatherService.GetWeatherAsync(token);
+                   return _weatherService.GetWeatherAsync(token);
                });
 
                 Task.WaitAll(new[] { task }, TimeOutSec);
