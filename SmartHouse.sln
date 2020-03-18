@@ -76,6 +76,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SoapUI Services", "SoapUI S
 		Other\SoapUI Services\SoapUI-SmartHouse.xml = Other\SoapUI Services\SoapUI-SmartHouse.xml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WeatherService", "WeatherService", "{D7DD681F-D7F2-4504-B638-D51FDB03B692}"
+EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "WetherApiNodejs", "Other\WetherApiNodejs\WetherApiNodejs.njsproj", "{29361E9A-7BAD-4431-A209-AB17C55C399A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -146,6 +150,10 @@ Global
 		{FBEF1028-218D-483D-A345-AE409A5934FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBEF1028-218D-483D-A345-AE409A5934FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBEF1028-218D-483D-A345-AE409A5934FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29361E9A-7BAD-4431-A209-AB17C55C399A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29361E9A-7BAD-4431-A209-AB17C55C399A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29361E9A-7BAD-4431-A209-AB17C55C399A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29361E9A-7BAD-4431-A209-AB17C55C399A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -174,6 +182,7 @@ Global
 		{B0384EDA-2F9B-43F2-900F-C8A572A52702} = {91C3603F-AA24-47CD-8F51-B5911BD35B80}
 		{FBEF1028-218D-483D-A345-AE409A5934FB} = {B3F8CEAD-7F26-4CE5-8050-4F8CB194277E}
 		{EB05DB48-C376-4832-AD86-08854A3C34BF} = {B385FDF5-7CD7-4A94-B9A0-B67137DC83C7}
+		{29361E9A-7BAD-4431-A209-AB17C55C399A} = {D7DD681F-D7F2-4504-B638-D51FDB03B692}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9277942-AB87-49EB-8D2D-082A2C092696}

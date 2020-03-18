@@ -28,6 +28,7 @@ services:
     depends_on: 
       - mongo
       - postgres
+      - weather-api-service-nodejs
   mongo:
     image: mongo:latest
     restart: always
@@ -50,6 +51,14 @@ services:
         - ${EXTERNAL_POSTGRESS_PORT}:${INTERNAL_POSTGRES_PORT}
     volumes:
       - database_data:/var/lib/postgresql/data
+  weather-api-service-nodejs:
+    build:
+      context: ./Other/WetherApiNodejs/
+      dockerfile: Dockerfile
+    networks:
+      - app-smart-house-network
+    ports:
+      - ${EXTERNAL_WEATHER_API_NODEJS}:${INTERNAL_WEATHER_API_NODEJS}
 volumes:
   database_data:
     driver: local

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "WetherApiNodejs", "WetherApiNodejs.njsproj", "{29361E9A-7BAD-4431-A209-AB17C55C399A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{29361E9A-7BAD-4431-A209-AB17C55C399A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29361E9A-7BAD-4431-A209-AB17C55C399A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29361E9A-7BAD-4431-A209-AB17C55C399A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29361E9A-7BAD-4431-A209-AB17C55C399A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {37762867-D709-4FB1-BF90-B03F306D05E1}
+	EndGlobalSection
+EndGlobal
