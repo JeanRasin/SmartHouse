@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,14 +16,19 @@ namespace SmartHouse.Domain.Core
 
         [BsonElement("eventId")]
         [Required]
+        [JsonProperty(Required = Required.Always)]
         public EventId EventId { get; set; }
+
         [BsonElement("message")]
         [BsonRepresentation(BsonType.String)]
         [Required]
+        [JsonProperty(Required = Required.AllowNull)]
         public string Message { get; set; }
+
         [BsonElement("date")]
         [Required]
         [BsonRepresentation(BsonType.DateTime)]
+        [JsonProperty(Required = Required.Always)]
         public DateTime Date { get; set; }
 
         //[BsonElement("exception")]

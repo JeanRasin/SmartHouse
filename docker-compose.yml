@@ -21,6 +21,7 @@ services:
       - FrontUrlsCors=${FRONT_CORS_URLS}
       - MongoDbLoggerConnection:Connection=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:${INTERNAL_MONGO_PORT}
       - ConnectionStrings:DefaultConnection=Host=postgres;Port=${INTERNAL_POSTGRES_PORT};Database=${POSTGRES_DATABASE};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};
+      - OpenWeatherMapService:url=http://weather-api-service-nodejs:${INTERNAL_WEATHER_API_NODEJS}
     networks:
       - app-smart-house-network
     ports:
