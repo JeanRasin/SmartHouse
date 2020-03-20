@@ -1,4 +1,6 @@
-﻿using Bogus;
+﻿// EntityFrameworkCore.Testing - https://github.com/rgvlee/EntityFrameworkCore.Testing
+
+using Bogus;
 using EntityFrameworkCore.Testing.Moq;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
@@ -12,13 +14,11 @@ using Xunit;
 
 namespace RepositoryTest
 {
-    /// <summary>
-    /// https://github.com/rgvlee/EntityFrameworkCore.Testing
-    /// </summary>
-    [CollectionDefinition("Goal repository")]
+    [Collection("Goal repository")]
     public class GoalRepositoryTest
     {
         private static readonly GoalModel _itemTestData = GetTestData();
+
         private readonly GoalContext _mockedDbContext;
         private readonly GoalRepository _repository;
         private readonly Mock<GoalContext> _dbContextMock;
@@ -30,6 +30,10 @@ namespace RepositoryTest
             _dbContextMock = Mock.Get(_mockedDbContext);
         }
 
+        /// <summary>
+        /// Get test data.
+        /// </summary>
+        /// <returns></returns>
         static GoalModel GetTestData()
         {
             // Random constant.
@@ -47,40 +51,11 @@ namespace RepositoryTest
             return result;
         }
 
-        #region Just in case 
-        /// <summary>
-        /// Mock dbSet. todo: возможно пригадится.
-        /// </summary>
-        /// <remarks>
-        /// https://stackoverflow.com/questions/37630564/how-to-mock-up-dbcontext
-        /// </remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        private Mock<DbSet<T>> MockDbSet<T>(IEnumerable<T> list) where T : class, new()
-        {
-            IQueryable<T> queryableList = list.AsQueryable();
-            Mock<DbSet<T>> dbSetMock = new Mock<DbSet<T>>();
-            dbSetMock.As<IQueryable<T>>().Setup(x => x.Provider).Returns(queryableList.Provider);
-            dbSetMock.As<IQueryable<T>>().Setup(x => x.Expression).Returns(queryableList.Expression);
-            dbSetMock.As<IQueryable<T>>().Setup(x => x.ElementType).Returns(queryableList.ElementType);
-            dbSetMock.As<IQueryable<T>>().Setup(x => x.GetEnumerator()).Returns(() => queryableList.GetEnumerator());
-            // dbSetMock.Setup(x => x.Create()).Returns(new T());
-
-            return dbSetMock;
-        }
-        #endregion
-
-        [Fact(Skip = "Thats how you ignore a test", DisplayName = "To Ignore")]//todo: для запоминания
-        public void ToIgnore()
-        {
-            Assert.False(true);
-        }
-
         #region GetGoals
         /// <summary>
         /// Get goals.
         /// </summary>
+        [Trait("Get Goals", "Success")]
         [Fact]
         public void GetGoals_GoalModelItems()
         {
@@ -98,6 +73,7 @@ namespace RepositoryTest
         /// Get goal by id.
         /// </summary>
         [Fact]
+        [Trait("Get Goal By Id", "Success")]
         public void GetGoal_GoalModelItem()
         {
             // Arrange
@@ -115,6 +91,7 @@ namespace RepositoryTest
         /// Get goal key id not found. Throw exception KeyNotFoundException.
         /// </summary>
         [Fact]
+        [Trait("Get Goal By Id", "KeyNotFoundException")]
         public void GetGoal_KeyNotFound_KeyNotFoundException()
         {
             // Act & Assert
@@ -127,6 +104,7 @@ namespace RepositoryTest
         /// Create goal.
         /// </summary>
         [Fact]
+        [Trait("Create", "Success")]
         public void Create_Success()
         {
             // Act
@@ -144,6 +122,7 @@ namespace RepositoryTest
         /// Remove goal.
         /// </summary>
         [Fact]
+        [Trait("Remove", "Success")]
         public void Remove_Success()
         {
             // Arrange
@@ -162,6 +141,7 @@ namespace RepositoryTest
         /// Remove goal key id not found. Throw exception KeyNotFoundException.
         /// </summary>
         [Fact]
+        [Trait("Remove", "KeyNotFoundException")]
         public void Remove_KeyNotFound_KeyNotFoundException()
         {
             // Act && Assert
@@ -174,6 +154,7 @@ namespace RepositoryTest
         /// Update goal.
         /// </summary>
         [Fact]
+        [Trait("Update", "Success")]
         public void Update_Success()
         {
             // Arrange
@@ -192,6 +173,7 @@ namespace RepositoryTest
         /// Update goal key id not found. Throw exception KeyNotFoundException.
         /// </summary>
         [Fact]
+        [Trait("Remove", "KeyNotFoundException")]
         public void Update_KeyNotFound_KeyNotFoundException()
         {
             // Act & Assert

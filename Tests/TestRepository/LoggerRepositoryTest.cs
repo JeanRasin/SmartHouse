@@ -21,7 +21,7 @@ using EventId = SmartHouse.Domain.Core.EventId;
 
 namespace RepositoryTest
 {
-    [CollectionDefinition("Logger repository")]
+    [Collection("Logger repository")]
     public class LoggerRepositoryTest
     {
         private readonly Faker<EventId> _eventIdFaker;
@@ -62,6 +62,7 @@ namespace RepositoryTest
         /// Create logger.
         /// </summary>
         [Fact]
+        [Trait("Create", "Success")]
         public void Create_Success()
         {
             // Arrange
@@ -88,6 +89,7 @@ namespace RepositoryTest
         /// Throw exception MongoWriteException.
         /// </summary>
         [Fact]
+        [Trait("Create", "MongoWriteException")]
         public void Create_IdNotFound_MongoWriteException()
         {
             // Arrange
@@ -131,6 +133,7 @@ namespace RepositoryTest
         /// </summary>
         /// <returns></returns>
         [Fact]
+        [Trait("Query", "Success")]
         public async Task Query_All_Data()
         {
             // Arrange
@@ -155,6 +158,7 @@ namespace RepositoryTest
         /// </summary>
         /// <returns></returns>
         [Fact]
+        [Trait("QueryFilter", "Success")]
         public async Task QueryFilter_FilterId_Data()
         {
             // Arrange

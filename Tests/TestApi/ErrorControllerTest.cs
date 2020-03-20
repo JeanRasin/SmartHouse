@@ -77,7 +77,8 @@ namespace ApiTest
             }
         }
 
-       /* [Fact]
+        /* */
+        [Fact(Skip ="Do not work!!!", DisplayName ="Error controller")]
         public void ErrorLocalDevelopment_WhenCalled_ErrorData()
         {
             var mockErrorWork = new Mock<IWebHostEnvironment>();
@@ -152,6 +153,6 @@ namespace ApiTest
 
             Assert.IsType<ObjectResult>(result);
         }
-        */
+       
     }
 }

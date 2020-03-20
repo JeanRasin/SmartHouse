@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace SmartHouse.Domain.Core
 {
@@ -7,10 +8,13 @@ namespace SmartHouse.Domain.Core
     {
         [BsonElement("stateId")]
         [BsonRepresentation(BsonType.Int32)]
+        [JsonProperty(Required = Required.Always)]
         public int StateId { get; set; }
+
         [BsonElement("name")]
         [BsonRepresentation(BsonType.String)]
         [BsonIgnoreIfNull]
+        [JsonProperty(Required = Required.Always)]
         public string Name { get; set; }
 
         public EventId()

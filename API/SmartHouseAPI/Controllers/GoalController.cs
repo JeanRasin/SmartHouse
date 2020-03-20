@@ -52,7 +52,6 @@ namespace SmartHouseAPI.Controllers
 
             if (result == null)
             {
-                // throw new NotFoundException($"Goal object id:{id} not found.");
                 return NotFound($"Goal object id:{id} not found.");
             }
 
@@ -82,7 +81,6 @@ namespace SmartHouseAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                //throw new ModelStateException("Goal model is not valid.", ModelState);
                 var modelStateException = new ModelStateException("Goal model is not valid.", ModelState);
                 return BadRequest(modelStateException.Message);
             }
@@ -116,8 +114,7 @@ namespace SmartHouseAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                 //throw new ModelStateException("Goal model is not valid.", ModelState);
-                 var modelStateException = new ModelStateException("Goal model is not valid.", ModelState);
+                var modelStateException = new ModelStateException("Goal model is not valid.", ModelState);
                 return BadRequest(modelStateException.Message);
             }
 
@@ -129,7 +126,6 @@ namespace SmartHouseAPI.Controllers
             catch (KeyNotFoundException)
             {
                 return NotFound($"Goal object id:{data.Id} not found.");
-              //  throw new NotFoundException($"Goal object id:{data.Id} not found.");
             }
         }
 
@@ -147,7 +143,6 @@ namespace SmartHouseAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                //throw new NotFoundException($"Goal object id:{id} not found.");
                 return NotFound($"Goal object id:{id} not found.");
             }
         }
@@ -181,7 +176,6 @@ namespace SmartHouseAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                //throw new NotFoundException($"Goal object id:{data.Id} not found.");
                 return NotFound($"Goal object id:{data.Id} not found.");
             }
         }

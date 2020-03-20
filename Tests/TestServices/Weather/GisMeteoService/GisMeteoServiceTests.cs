@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace TestService
 {
+    [Category("GisMeteo Service Tests")]
     public class GisMeteoServiceTests
     {
         [SetUp]
@@ -13,6 +14,7 @@ namespace TestService
         }
 
         [Test]
+        [Category("GetWeatherAsync")]
         public async Task Get_Success_WeatherModelItem()
         {
             // Arrange

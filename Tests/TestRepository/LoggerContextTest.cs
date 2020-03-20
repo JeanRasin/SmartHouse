@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace RepositoryTest
 {
-    [CollectionDefinition("Logger context")]
+    [Collection("Logger context")]
     public class LoggerContextTest
     {
 
-        [Fact(Skip ="!!!")] // todo:!!!
+        [Fact(Skip ="Возможно и не надо.")] // todo:!!!
         public void GetTableName_AttributeName()
         {
             //var loggerContext = new LoggerContext("","");

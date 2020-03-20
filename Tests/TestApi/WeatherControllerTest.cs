@@ -1,4 +1,5 @@
 using Bogus;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SmartHouse.Business.Data;
@@ -11,7 +12,7 @@ using Xunit;
 
 namespace ApiTest
 {
-    [CollectionDefinition("Weather controller")]
+    [Collection("Weather controller")]
     public class WeatherControllerTest
     {
         private static readonly WeatherModel _wetaherData = GetTestData();
@@ -25,6 +26,10 @@ namespace ApiTest
             _weatherController = new WeatherController(_mockWeatherWork.Object);
         }
 
+        /// <summary>
+        /// Get test data.
+        /// </summary>
+        /// <returns></returns>
         static WeatherModel GetTestData()
         {
             // Random constant.
@@ -49,6 +54,7 @@ namespace ApiTest
         /// Get weather.
         /// </summary>
         [Fact]
+        [Trait("Get Weather", "Success Status 200")]
         public void GetWeatherAsync_Success_WeatherModelItem()
         {
             // Arrange
@@ -58,14 +64,17 @@ namespace ApiTest
             var result = _weatherController.GetWeatherAsync().Result as OkObjectResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<WeatherModel>(result.Value);
             Assert.Equal(result.Value, _wetaherData);
+            Assert.Equal(result.StatusCode, StatusCodes.Status200OK);
         }
 
         /// <summary>
         /// No weather data received.
         /// </summary>
         [Fact]
+        [Trait("Get Weather", "NotFoundException Status 404")]
         public void GetWeatherAsync_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
@@ -79,6 +88,7 @@ namespace ApiTest
         /// The exception is that the service is not responding.
         /// </summary>
         [Fact]
+        [Trait("Get Weather", "Exception Status 500")]
         public void GetWeatherAsync_Exception_ExceptionStatus500()
         {
             // Arrange

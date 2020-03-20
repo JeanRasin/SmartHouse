@@ -1,4 +1,4 @@
-﻿// https://www.codingame.com/playgrounds/35462/creating-web-api-in-asp-net-core-2-0/part-3---integration-tests
+﻿// Integration Tests - https://www.codingame.com/playgrounds/35462/creating-web-api-in-asp-net-core-2-0/part-3---integration-tests
 
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Serialization;
@@ -10,16 +10,12 @@ namespace ApiIntegrationTest
 {
     public class TestFixture : IDisposable
     {
-        private static IConfigurationRoot Config =>  new ConfigurationBuilder().AddJsonFile("config.json").AddEnvironmentVariables().Build();
+        private static IConfigurationRoot Config => new ConfigurationBuilder().AddJsonFile("config.json").AddEnvironmentVariables().Build();
 
         public HttpClient Client { get; }
         public Newtonsoft.Json.JsonSerializerSettings SerializerOptions { get; }
         public TestFixture()
         {
- //           var config = new ConfigurationBuilder()
- //.AddJsonFile("config.json")
- //.Build();
-
             Client = new HttpClient
             {
                 // BaseAddress = new Uri("http://localhost:55673/")
@@ -27,13 +23,6 @@ namespace ApiIntegrationTest
             };
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            //SerializerOptions = new JsonSerializerOptions
-            //{
-            //    PropertyNameCaseInsensitive = true,
-            //    IgnoreNullValues = true,
-            //    WriteIndented = true
-            //};
 
             SerializerOptions = new Newtonsoft.Json.JsonSerializerSettings
             {

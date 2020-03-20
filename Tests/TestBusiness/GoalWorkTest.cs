@@ -10,7 +10,7 @@ using Xunit;
 
 namespace BusinessTest
 {
-    [CollectionDefinition("Goal work")]
+    [Collection("Goal work")]
     public class GoalWorkTest
     {
         private static readonly List<GoalModel> _testDataItems = GetTestData();
@@ -25,6 +25,11 @@ namespace BusinessTest
             _goalWork = new GoalWork(_mockGoalRepository.Object);
         }
 
+        /// <summary>
+        /// Get test data.
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
         static List<GoalModel> GetTestData(int n = 10)
         {
             // Random constant.
@@ -38,6 +43,7 @@ namespace BusinessTest
                  .RuleFor(o => o.DateUpdate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
                  .RuleFor(o => o.Done, f => f.Random.Bool())
                  .Generate(n);
+
             return result;
         }
 
@@ -46,6 +52,7 @@ namespace BusinessTest
         /// Get all the goals.
         /// </summary>
         [Fact]
+        [Trait("Get All Goals", "Success")]
         public void GetGoalAll_OrderByDescendingDateUpdate_GoalModelItems()
         {
             //Arrange
@@ -63,9 +70,10 @@ namespace BusinessTest
 
         #region GetGoals
         /// <summary>
-        /// Get outstanding goals.
+        /// Get unmarked goals.
         /// </summary>
         [Fact]
+        [Trait("Get Unmarked Goals", "Success")]
         public void GetGoals_DoneIsFalse_GoalModelItems()
         {
             //Arrange
@@ -100,6 +108,7 @@ namespace BusinessTest
         /// Get goal by id.
         /// </summary>
         [Fact]
+        [Trait("Get Goal By Id", "Success")]
         public void GetGoal_Success_GoalModelItem()
         {
             //Arrange
@@ -117,6 +126,7 @@ namespace BusinessTest
         /// Get goal key id not found. Throw exception KeyNotFoundException.
         /// </summary>
         [Fact]
+        [Trait("Get Goal By Id", "KeyNotFoundException")]
         public void GetGoal_IdNotFound_KeyNotFoundException()
         {
             //Arrange
@@ -132,6 +142,7 @@ namespace BusinessTest
         /// Create goal.
         /// </summary>
         [Fact]
+        [Trait("Create Goal", "Success")]
         public void Create_Success_GoalModelItem()
         {
             //Arrange
@@ -153,6 +164,7 @@ namespace BusinessTest
         /// Update goal.
         /// </summary>
         [Fact]
+        [Trait("Update Goal", "Success")]
         public void Update_Success()
         {
             //Arrange
@@ -172,6 +184,7 @@ namespace BusinessTest
         /// Update goal key id not found. Throw exception KeyNotFoundException.
         /// </summary>
         [Fact]
+        [Trait("Update Goal", "KeyNotFoundException")]
         public void Update_IdNotFound_KeyNotFoundException()
         {
             //Arrange
@@ -187,6 +200,7 @@ namespace BusinessTest
         /// Delete goal by id.
         /// </summary>
         [Fact]
+        [Trait("Delete Goal", "Success")]
         public void Delete_Success()
         {
             //Arrange
@@ -206,6 +220,7 @@ namespace BusinessTest
         /// Delete goal key id not found. Throw exception KeyNotFoundException.
         /// </summary>
         [Fact]
+        [Trait("Delete Goal", "KeyNotFoundException")]
         public void Delete_IdNotFound_KeyNotFoundException()
         {
             //Arrange
@@ -221,6 +236,7 @@ namespace BusinessTest
         /// Mark goal.
         /// </summary>
         [Fact]
+        [Trait("Done Goal", "Success")]
         public void Done_Success()
         {
             //Arrange
@@ -240,6 +256,7 @@ namespace BusinessTest
         /// Mark goal key id not found. Throw exception KeyNotFoundException.
         /// </summary>
         [Fact]
+        [Trait("Done Goal", "KeyNotFoundException")]
         public void Done_IdNotFound_KeyNotFoundException()
         {
             //Arrange

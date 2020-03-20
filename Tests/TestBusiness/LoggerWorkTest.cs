@@ -10,7 +10,7 @@ using Xunit;
 
 namespace BusinessTest
 {
-    [CollectionDefinition("Logger work")]
+    [Collection("Logger work")]
     public class LoggerWorkTest
     {
         private readonly Mock<ILoggerRepository<LoggerModel>> _mockLoggerRepository;
@@ -24,6 +24,7 @@ namespace BusinessTest
 
         #region GetLoggerAsync
         [Fact]
+        [Trait("GetLoggerAsync", "Success")]
         public async void GetLoggerAsync_LoggerModelItems()
         {
             // Arrange
@@ -60,6 +61,7 @@ namespace BusinessTest
         /// Log write.
         /// </summary>
         [Fact]
+        [Trait("Log Write", "Success")]
         public void Log_LogWrite_Success()
         {
             // Arrange
@@ -89,6 +91,7 @@ namespace BusinessTest
         /// Log write formatter is null.
         /// </summary>
         [Fact]
+        [Trait("Log Write", "Formatter Is Null")]
         public void Log_FormatterIsNull_LogWrite()
         {
             // Arrange
@@ -115,6 +118,7 @@ namespace BusinessTest
         /// Method BeginScope is null.
         /// </summary>
         [Fact]
+        [Trait("BeginScope", "Null")]
         public void BeginScope_null()
         {
             // Act
@@ -130,6 +134,7 @@ namespace BusinessTest
         /// Method IsEnabled is true.
         /// </summary>
         [Fact]
+        [Trait("IsEnabled", "True")]
         public void IsEnabled_true()
         {
             // Act

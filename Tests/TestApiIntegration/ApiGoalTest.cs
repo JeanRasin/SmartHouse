@@ -18,13 +18,11 @@ namespace ApiIntegrationTest
     {
         private readonly HttpClient _lient;
         private readonly List<GoalModel> _itemTestData;
-        //  private readonly JsonSerializerOptions _serializerOptions;
         private readonly JsonSerializerSettings _serializerOptions;
 
         public ApiGoalTest(TestFixture fixture)
         {
             _lient = fixture.Client;
-           //_serializerOptions = fixture.SerializerOptions;
             _serializerOptions = fixture.SerializerOptions;
             _itemTestData = GetAllGoals().Result;
         }
@@ -37,15 +35,8 @@ namespace ApiIntegrationTest
         {
             const string url = "/api/goal/getAll";
 
-            // Act
             HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
-            // List<GoalModel> items = JsonSerializer.Deserialize<List<GoalModel>>(value, _serializerOptions); //todo: exception deserialize model
-            // List<LoggerModel> items = JsonSerializer.Deserialize<List<LoggerModel>>(value, _serializerOptions);
-
-            //var options = new Newtonsoft.Json.JsonSerializerSettings { 
-            //    NullValueHandling = Newtonsoft.Json.NullValueHandling.Include
-            //};
 
             List<GoalModel> items = JsonConvert.DeserializeObject<List<GoalModel>>(value, _serializerOptions);
 
@@ -68,7 +59,6 @@ namespace ApiIntegrationTest
             // Act
             HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
-            // List<GoalModel> items = JsonSerializer.Deserialize<List<GoalModel>>(value, _serializerOptions);
             List<GoalModel> items = JsonConvert.DeserializeObject<List<GoalModel>>(value, _serializerOptions);
 
             // Assert
@@ -81,7 +71,7 @@ namespace ApiIntegrationTest
 
         #region Get unmarked goals
         [Fact, Order(2)]
-        [Trait("Get Goals", "200")]
+        [Trait("Get Unmarked Goals", "200")]
         public async Task GetGoals_Success_StatusCode200()
         {
             // Arrange
@@ -90,7 +80,6 @@ namespace ApiIntegrationTest
             // Act
             HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
-            //List<GoalModel> items = JsonSerializer.Deserialize<List<GoalModel>>(value);
             List<GoalModel> items = JsonConvert.DeserializeObject<List<GoalModel>>(value, _serializerOptions);
 
             // Assert
@@ -113,7 +102,6 @@ namespace ApiIntegrationTest
             // Act
             HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
-            //GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);
             GoalModel item = JsonConvert.DeserializeObject<GoalModel>(value, _serializerOptions);
 
             // Assert
@@ -155,7 +143,6 @@ namespace ApiIntegrationTest
             // Act
             HttpResponseMessage response = await _lient.PostAsync(url, stringContent);
             string value = await response.Content.ReadAsStringAsync();
-            //GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);
             GoalModel item = JsonConvert.DeserializeObject<GoalModel>(value, _serializerOptions);
 
             // Assert

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
-using SmartHouseAPI.ApiException;
 using SmartHouseAPI.Controllers;
 using SmartHouseAPI.InputModel;
 using System;
@@ -15,7 +14,7 @@ using Xunit;
 
 namespace ApiTest
 {
-    [CollectionDefinition("Goal controller")]
+    [Collection("Goal controller")]
     public class GoalControllerTest
     {
         private static readonly List<GoalModel> _goalDataItems = GetTestData();
@@ -31,6 +30,11 @@ namespace ApiTest
             _goalController = new GoalController(_mockGoalWork.Object);
         }
 
+        /// <summary>
+        /// Get test data.
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
         static List<GoalModel> GetTestData(int n = 10)
         {
             // Random constant.
@@ -53,6 +57,7 @@ namespace ApiTest
         /// Get all goals.
         /// </summary>
         [Fact]
+        [Trait("Get All Goals", "Success Status 200")]
         public void GetGoalAll_All_GoalModelItems()
         {
             // Arrange
@@ -62,14 +67,17 @@ namespace ApiTest
             var result = _goalController.GetGoalAll() as OkObjectResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<List<GoalModel>>(result.Value);
             Assert.Equal(result.Value, _goalDataItems);
+            Assert.Equal(result.StatusCode, StatusCodes.Status200OK);
         }
 
         /// <summary>
         ///  An exception has occurred.
         /// </summary>
         [Fact]
+        [Trait("Get All Goals", "Exception Status 500")]
         public void GetGoalAll_Exception_ExceptionStatus500()
         {
             // Arrange
@@ -82,9 +90,10 @@ namespace ApiTest
 
         #region GetGoals
         /// <summary>
-        /// Get goals.
+        /// Get unmarked goals.
         /// </summary>
         [Fact]
+        [Trait("Get Unmarked Goals", "Success Status 200")]
         public void GetGoals_GoalModelItems()
         {
             // Arrange
@@ -94,14 +103,17 @@ namespace ApiTest
             var result = _goalController.GetGoals() as OkObjectResult;
 
             //Assert
+            Assert.NotNull(result);
             Assert.IsType<List<GoalModel>>(result.Value);
             Assert.Equal(result.Value, _goalDataItems);
+            Assert.Equal(result.StatusCode, StatusCodes.Status200OK);
         }
 
         /// <summary>
         /// An exception has occurred.
         /// </summary>
         [Fact]
+        [Trait("Get Unmarked Goals", "Exception Status 500")]
         public void GetGoals_Exception_ExceptionStatus500()
         {
             // Arrange
@@ -117,6 +129,7 @@ namespace ApiTest
         /// Get goal by id.
         /// </summary>
         [Fact]
+        [Trait("Get Goal By Id", "Success Status 200")]
         public void GetGoal_GoalModelItem()
         {
             // Arrange
@@ -126,14 +139,17 @@ namespace ApiTest
             var result = _goalController.GetGoal(_goalDataItem.Id) as OkObjectResult;
 
             //Assert
+            Assert.NotNull(result);
             Assert.IsType<GoalModel>(result.Value);
             Assert.Equal(result.Value, _goalDataItem);
+            Assert.Equal(result.StatusCode, StatusCodes.Status200OK);
         }
 
         /// <summary>
         /// Goal by id not found.
         /// </summary>
         [Fact]
+        [Trait("Get Goal By Id", "IdNotFound Status 404")]
         public void GetGoal_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
@@ -143,6 +159,7 @@ namespace ApiTest
             var result = _goalController.GetGoal(Guid.NewGuid()) as NotFoundObjectResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
@@ -151,6 +168,7 @@ namespace ApiTest
         /// An exception has occurred.
         /// </summary>
         [Fact]
+        [Trait("Get Goal By Id", "Exception Status 500")]
         public void GetGoal_Exception_ExceptionStatus500()
         {
             // Arrange
@@ -166,6 +184,7 @@ namespace ApiTest
         /// Create goal.
         /// </summary>
         [Fact]
+        [Trait("Create Goal", "Success Status 201")]
         public void Create_Success_Status201()
         {
             // Arrange
@@ -186,6 +205,7 @@ namespace ApiTest
             var result = goalController.Create(inputParam) as CreatedResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<GoalModel>(result.Value);
             Assert.Equal(result.Value, _goalDataItem);
             Assert.Equal(StatusCodes.Status201Created, result.StatusCode);
@@ -195,6 +215,7 @@ namespace ApiTest
         /// Goal creation exception.
         /// </summary>
         [Fact]
+        [Trait("Create Goal", "Exception Status 500")]
         public void Create_Exception_ExceptionStatus500()
         {
             // Arrange
@@ -209,6 +230,7 @@ namespace ApiTest
         /// ModelState exception.
         /// </summary>
         [Fact]
+        [Trait("Create Goal", "ModelStateException Status 400")]
         public void Create_Exception_ModelStateExceptionStatus400()
         {
             // Arrange
@@ -220,6 +242,7 @@ namespace ApiTest
             var result = _goalController.Create(inputParam) as BadRequestObjectResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
         }
@@ -230,6 +253,7 @@ namespace ApiTest
         /// Goal update.
         /// </summary>
         [Fact]
+        [Trait("Update Goal", "Success Status 204")]
         public void Update_Success_Status204()
         {
             // Arrange
@@ -240,6 +264,7 @@ namespace ApiTest
             var result = _goalController.Update(inputData) as NoContentResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<NoContentResult>(result);
             Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
         }
@@ -248,6 +273,7 @@ namespace ApiTest
         /// ModelState exception.
         /// </summary>
         [Fact]
+        [Trait("Update Goal", "ModelStateException Status 400")]
         public void Update_Exception_ModelStateExceptionStatus400()
         {
             // Arrange
@@ -259,6 +285,7 @@ namespace ApiTest
             var result = _goalController.Update(inputData) as BadRequestObjectResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
         }
@@ -267,6 +294,7 @@ namespace ApiTest
         /// Update goal by id not found.
         /// </summary>
         [Fact]
+        [Trait("Update Goal", "IdNotFound Status 404")]
         public void Update_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
@@ -277,6 +305,7 @@ namespace ApiTest
             var result = _goalController.Update(inputData) as NotFoundObjectResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
@@ -285,6 +314,7 @@ namespace ApiTest
         /// Goal creation exception.
         /// </summary>
         [Fact]
+        [Trait("Update Goal", "Exception Status 500")]
         public void Update_Exception_ExceptionStatus500()
         {
             // Arrange
@@ -301,6 +331,7 @@ namespace ApiTest
         /// Delete goal by id.
         /// </summary>
         [Fact]
+        [Trait("Delete Goal", "Success Status 204")]
         public void Delete_Success_Status204()
         {
             // Arrange
@@ -310,6 +341,7 @@ namespace ApiTest
             var result = _goalController.Delete(Guid.NewGuid()) as NoContentResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<NoContentResult>(result);
             Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
         }
@@ -318,6 +350,7 @@ namespace ApiTest
         /// Delete goal by id not found.
         /// </summary>
         [Fact]
+        [Trait("Delete Goal", "IdNotFound Status 404")]
         public void Delete_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
@@ -327,6 +360,7 @@ namespace ApiTest
             var result = _goalController.Delete(Guid.NewGuid()) as NotFoundObjectResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
@@ -335,6 +369,7 @@ namespace ApiTest
         /// Goal delete exception.
         /// </summary>
         [Fact]
+        [Trait("Delete Goal", "Exception Status 500")]
         public void Delete_Exception_ExceptionStatus500()
         {
             // Arrange
@@ -350,6 +385,7 @@ namespace ApiTest
         /// Mark goal.
         /// </summary>
         [Fact]
+        [Trait("Done Goal", "Success Status 204")]
         public void Done_Success_Status204()
         {
             // Arrange
@@ -360,6 +396,7 @@ namespace ApiTest
             var result = _goalController.Done(inputData) as NoContentResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<NoContentResult>(result);
             Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
         }
@@ -368,6 +405,7 @@ namespace ApiTest
         /// Done goal by id not found.
         /// </summary>
         [Fact]
+        [Trait("Done Goal", "IdNotFound Status 404")]
         public void Done_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
@@ -378,6 +416,7 @@ namespace ApiTest
             var result = _goalController.Done(inputData) as NotFoundObjectResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
@@ -386,6 +425,7 @@ namespace ApiTest
         /// Goal done exception.
         /// </summary>
         [Fact]
+        [Trait("Done Goal", "Exception Status 500")]
         public void Done_Exception_ExceptionStatus500()
         {
             // Arrange

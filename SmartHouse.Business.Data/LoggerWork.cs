@@ -28,6 +28,10 @@ namespace SmartHouse.Business.Data
             return null;
         }
 
+        /// <summary>
+        /// Get logger data.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<LoggerModel>> GetLoggerAsync()
         {
             IEnumerable<LoggerModel> result = await _repository.QueryAsync();

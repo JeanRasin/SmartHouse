@@ -1,14 +1,31 @@
-﻿namespace SmartHouse.Domain.Core
+﻿using Newtonsoft.Json;
+
+namespace SmartHouse.Domain.Core
 {
     public class WeatherModel
     {
+        [JsonProperty(Required = Required.Always)]
         public float WindSpeed { get; set; }
+
+        [JsonProperty(Required = Required.Always)]
         public ushort WindDeg { get; set; }
+
+        [JsonProperty(Required = Required.Always)]
         public float Temp { get; set; }
+
+        [JsonProperty(Required = Required.Always)]
         public string City { get; set; }
+
+        [JsonProperty(Required = Required.Always)]
         public float Pressure { get; set; }
+
+        [JsonProperty(Required = Required.Always)]
         public float Humidity { get; set; }
+
+        [JsonProperty(Required = Required.Always)]
         public string Description { get; set; }
+
+        [JsonProperty(Required = Required.Always)]
         public float FeelsLike { get; set; }
 
         public WeatherModel()

@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -12,7 +13,7 @@ using Xunit;
 
 namespace ApiTest
 {
-    [CollectionDefinition("Logger controller")]
+    [Collection("Logger controller")]
     public class LoggerControllerTest
     {
         private static readonly IEnumerable<LoggerModel> _loggerList = GetTestData();
@@ -26,6 +27,11 @@ namespace ApiTest
             _loggerController = new LoggerController(_mockLogger.Object);
         }
 
+        /// <summary>
+        /// Get test data.
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
         static IEnumerable<LoggerModel> GetTestData(int n = 10)
         {
             // Random constant.
@@ -54,6 +60,7 @@ namespace ApiTest
         /// Get logger data.
         /// </summary>
         [Fact]
+        [Trait("Get Logger Data", "Success Status 200")]
         public void GetLoggerAsync_Success_LoggerModelItems()
         {
             // Arrange
@@ -63,14 +70,17 @@ namespace ApiTest
             var result = _loggerController.GetLoggerAsync().Result as OkObjectResult;
 
             // Assert
+            Assert.NotNull(result);
             Assert.IsAssignableFrom<IEnumerable<LoggerModel>>(result.Value);
             Assert.Equal(result.Value, _loggerList);
+            Assert.Equal(result.StatusCode, StatusCodes.Status200OK);
         }
 
         /// <summary>
         /// The exception is that the service is not responding.
         /// </summary>
         [Fact]
+        [Trait("Get Logger Data", "Exception Status 500")]
         public void GetLoggerAsync_Exception_ExceptionStatus500()
         {
             // Arrange

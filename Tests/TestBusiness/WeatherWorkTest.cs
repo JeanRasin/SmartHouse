@@ -10,7 +10,7 @@ using Xunit;
 
 namespace BusinessTest
 {
-    [CollectionDefinition("Weather work")]
+    [Collection("Weather work")]
     public class WeatherWorkTest
     {
         private readonly Mock<IWeatherService> _mockWeatherService;
@@ -25,6 +25,7 @@ namespace BusinessTest
         /// Get weather.
         /// </summary>
         [Fact]
+        [Trait("GetWeatherAsync", "Success")]
         public async void GetWeatherAsync_WeatherModel()
         {
             // Arrange
@@ -75,6 +76,7 @@ namespace BusinessTest
         /// When getting weather get an exception.
         /// </summary>
         [Fact]
+        [Trait("GetWeatherAsync", "Exception")]
         public void GetWeatherAsync_Exception()
         {
             // Arrange
@@ -89,6 +91,7 @@ namespace BusinessTest
         /// When receiving weather, get a timeout exception.
         /// </summary>
         [Fact]
+        [Trait("GetWeatherAsync", "OperationCanceledException")]
         public async void GetWeatherAsync_TimeOut_OperationCanceledException()
         {
             // Arrange

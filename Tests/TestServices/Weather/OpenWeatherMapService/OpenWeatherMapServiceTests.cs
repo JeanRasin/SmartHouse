@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 namespace TestService
 {
     [TestFixture]
+    [Category("OpenWeatherMap Service Tests")]
     public class OpenWeatherMapServiceTests
     {
         const string mediaTypeJson = "application/json";
@@ -101,6 +102,7 @@ namespace TestService
         /// Parameters is null.
         /// </summary>
         [TestCase("")]
+        [Category("OpenWeatherMapService")]
         public void Check_ParamNull_NullReferenceException(string response)
         {
             // Arrange
@@ -114,6 +116,7 @@ namespace TestService
         /// No parameters.
         /// </summary>
         [TestCase("{'name' : 'Test McGee'}")]
+        [Category("OpenWeatherMapService")]
         public void Check_ParamNot_Exception(string response)
         {
             // Arrange
@@ -128,6 +131,7 @@ namespace TestService
         /// Incorrect answer. Error json conversion.
         /// </summary>
         [TestCase("{'name' : 'not'}")]
+        [Category("GetWeatherAsync")]
         public void Http_Request_WrongResponseJsonException(string response)
         {
             // Arrange
@@ -141,6 +145,7 @@ namespace TestService
         /// Server error 503.
         /// </summary>
         [TestCase(HttpStatusCode.ServiceUnavailable)]
+        [Category("GetWeatherAsync")]
         public void Http_RequestNotToken_Status503(HttpStatusCode status)
         {
             // Arrange
@@ -155,6 +160,7 @@ namespace TestService
         /// Server error 503. Repeat requests for a certain time then cause interruption with a token.
         /// </summary>
         [TestCase(HttpStatusCode.ServiceUnavailable)]
+        [Category("GetWeatherAsync")]
         public void Http_Request_Status503(HttpStatusCode status)
         {
             // Arrange
@@ -178,6 +184,7 @@ namespace TestService
         /// Server error 401. Repeat requests for a certain time then cause interruption with a token. 
         /// </summary>
         [TestCase(HttpStatusCode.Unauthorized)]
+        [Category("GetWeatherAsync")]
         public void Http_Request_Status401(HttpStatusCode status)
         {
             // Arrange
@@ -210,6 +217,7 @@ namespace TestService
         /// Raise on exception.
         /// </summary>
         [Test]
+        [Category("GetWeatherAsync")]
         public void Http_Request_Exception()
         {
             // Arrange
@@ -223,6 +231,7 @@ namespace TestService
         /// Write log.
         /// </summary>
         [Test]
+        [Category("GetWeatherAsync")]
         public void Http_RequestException_WriteLogger()
         {
             // Arrange
@@ -240,6 +249,7 @@ namespace TestService
         /// Timeout request.
         /// </summary>
         [Test]
+        [Category("GetWeatherAsync")]
         public void Http_Request_TimeOut()
         {
             // Arrange
@@ -259,6 +269,7 @@ namespace TestService
         /// </summary>
         /// <returns></returns>
         [Test]
+        [Category("GetWeatherAsync")]
         public async Task Http_Request_Success()
         {
             // Arrange

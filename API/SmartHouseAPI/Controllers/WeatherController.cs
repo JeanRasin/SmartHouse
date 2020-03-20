@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
-using SmartHouseAPI.ApiException;
 using System.Threading.Tasks;
 
 namespace SmartHouseAPI.Controllers
@@ -31,7 +30,6 @@ namespace SmartHouseAPI.Controllers
 
             if (result == null)
             {
-                // throw new NotFoundException("Weather result is null.");
                 return NotFound("Weather result is null.");
             }
 
