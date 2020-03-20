@@ -6,3 +6,9 @@ services:
     build:
       context: .
       dockerfile: DockerfileTests
+    environment:
+      - api_url=http://api:${INTERNAL_API_PORT}
+    networks:
+      - app-smart-house-network
+    depends_on: 
+      - api

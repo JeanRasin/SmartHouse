@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+ï»¿using Newtonsoft.Json;
 using SmartHouse.Domain.Core;
 using System.Collections.Generic;
 using System.Net;
@@ -11,12 +11,12 @@ namespace ApiIntegrationTest
     [Collection("Api Logger Test Collection")]
     public class ApiLoggerTest : IClassFixture<TestFixture>
     {
-        private readonly HttpClient _ñlient;
+        private readonly HttpClient _lient;
         private readonly JsonSerializerSettings _serializerOptions;
 
         public ApiLoggerTest(TestFixture fixture)
         {
-            _ñlient = fixture.Client;
+            _lient = fixture.Client;
             _serializerOptions = fixture.SerializerOptions;
         }
 
@@ -29,7 +29,7 @@ namespace ApiIntegrationTest
             const string url = "/api/logger";
 
             // Act
-            HttpResponseMessage response = await _ñlient.GetAsync(url);
+            HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
             List<LoggerModel> items = JsonConvert.DeserializeObject<List<LoggerModel>>(value, _serializerOptions);
 

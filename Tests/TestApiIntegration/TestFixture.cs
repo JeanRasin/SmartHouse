@@ -10,7 +10,7 @@ namespace ApiIntegrationTest
 {
     public class TestFixture : IDisposable
     {
-        private static IConfigurationRoot Config =>  new ConfigurationBuilder().AddJsonFile("config.json").Build();
+        private static IConfigurationRoot Config =>  new ConfigurationBuilder().AddJsonFile("config.json").AddEnvironmentVariables().Build();
 
         public HttpClient Client { get; }
         public Newtonsoft.Json.JsonSerializerSettings SerializerOptions { get; }

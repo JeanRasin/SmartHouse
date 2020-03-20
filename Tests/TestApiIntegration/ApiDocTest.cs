@@ -1,4 +1,4 @@
-using System.Net;
+ï»¿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -8,11 +8,11 @@ namespace ApiIntegrationTest
     [Collection("Api Doc Test Collection")]
     public class ApiDocTest : IClassFixture<TestFixture>
     {
-        private readonly HttpClient _ñlient;
+        private readonly HttpClient _lient;
 
         public ApiDocTest(TestFixture fixture)
         {
-            _ñlient = fixture.Client;
+            _lient = fixture.Client;
         }
 
         #region Get swagger
@@ -24,7 +24,7 @@ namespace ApiIntegrationTest
             const string url = "/api/docs/v1/swagger.json";
 
             // Act
-            HttpResponseMessage response = await _ñlient.GetAsync(url);
+            HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -40,7 +40,7 @@ namespace ApiIntegrationTest
             const string url = "/api/docs/index.html";
 
             // Act
-            HttpResponseMessage response = await _ñlient.GetAsync(url);
+            HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
 
             // Assert

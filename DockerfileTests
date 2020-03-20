@@ -28,4 +28,5 @@ RUN dotnet publish "TestBusiness/BusinessTest.csproj" -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN dotnet vstest TestRepository/RepositoryTest.dll TestBusiness/BusinessTest.dll TestApi/ApiTest.dll TestApiIntegration/ApiIntegrationTest.dll TestServices/ServicesTest.dll
+RUN dotnet vstest TestRepository/RepositoryTest.dll TestBusiness/BusinessTest.dll TestApi/ApiTest.dll TestServices/ServicesTest.dll
+# TestApiIntegration/ApiIntegrationTest.dll

@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+ï»¿using Newtonsoft.Json;
 using SmartHouse.Domain.Core;
 using SmartHouseAPI.InputModel;
 using System;
@@ -16,14 +16,14 @@ namespace ApiIntegrationTest
     [Collection("Api Goal Test Collection")]
     public class ApiGoalTest : IClassFixture<TestFixture>
     {
-        private readonly HttpClient _ñlient;
+        private readonly HttpClient _lient;
         private readonly List<GoalModel> _itemTestData;
         //  private readonly JsonSerializerOptions _serializerOptions;
         private readonly JsonSerializerSettings _serializerOptions;
 
         public ApiGoalTest(TestFixture fixture)
         {
-            _ñlient = fixture.Client;
+            _lient = fixture.Client;
            //_serializerOptions = fixture.SerializerOptions;
             _serializerOptions = fixture.SerializerOptions;
             _itemTestData = GetAllGoals().Result;
@@ -38,7 +38,7 @@ namespace ApiIntegrationTest
             const string url = "/api/goal/getAll";
 
             // Act
-            HttpResponseMessage response = await _ñlient.GetAsync(url);
+            HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
             // List<GoalModel> items = JsonSerializer.Deserialize<List<GoalModel>>(value, _serializerOptions); //todo: exception deserialize model
             // List<LoggerModel> items = JsonSerializer.Deserialize<List<LoggerModel>>(value, _serializerOptions);
@@ -66,7 +66,7 @@ namespace ApiIntegrationTest
             const string url = "/api/goal/getAll";
 
             // Act
-            HttpResponseMessage response = await _ñlient.GetAsync(url);
+            HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
             // List<GoalModel> items = JsonSerializer.Deserialize<List<GoalModel>>(value, _serializerOptions);
             List<GoalModel> items = JsonConvert.DeserializeObject<List<GoalModel>>(value, _serializerOptions);
@@ -88,7 +88,7 @@ namespace ApiIntegrationTest
             const string url = "/api/goal";
 
             // Act
-            HttpResponseMessage response = await _ñlient.GetAsync(url);
+            HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
             //List<GoalModel> items = JsonSerializer.Deserialize<List<GoalModel>>(value);
             List<GoalModel> items = JsonConvert.DeserializeObject<List<GoalModel>>(value, _serializerOptions);
@@ -111,7 +111,7 @@ namespace ApiIntegrationTest
             string url = $"/api/goal/{firstItem.Id}";
 
             // Act
-            HttpResponseMessage response = await _ñlient.GetAsync(url);
+            HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
             //GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);
             GoalModel item = JsonConvert.DeserializeObject<GoalModel>(value, _serializerOptions);
@@ -130,7 +130,7 @@ namespace ApiIntegrationTest
             string url = $"/api/goal/{Guid.NewGuid()}";
 
             // Act
-            HttpResponseMessage response = await _ñlient.GetAsync(url);
+            HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -153,7 +153,7 @@ namespace ApiIntegrationTest
             var stringContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage response = await _ñlient.PostAsync(url, stringContent);
+            HttpResponseMessage response = await _lient.PostAsync(url, stringContent);
             string value = await response.Content.ReadAsStringAsync();
             //GoalModel item = JsonSerializer.Deserialize<GoalModel>(value, _serializerOptions);
             GoalModel item = JsonConvert.DeserializeObject<GoalModel>(value, _serializerOptions);
@@ -177,7 +177,7 @@ namespace ApiIntegrationTest
             var stringContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage response = await _ñlient.PostAsync(url, stringContent);
+            HttpResponseMessage response = await _lient.PostAsync(url, stringContent);
             string value = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -203,7 +203,7 @@ namespace ApiIntegrationTest
             var stringContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage response = await _ñlient.PutAsync(url, stringContent);
+            HttpResponseMessage response = await _lient.PutAsync(url, stringContent);
             string value = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -226,7 +226,7 @@ namespace ApiIntegrationTest
             var stringContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage response = await _ñlient.PutAsync(url, stringContent);
+            HttpResponseMessage response = await _lient.PutAsync(url, stringContent);
             string value = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -250,7 +250,7 @@ namespace ApiIntegrationTest
             var stringContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage response = await _ñlient.PutAsync(url, stringContent);
+            HttpResponseMessage response = await _lient.PutAsync(url, stringContent);
             string value = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -269,7 +269,7 @@ namespace ApiIntegrationTest
             string url = $"/api/goal/{firstItem.Id}";
 
             // Act
-            HttpResponseMessage response = await _ñlient.DeleteAsync(url);
+            HttpResponseMessage response = await _lient.DeleteAsync(url);
             string value = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -285,7 +285,7 @@ namespace ApiIntegrationTest
             string url = $"/api/goal/{Guid.NewGuid()}";
 
             // Act
-            HttpResponseMessage response = await _ñlient.DeleteAsync(url);
+            HttpResponseMessage response = await _lient.DeleteAsync(url);
             string value = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -310,7 +310,7 @@ namespace ApiIntegrationTest
             var stringContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage response = await _ñlient.PutAsync(url, stringContent);
+            HttpResponseMessage response = await _lient.PutAsync(url, stringContent);
             string value = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -332,7 +332,7 @@ namespace ApiIntegrationTest
             var stringContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage response = await _ñlient.PutAsync(url, stringContent);
+            HttpResponseMessage response = await _lient.PutAsync(url, stringContent);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
