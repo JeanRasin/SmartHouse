@@ -9,7 +9,7 @@ services:
     networks:
       - app-smart-house-network
     ports:
-        - ${EXTERNAL_FRONT_ANGULAR_PORT}:${INTERNAL_API_PORT}
+        - ${EXTERNAL_FRONT_ANGULAR_PORT}:${INTERNAL_FRONT_ANGULAR_PORT}
     depends_on:
         - api
   api:
@@ -25,7 +25,7 @@ services:
     networks:
       - app-smart-house-network
     ports:
-      - ${EXTERNAL_API_PORT}:${INTERNAL_FRONT_ANGULAR_PORT}
+      - ${EXTERNAL_API_PORT}:${INTERNAL_API_PORT}
     depends_on: 
       - mongo
       - postgres

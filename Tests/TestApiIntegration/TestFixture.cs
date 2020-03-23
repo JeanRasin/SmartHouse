@@ -18,8 +18,9 @@ namespace ApiIntegrationTest
         {
             Client = new HttpClient
             {
-                // BaseAddress = new Uri("http://localhost:55673/")
-                BaseAddress = new Uri(Config["api_url"])
+                //BaseAddress = new Uri("http://localhost:55673/") 
+                 BaseAddress = new Uri("http://api:80/")
+                //BaseAddress = new Uri(Config["api_url"])
             };
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

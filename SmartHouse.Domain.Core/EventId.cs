@@ -14,7 +14,7 @@ namespace SmartHouse.Domain.Core
         [BsonElement("name")]
         [BsonRepresentation(BsonType.String)]
         [BsonIgnoreIfNull]
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty(Required = Required.AllowNull)]
         public string Name { get; set; }
 
         public EventId()

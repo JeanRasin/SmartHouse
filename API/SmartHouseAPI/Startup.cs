@@ -107,9 +107,6 @@ namespace SmartHouseAPI
                 }
             });
 
-            services.AddTransient<IGoalWork<GoalModel>, GoalWork>();
-            services.AddTransient<IWeatherWork, WeatherWork>();
-
             if (IsLogger)
             {
                 MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
@@ -120,7 +117,7 @@ namespace SmartHouseAPI
                     _loggerContext.EnsureCreated();
                 }
 
-                services.AddTransient<ILoggerWork>(x => new LoggerWork(new LoggerRepository<LoggerModel>(_loggerContext, "General category")));
+                services.AddScoped<ILoggerWork>(x => new LoggerWork(new LoggerRepository<LoggerModel>(_loggerContext, "General category")));
             }
             else
             {
@@ -130,10 +127,13 @@ namespace SmartHouseAPI
             IDictionary<string, string> parm = Configuration.GetSection("OpenWeatherMapService").Get<OpenWeatherMapServiceConfig>().ToDictionary<string>();
 
             // OpenWeatherMap service.
-            services.AddTransient<IWeatherService>(x => new OpenWeatherMapService(parm, new HttpClient(), logger: x.GetRequiredService<ILogger<OpenWeatherMapService>>()));
+            services.AddScoped<IWeatherService>(x => new OpenWeatherMapService(parm, new HttpClient(), logger: x.GetRequiredService<ILogger<OpenWeatherMapService>>()));
 
             // GisMeteo service.
             //services.AddTransient<IWeatherService, GisMeteoService>(); 
+
+            services.AddScoped<IGoalWork<GoalModel>, GoalWork>();
+            services.AddScoped<IWeatherWork, WeatherWork>(x => new WeatherWork(x.GetRequiredService<IWeatherService>(), 30));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
