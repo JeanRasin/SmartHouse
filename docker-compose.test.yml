@@ -2,13 +2,23 @@
 
 version: '3.6'
 services:
-  tests:
+  api_test:
     build:
       context: .
-      dockerfile: DockerfileTests
+      dockerfile: Dockerfile.tests
     environment:
       - api_url=http://api:${INTERNAL_API_PORT}
     networks:
       - app-smart-house-network
     depends_on: 
       - api
+  front_test_angular:
+    build:
+      context: ./Web/SmartHouseWebAngular
+      dockerfile: Dockerfile.karma.test
+    networks:
+     - app-smart-house-network
+    ports:
+        - ${EXTERNAL_FRONT_TEST_ANGULAR}:${INTERNAL_FRONT_TEST_ANGULAR}
+    depends_on:
+        - front_angular      

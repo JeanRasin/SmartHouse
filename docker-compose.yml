@@ -4,8 +4,8 @@ version: '3.6'
 services:
   front_angular:
     build:
-      context: ./Web/
-      dockerfile: Web/SmartHouseWebAngular/Dockerfile
+      context: ./Web/SmartHouseWebAngular
+      dockerfile: Dockerfile
     networks:
       - app-smart-house-network
     ports:

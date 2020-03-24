@@ -44,8 +44,22 @@ export class GoalComponent implements OnInit {
       this.dataSource = new MatTableDataSource<Goal>(data);
       this.dataSource.paginator = this.paginator;
 
-      this.sort.sort(({ id: 'dateUpdate', start: 'asc' }) as MatSortable);
-      this.dataSource.sort = this.sort;
+      //this.sort.sort(({ id: 'dateUpdate', start: 'asc' }) as MatSortable);
+      //this.dataSource.sort = this.sort;
+
+     // this.dataSource.sort.sort(<MatSortable>({ id: id, start: start }));
+     //this.dataSource.sort.sort(({ id: 'dateUpdate', start: 'asc' }) as MatSortable);
+
+      this.dataSource.data.sort((a: any, b: any) => {
+          if (a.dateUpdate < b.dateUpdate) {
+              return -1;
+          } else if (a.dateUpdate > b.dateUpdate) {
+              return 1;
+          } else {
+              return 0;
+          }
+      });
+
     }, error => {
       console.log(error);
     });
