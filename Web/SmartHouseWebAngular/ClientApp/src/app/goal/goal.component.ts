@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatButtonToggleGroup, MatDialog, MatDialogConfig, MatSort, MatSortable } from '@angular/material';
+import { MatButtonToggleGroup, MatDialog, MatDialogConfig, MatSort } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { faCheckCircle, faCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -43,12 +43,6 @@ export class GoalComponent implements OnInit {
     this.httpService.get().subscribe((data: Goal[]) => {
       this.dataSource = new MatTableDataSource<Goal>(data);
       this.dataSource.paginator = this.paginator;
-
-      //this.sort.sort(({ id: 'dateUpdate', start: 'asc' }) as MatSortable);
-      //this.dataSource.sort = this.sort;
-
-     // this.dataSource.sort.sort(<MatSortable>({ id: id, start: start }));
-     //this.dataSource.sort.sort(({ id: 'dateUpdate', start: 'asc' }) as MatSortable);
 
       this.dataSource.data.sort((a: any, b: any) => {
           if (a.dateUpdate < b.dateUpdate) {

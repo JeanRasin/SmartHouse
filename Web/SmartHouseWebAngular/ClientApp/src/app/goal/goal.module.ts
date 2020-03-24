@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule, GoalDialogCreateComponent, GoalDialogEditComponent } from '../shared';
 import { GoalComponent } from './goal.component';
-import { MatSortModule } from '@angular/material';
 
 const goalRouting: ModuleWithProviders = RouterModule.forChild([
   {
@@ -24,7 +23,6 @@ const goalRouting: ModuleWithProviders = RouterModule.forChild([
     MatPaginatorModule,
     MatTableModule,
     MatButtonModule,
-    MatSortModule,
     SharedModule
   ],
   declarations: [
