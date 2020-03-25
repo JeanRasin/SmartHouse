@@ -37,7 +37,6 @@ namespace SmartHouse.Domain.Core
 
         public GoalModel()
         {
-
         }
 
         public GoalModel(string name)

@@ -19,7 +19,6 @@ namespace SmartHouse.Domain.Core
 
         public EventId()
         {
-
         }
 
         public EventId(Microsoft.Extensions.Logging.EventId eventId)

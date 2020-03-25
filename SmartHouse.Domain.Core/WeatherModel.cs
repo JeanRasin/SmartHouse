@@ -30,7 +30,6 @@ namespace SmartHouse.Domain.Core
 
         public WeatherModel()
         {
-          
         }
 
         public WeatherModel(float windSpeed, byte windDeg, float temp, string city, float pressure, float humidity, string description, float feelsLike)
