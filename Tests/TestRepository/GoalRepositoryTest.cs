@@ -34,7 +34,7 @@ namespace RepositoryTest
         /// Get test data.
         /// </summary>
         /// <returns></returns>
-        static GoalModel GetTestData()
+        private static GoalModel GetTestData()
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
@@ -52,6 +52,7 @@ namespace RepositoryTest
         }
 
         #region GetGoals
+
         /// <summary>
         /// Get goals.
         /// </summary>
@@ -66,9 +67,11 @@ namespace RepositoryTest
             _dbContextMock.VerifyGet(v => v.Goals, "Property was not called.");
             Assert.Equal(items.Count(), _mockedDbContext.Goals.Count());
         }
-        #endregion
 
-        #region GetGoal 
+        #endregion GetGoals
+
+        #region GetGoal
+
         /// <summary>
         /// Get goal by id.
         /// </summary>
@@ -97,9 +100,11 @@ namespace RepositoryTest
             // Act & Assert
             Assert.Throws<KeyNotFoundException>(() => _repository.GetGoal(Guid.NewGuid()));
         }
-        #endregion
 
-        #region Create 
+        #endregion GetGoal
+
+        #region Create
+
         /// <summary>
         /// Create goal.
         /// </summary>
@@ -115,9 +120,11 @@ namespace RepositoryTest
             _dbContextMock.Verify(v => v.Entry(_itemTestData), Times.Exactly(2), "Entry was not called.");
             Assert.Equal(EntityState.Added, itemState);
         }
-        #endregion
+
+        #endregion Create
 
         #region Remove
+
         /// <summary>
         /// Remove goal.
         /// </summary>
@@ -147,9 +154,11 @@ namespace RepositoryTest
             // Act && Assert
             Assert.Throws<KeyNotFoundException>(() => _repository.Remove(Guid.NewGuid()));
         }
-        #endregion
+
+        #endregion Remove
 
         #region Update
+
         /// <summary>
         /// Update goal.
         /// </summary>
@@ -179,6 +188,7 @@ namespace RepositoryTest
             // Act & Assert
             Assert.Throws<KeyNotFoundException>(() => _repository.Update(_itemTestData));
         }
-        #endregion
+
+        #endregion Update
     }
 }

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using SmartHouse.Infrastructure.Data;
-using System.Reflection;
+﻿using SmartHouse.Infrastructure.Data;
+using System;
 using System.Linq;
+using System.Reflection;
+using Xunit;
 
 namespace RepositoryTest
 {
     [Collection("Logger context")]
     public class LoggerContextTest
     {
-
-        [Fact(Skip ="Возможно и не надо.")] // todo:!!!
+        [Fact(Skip = "Возможно и не надо.")] // todo:!!!
         public void GetTableName_AttributeName()
         {
             //var loggerContext = new LoggerContext("","");
@@ -25,9 +22,6 @@ namespace RepositoryTest
             var getTableName = (string)method.Invoke(hello, new object[] { });
 
             //getTableName.
-
         }
     }
-
-    
 }

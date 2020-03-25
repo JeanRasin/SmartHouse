@@ -58,6 +58,7 @@ namespace RepositoryTest
         }
 
         #region Create
+
         /// <summary>
         /// Create logger.
         /// </summary>
@@ -125,9 +126,11 @@ namespace RepositoryTest
             // Act & Assert
             Assert.Throws<MongoWriteException>(() => _repository.Create(testData));
         }
-        #endregion
+
+        #endregion Create
 
         #region Query
+
         /// <summary>
         /// Get all the loggers.
         /// </summary>
@@ -150,9 +153,11 @@ namespace RepositoryTest
             Assert.NotNull(result);
             Assert.Equal(items, result);
         }
-        #endregion
+
+        #endregion Query
 
         #region QueryFilter
+
         /// <summary>
         /// Get filtered data.
         /// </summary>
@@ -176,6 +181,7 @@ namespace RepositoryTest
             Assert.NotNull(result);
             Assert.Equal(items, result);
         }
-        #endregion
+
+        #endregion QueryFilter
     }
 }
