@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using SmartHouseAPI.ApiException;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SmartHouseAPI.Middleware
@@ -25,16 +23,6 @@ namespace SmartHouseAPI.Middleware
             {
                 await _next(httpContext);
             }
-            //catch (ModelStateException ex)
-            //{
-            //    _logger.LogError(new EventId(2), ex, "ModelStateException");
-            //    throw ex;
-            //}
-            //catch (KeyNotFoundException ex)
-            //{
-            //    _logger.LogError(new EventId(1), ex, "NotFoundException");
-            //    throw ex;
-            //}
             catch (Exception ex)
             {
                 _logger.LogError(new EventId(0), ex, "Exception");
