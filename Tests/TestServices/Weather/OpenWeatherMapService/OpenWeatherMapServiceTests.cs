@@ -19,9 +19,10 @@ namespace TestService
     [Category("OpenWeatherMap Service Tests")]
     public class OpenWeatherMapServiceTests
     {
-        const string mediaTypeJson = "application/json";
+        private const string mediaTypeJson = "application/json";
 
         private readonly MockHttpMessageHandler _mockHttp = new MockHttpMessageHandler();
+
         private readonly Dictionary<string, string> _parm = new Dictionary<string, string>
             {
                 { "url", "https://api.openweathermap.org" },
@@ -181,7 +182,7 @@ namespace TestService
         }
 
         /// <summary>
-        /// Server error 401. Repeat requests for a certain time then cause interruption with a token. 
+        /// Server error 401. Repeat requests for a certain time then cause interruption with a token.
         /// </summary>
         [TestCase(HttpStatusCode.Unauthorized)]
         [Category("GetWeatherAsync")]
