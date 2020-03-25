@@ -23,7 +23,7 @@ namespace SmartHouseAPI
 {
     public class Startup
     {
-        const string allowSpecificOrigins = "_allowSpecificOrigins";
+        private const string allowSpecificOrigins = "_allowSpecificOrigins";
 
         private ILoggerContext _loggerContext = null;
         private readonly IWebHostEnvironment _currentEnvironment;
@@ -130,7 +130,7 @@ namespace SmartHouseAPI
             services.AddScoped<IWeatherService>(x => new OpenWeatherMapService(parm, new HttpClient(), logger: x.GetRequiredService<ILogger<OpenWeatherMapService>>()));
 
             // GisMeteo service.
-            //services.AddTransient<IWeatherService, GisMeteoService>(); 
+            //services.AddTransient<IWeatherService, GisMeteoService>();
 
             services.AddScoped<IGoalWork<GoalModel>, GoalWork>();
             services.AddScoped<IWeatherWork, WeatherWork>(x => new WeatherWork(x.GetRequiredService<IWeatherService>(), 30));

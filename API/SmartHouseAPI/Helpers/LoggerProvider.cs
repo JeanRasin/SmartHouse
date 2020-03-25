@@ -8,6 +8,7 @@ namespace SmartHouseAPI.Helpers
     public class LoggerProvider : ILoggerProvider
     {
         private readonly ILoggerContext _context;
+
         public LoggerProvider(ILoggerContext context)
         {
             _context = context;

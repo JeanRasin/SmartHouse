@@ -154,7 +154,7 @@ namespace SmartHouseAPI.Controllers
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT 
+        ///     PUT
         ///     {
         ///        "id": "c55940df-c000-c450-1601-5e9aa3ed8bbc",
         ///        "done": "true",

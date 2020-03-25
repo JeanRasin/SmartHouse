@@ -7,11 +7,11 @@ namespace SmartHouseAPI.InputModel
     {
         [Required(ErrorMessage = "Id not null or empty.")]
         public Guid Id { get; set; }
+
         public bool Done { get; set; }
 
         public GoalDoneDto()
         {
-
         }
 
         public GoalDoneDto(Guid id, bool done)
@@ -19,6 +19,5 @@ namespace SmartHouseAPI.InputModel
             Id = id;
             Done = done;
         }
-
     }
 }
