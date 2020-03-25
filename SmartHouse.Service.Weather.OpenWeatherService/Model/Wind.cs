@@ -6,6 +6,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap.Model
     {
         [JsonPropertyName("speed")]
         public float Speed { get; set; }
+
         [JsonPropertyName("deg")]
         public ushort Deg { get; set; }
     }

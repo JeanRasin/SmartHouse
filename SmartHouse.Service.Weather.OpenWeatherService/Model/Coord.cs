@@ -6,6 +6,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap.Model
     {
         [JsonPropertyName("lon")]
         public double Lon { get; set; }
+
         [JsonPropertyName("lat")]
         public double Lat { get; set; }
     }

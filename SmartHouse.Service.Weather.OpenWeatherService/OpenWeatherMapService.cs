@@ -17,7 +17,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
 {
     public class OpenWeatherMapService : IWeatherService, IDisposable
     {
-        const int TimeOutMilSec = 1000;
+        private const int TimeOutMilSec = 1000;
 
         protected readonly (string url, string city, string api) data;
         protected readonly ILogger<OpenWeatherMapService> logger;
@@ -88,6 +88,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                             }
 
                             break;
+
                         default:
                             b = false;
                             break;
@@ -137,6 +138,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
         }
 
         #region dispose
+
         private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
@@ -156,6 +158,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
+
+        #endregion dispose
     }
 }
