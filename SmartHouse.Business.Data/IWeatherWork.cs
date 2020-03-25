@@ -7,6 +7,7 @@ namespace SmartHouse.Business.Data
     public interface IWeatherWork
     {
         public Task<WeatherModel> GetWeatherAsync();
+
         public Task<WeatherModel> GetWeatherAsync(CancellationTokenSource tokenSource = default);
     }
 }
