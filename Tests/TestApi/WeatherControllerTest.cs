@@ -30,7 +30,7 @@ namespace ApiTest
         /// Get test data.
         /// </summary>
         /// <returns></returns>
-        static WeatherModel GetTestData()
+        private static WeatherModel GetTestData()
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
@@ -50,6 +50,7 @@ namespace ApiTest
         }
 
         #region GetWeatherAsync
+
         /// <summary>
         /// Get weather.
         /// </summary>
@@ -97,6 +98,7 @@ namespace ApiTest
             // Act & Assert
             Assert.ThrowsAsync<Exception>(() => _weatherController.GetWeatherAsync());
         }
-        #endregion
+
+        #endregion GetWeatherAsync
     }
 }

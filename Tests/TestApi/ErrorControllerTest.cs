@@ -1,28 +1,19 @@
-﻿using Bogus;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Routing;
 using Moq;
-using SmartHouse.Business.Data;
-using SmartHouse.Domain.Core;
 using SmartHouseAPI.Controllers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ApiTest
 {
     public class ErrorControllerTest
     {
-
         //protected T GetController<T>() where T : Controller, new()
         //{
         //    var routes = new RouteCollection();
@@ -78,7 +69,8 @@ namespace ApiTest
         }
 
         /* */
-        [Fact(Skip ="Do not work!!!", DisplayName ="Error controller")]
+
+        [Fact(Skip = "Do not work!!!", DisplayName = "Error controller")]
         public void ErrorLocalDevelopment_WhenCalled_ErrorData()
         {
             var mockErrorWork = new Mock<IWebHostEnvironment>();
@@ -88,11 +80,11 @@ namespace ApiTest
                 return "Development";
             });
 
-             var kkk = new ErrorController();
+            var kkk = new ErrorController();
 
-            var mockErrorController = new Mock<ErrorController>() {
+            var mockErrorController = new Mock<ErrorController>()
+            {
                 CallBase = true,
-               
             };
 
             //mockErrorController.Setup(m => m.Problem()).Returns(() =>
@@ -113,11 +105,9 @@ namespace ApiTest
             //});
 
             //mockErrorController.Setup(m => m.ErrorLocalDevelopment(mockErrorWork.Object)).Returns(() => {
-
             //    errorController.
             //});
 
-           
             var mockfeatureCollection = new Mock<IFeatureCollection>();
             mockfeatureCollection.Setup(m => m.Get<IExceptionHandlerFeature>()).Returns(() =>
            {
@@ -134,25 +124,21 @@ namespace ApiTest
 
             var mockObjectResult = new Mock<ObjectResult>();
 
-
             var httpContext = new DefaultHttpContext(mockfeatureCollection.Object);
             var actionContext = new ActionContext(httpContext, new Microsoft.AspNetCore.Routing.RouteData(), new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor());
             var controllerContext = new ControllerContext(actionContext);
 
-
             kkk.ControllerContext = controllerContext;
 
+            // var problemDetails = ProblemDetailsFactory.CreateProblemDetails(httpContext);
+            // var tt=  ProblemDetailsFactory.CreateProblemDetails(httpContext);
 
-             // var problemDetails = ProblemDetailsFactory.CreateProblemDetails(httpContext);
-          // var tt=  ProblemDetailsFactory.CreateProblemDetails(httpContext);
+            // kkk.ProblemDetailsFactory = new
 
-         // kkk.ProblemDetailsFactory = new 
-
-            var hh =  mockErrorController.Object;
+            var hh = mockErrorController.Object;
             var result = mockErrorController.Object.ErrorLocalDevelopment(mockErrorWork.Object) as ObjectResult;
 
             Assert.IsType<ObjectResult>(result);
         }
-       
     }
 }

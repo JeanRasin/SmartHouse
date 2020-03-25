@@ -23,7 +23,6 @@ namespace ApiTest
         private readonly Mock<IGoalWork<GoalModel>> _mockGoalWork;
         private readonly GoalController _goalController;
 
-
         public GoalControllerTest()
         {
             _mockGoalWork = new Mock<IGoalWork<GoalModel>>();
@@ -35,7 +34,7 @@ namespace ApiTest
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        static List<GoalModel> GetTestData(int n = 10)
+        private static List<GoalModel> GetTestData(int n = 10)
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
@@ -53,6 +52,7 @@ namespace ApiTest
         }
 
         #region GetGoalAll
+
         /// <summary>
         /// Get all goals.
         /// </summary>
@@ -86,9 +86,11 @@ namespace ApiTest
             // Act & Assert
             Assert.Throws<Exception>(() => _goalController.GetGoalAll());
         }
-        #endregion
+
+        #endregion GetGoalAll
 
         #region GetGoals
+
         /// <summary>
         /// Get unmarked goals.
         /// </summary>
@@ -122,9 +124,11 @@ namespace ApiTest
             // Act & Assert
             Assert.Throws<Exception>(() => _goalController.GetGoals());
         }
-        #endregion
+
+        #endregion GetGoals
 
         #region GetGoal
+
         /// <summary>
         /// Get goal by id.
         /// </summary>
@@ -177,9 +181,11 @@ namespace ApiTest
             // Act & Assert
             Assert.Throws<Exception>(() => _goalController.GetGoal(Guid.NewGuid()));
         }
-        #endregion
+
+        #endregion GetGoal
 
         #region Create
+
         /// <summary>
         /// Create goal.
         /// </summary>
@@ -246,9 +252,11 @@ namespace ApiTest
             Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
         }
-        #endregion
+
+        #endregion Create
 
         #region Update
+
         /// <summary>
         /// Goal update.
         /// </summary>
@@ -324,9 +332,11 @@ namespace ApiTest
             // Act & Assert
             Assert.Throws<Exception>(() => _goalController.Update(inputData));
         }
-        #endregion
+
+        #endregion Update
 
         #region Delete
+
         /// <summary>
         /// Delete goal by id.
         /// </summary>
@@ -337,7 +347,7 @@ namespace ApiTest
             // Arrange
             _mockGoalWork.Setup(m => m.Delete(It.IsAny<Guid>()));
 
-            // Act 
+            // Act
             var result = _goalController.Delete(Guid.NewGuid()) as NoContentResult;
 
             // Assert
@@ -378,9 +388,11 @@ namespace ApiTest
             // Act & Assert
             Assert.Throws<Exception>(() => _goalController.Delete(Guid.NewGuid()));
         }
-        #endregion
+
+        #endregion Delete
 
         #region Done
+
         /// <summary>
         /// Mark goal.
         /// </summary>
@@ -435,6 +447,7 @@ namespace ApiTest
             // Act & Assert
             Assert.Throws<Exception>(() => _goalController.Done(inputData));
         }
-        #endregion
+
+        #endregion Done
     }
 }

@@ -32,7 +32,7 @@ namespace ApiTest
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        static IEnumerable<LoggerModel> GetTestData(int n = 10)
+        private static IEnumerable<LoggerModel> GetTestData(int n = 10)
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
@@ -56,6 +56,7 @@ namespace ApiTest
         }
 
         #region GetLoggerAsync
+
         /// <summary>
         /// Get logger data.
         /// </summary>
@@ -89,6 +90,7 @@ namespace ApiTest
             // Act & Assert
             Assert.ThrowsAsync<Exception>(() => _loggerController.GetLoggerAsync());
         }
-        #endregion
+
+        #endregion GetLoggerAsync
     }
 }
