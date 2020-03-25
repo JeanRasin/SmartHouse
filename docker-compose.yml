@@ -1,11 +1,14 @@
 #docker-compose.yml (Extended config for DEVELOPMENT env.)
 
-version: '3.6'
+version: '3.7'
 services:
   front_angular:
+  #container_name: smart_house_front_angular
+    image: smart_house_front_angular:latest
     build:
       context: ./Web/SmartHouseWebAngular
       dockerfile: Dockerfile
+    entrypoint: ["ng", "serve", "--host", "0.0.0.0"]
     networks:
       - app-smart-house-network
     ports:

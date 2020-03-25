@@ -1,24 +1,53 @@
 #docker-compose.test.yml (Extended config for DEVELOPMENT env.)
 
-version: '3.6'
+version: '3.7'
 services:
   api_test:
+    image: api_test:latest
+    entrypoint: ["dotnet", "vstest", "TestRepository/RepositoryTest.dll","TestBusiness/BusinessTest.dll","TestApi/ApiTest.dll","TestServices/ServicesTest.dll", "--logger:'trx;LogFileName=custom_file_name.trx'","--ResultsDirectory:custom/file/path"]
     build:
       context: .
       dockerfile: Dockerfile.tests
+    #environment:
+      #- api_url=http://api:${INTERNAL_API_PORT}
+    #networks:
+      #- app-smart-house-network
+    #depends_on: 
+      #- api
+  api_integration_test:
+    image: api_test:latest
+    entrypoint: ["dotnet", "vstest", "TestApiIntegration/ApiIntegrationTest.dll"]
+    #build:
+      #context: .
+      #dockerfile: Dockerfile.tests
     environment:
       - api_url=http://api:${INTERNAL_API_PORT}
     networks:
       - app-smart-house-network
     depends_on: 
+      - api_test
       - api
-  front_test_angular:
-    build:
-      context: ./Web/SmartHouseWebAngular
-      dockerfile: Dockerfile.karma.test
+  front_test_e2e_angular:
+    image: smart_house_front_angular:latest
+    #build:
+      #context: ./Web/SmartHouseWebAngular
+      #dockerfile: Dockerfile.karma.test
+    #entrypoint: ["ng", "e2e", "&&", "ng", "test"]
+    entrypoint: ["ng", "e2e"]
     networks:
      - app-smart-house-network
+    #ports:
+        #- ${EXTERNAL_FRONT_TEST_ANGULAR}:${INTERNAL_FRONT_TEST_ANGULAR}
+    depends_on:
+        - front_angular      
+  front_test_angular:
+    image: smart_house_front_angular:latest
+    entrypoint: ["ng", "test"]
+    #networks:
+     #- app-smart-house-network
     ports:
         - ${EXTERNAL_FRONT_TEST_ANGULAR}:${INTERNAL_FRONT_TEST_ANGULAR}
     depends_on:
-        - front_angular      
+        - front_angular 
+volumes:
+  test_result:
