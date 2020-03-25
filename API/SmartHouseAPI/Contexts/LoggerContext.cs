@@ -1,5 +1,8 @@
 ﻿using Bogus;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using SmartHouse.Domain.Core;
+using SmartHouse.Infrastructure.Data.Helpers;
 using System;
 using System.Collections.Generic;
 
@@ -7,7 +10,8 @@ namespace SmartHouseAPI.Contexts
 {
     public class LoggerContext : SmartHouse.Infrastructure.Data.LoggerContext
     {
-        public LoggerContext(string connection, string dbName) : base(connection, dbName)
+        //public LoggerContext(string connection, string dbName) : base(connection, dbName)
+        public LoggerContext(MongoSettings configuration) : base(new MongoClient(configuration.Connection), configuration.DatabaseName)
         {
         }
 

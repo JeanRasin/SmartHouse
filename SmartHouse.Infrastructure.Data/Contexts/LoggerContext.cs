@@ -9,28 +9,80 @@ namespace SmartHouse.Infrastructure.Data
 {
     public class LoggerContext : ILoggerContext
     {
-        public MongoClient MongoClient { get; set; }
+        //public IMongoClient MongoClient { get; set; }
 
-        private readonly IMongoDatabase mongoDb;
+        private readonly IMongoClient _mongoClient;
 
-        public LoggerContext(string connection, string dbName)
+        private readonly IMongoDatabase _mongoDb;
+
+        //public LoggerContext(string connection, string dbName)
+        //{
+        //    MongoClient = new MongoClient(connection);
+        //    mongoDb = MongoClient.GetDatabase(dbName);
+        //}
+
+        //public LoggerContext(MongoSettings configuration)
+        //{
+        //    MongoClient = new MongoClient(configuration.Connection);
+        //    mongoDb = MongoClient.GetDatabase(configuration.DatabaseName);
+        //}
+
+        public LoggerContext(IMongoClient mongoClient, string databaseName)
         {
-            MongoClient = new MongoClient(connection);
-            mongoDb = MongoClient.GetDatabase(dbName);
+            _mongoClient = mongoClient;
+            _mongoDb = _mongoClient.GetDatabase(databaseName);
         }
 
         public virtual IMongoCollection<T> DbSet<T>() where T : MongoBaseModel
         {
             string tableName = GetTableName<T>();
-            IMongoCollection<T> result = mongoDb.GetCollection<T>(tableName);
+            IMongoCollection<T> result = _mongoDb.GetCollection<T>(tableName);
             return result;
         }
 
+        /// <summary>
+        /// Override and set initial values
+        /// </summary>
+        /// <returns></returns>
         public virtual List<LoggerModel> OnModelCreating()
         {
             return null;
         }
 
+        /// <summary>
+        /// Add initial values to table if table is empty
+        /// </summary>
+        public void EnsureCreated()
+        {
+            // Add test data to the logger table
+            List<LoggerModel> dataItems = OnModelCreating() ?? new List<LoggerModel>();
+
+            if (dataItems.Any())
+            {
+                bool exist = _mongoDb.ListCollections().Any();
+                if (!exist)
+                {
+                    InsertDefaultData(_mongoDb, dataItems);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get table name.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        private static string GetTableName<T>()
+        {
+            return typeof(T).GetCustomAttribute<TableAttribute>(false).Name;
+        }
+
+        /// <summary>
+        /// Add initial values to the table. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="mongoDb"></param>
+        /// <param name="items"></param>
         private void InsertDefaultData<T>(IMongoDatabase mongoDb, List<T> items)
         {
             var tableName = GetTableName<T>();
@@ -39,26 +91,6 @@ namespace SmartHouse.Infrastructure.Data
             foreach (var item in items)
             {
                 loggerModel.InsertOne(item);
-            }
-        }
-
-        private string GetTableName<T>()
-        {
-            return typeof(T).GetCustomAttribute<TableAttribute>(false).Name;
-        }
-
-        public void EnsureCreated()
-        {
-            // Add test data to the logger table
-            List<LoggerModel> dataItems = OnModelCreating() ?? new List<LoggerModel>();
-
-            if (dataItems.Any())
-            {
-                bool exist = mongoDb.ListCollections().Any();
-                if (!exist)
-                {
-                    InsertDefaultData(mongoDb, dataItems);
-                }
             }
         }
     }

@@ -12,6 +12,7 @@ using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using SmartHouse.Infrastructure.Data;
+using SmartHouse.Infrastructure.Data.Helpers;
 using SmartHouse.Service.Weather.OpenWeatherMap;
 using SmartHouseAPI.Helpers;
 using SmartHouseAPI.Middleware;
@@ -109,8 +110,16 @@ namespace SmartHouseAPI
 
             if (IsLogger)
             {
-                MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
-                _loggerContext = new Contexts.LoggerContext(logConfig.Connection, logConfig.DbName);
+                // services.Configure<MongoSettings>(Configuration);
+                //services.Configure<ConnectionStringOptions>(Configuration.GetSection("ConnectionStrings"));
+
+                // services.AddScoped<LoggerContext>();
+
+                //MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
+                //_loggerContext = new Contexts.LoggerContext(logConfig.Connection, logConfig.DbName);
+
+                MongoSettings logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoSettings>();
+                _loggerContext = new Contexts.LoggerContext(logConfig);
 
                 if (_currentEnvironment.IsDevelopment())
                 {
