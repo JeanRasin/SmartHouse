@@ -30,6 +30,7 @@ namespace SmartHouse.Infrastructure.Data
         {
             return null;
         }
+
         private void InsertDefaultData<T>(IMongoDatabase mongoDb, List<T> items)
         {
             var tableName = GetTableName<T>();
@@ -48,7 +49,7 @@ namespace SmartHouse.Infrastructure.Data
 
         public void EnsureCreated()
         {
-            // Add test data to the logger table 
+            // Add test data to the logger table
             List<LoggerModel> dataItems = OnModelCreating() ?? new List<LoggerModel>();
 
             if (dataItems.Any())

@@ -89,6 +89,7 @@ namespace SmartHouse.Infrastructure.Data
         }
 
         #region dispose
+
         private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
@@ -108,6 +109,7 @@ namespace SmartHouse.Infrastructure.Data
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
+
+        #endregion dispose
     }
 }
