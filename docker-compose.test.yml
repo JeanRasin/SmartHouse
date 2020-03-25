@@ -8,18 +8,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.tests
-    #environment:
-      #- api_url=http://api:${INTERNAL_API_PORT}
-    #networks:
-      #- app-smart-house-network
-    #depends_on: 
-      #- api
   api_integration_test:
     image: api_test:latest
     entrypoint: ["dotnet", "vstest", "TestApiIntegration/ApiIntegrationTest.dll"]
-    #build:
-      #context: .
-      #dockerfile: Dockerfile.tests
     environment:
       - api_url=http://api:${INTERNAL_API_PORT}
     networks:
@@ -29,22 +20,14 @@ services:
       - api
   front_test_e2e_angular:
     image: smart_house_front_angular:latest
-    #build:
-      #context: ./Web/SmartHouseWebAngular
-      #dockerfile: Dockerfile.karma.test
-    #entrypoint: ["ng", "e2e", "&&", "ng", "test"]
     entrypoint: ["ng", "e2e"]
     networks:
      - app-smart-house-network
-    #ports:
-        #- ${EXTERNAL_FRONT_TEST_ANGULAR}:${INTERNAL_FRONT_TEST_ANGULAR}
     depends_on:
         - front_angular      
   front_test_angular:
     image: smart_house_front_angular:latest
     entrypoint: ["ng", "test"]
-    #networks:
-     #- app-smart-house-network
     ports:
         - ${EXTERNAL_FRONT_TEST_ANGULAR}:${INTERNAL_FRONT_TEST_ANGULAR}
     depends_on:

@@ -1,5 +1,4 @@
 
-
 # base image
 FROM node:latest
 
@@ -21,5 +20,4 @@ RUN npm install -g @angular/cli@7.3.9
 
 # add app
 COPY ./ClientApp /app
-
 
