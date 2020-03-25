@@ -21,6 +21,7 @@ namespace BusinessTest
         }
 
         #region WeatherWork
+
         /// <summary>
         /// Get weather.
         /// </summary>
@@ -117,6 +118,7 @@ namespace BusinessTest
             // Act & Assert
             await Assert.ThrowsAsync<OperationCanceledException>(() => weatherWork.GetWeatherAsync(tokenSource));
         }
-        #endregion
+
+        #endregion WeatherWork
     }
 }

@@ -23,6 +23,7 @@ namespace BusinessTest
         }
 
         #region GetLoggerAsync
+
         [Fact]
         [Trait("GetLoggerAsync", "Success")]
         public async void GetLoggerAsync_LoggerModelItems()
@@ -54,9 +55,11 @@ namespace BusinessTest
             // Assert
             Assert.Equal(result, loggerList);
         }
-        #endregion
+
+        #endregion GetLoggerAsync
 
         #region Log
+
         /// <summary>
         /// Log write.
         /// </summary>
@@ -111,9 +114,11 @@ namespace BusinessTest
             // Assert
             _mockLoggerRepository.Verify(v => v.Create(It.IsAny<LoggerModel>()), Times.Never);
         }
-        #endregion
+
+        #endregion Log
 
         #region BeginScope
+
         /// <summary>
         /// Method BeginScope is null.
         /// </summary>
@@ -127,9 +132,11 @@ namespace BusinessTest
             // Assert
             Assert.Null(result);
         }
-        #endregion
+
+        #endregion BeginScope
 
         #region IsEnabled
+
         /// <summary>
         /// Method IsEnabled is true.
         /// </summary>
@@ -143,6 +150,7 @@ namespace BusinessTest
             // Assert
             Assert.True(result);
         }
-        #endregion
+
+        #endregion IsEnabled
     }
 }

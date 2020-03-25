@@ -30,7 +30,7 @@ namespace BusinessTest
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        static List<GoalModel> GetTestData(int n = 10)
+        private static List<GoalModel> GetTestData(int n = 10)
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
@@ -48,6 +48,7 @@ namespace BusinessTest
         }
 
         #region GetGoalAll
+
         /// <summary>
         /// Get all the goals.
         /// </summary>
@@ -64,11 +65,12 @@ namespace BusinessTest
             //Assert
             Assert.NotNull(result);
             Assert.Equal(result.Count(), _testDataItems.Count());
-
         }
-        #endregion
+
+        #endregion GetGoalAll
 
         #region GetGoals
+
         /// <summary>
         /// Get unmarked goals.
         /// </summary>
@@ -101,9 +103,11 @@ namespace BusinessTest
             Assert.NotEqual(result.Count(), testData.Count());
             Assert.True(result.All(a => a.Done == false));
         }
-        #endregion
+
+        #endregion GetGoals
 
         #region GetGoal
+
         /// <summary>
         /// Get goal by id.
         /// </summary>
@@ -135,9 +139,11 @@ namespace BusinessTest
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => _goalWork.GetGoal(Guid.NewGuid()));
         }
-        #endregion
+
+        #endregion GetGoal
 
         #region Create
+
         /// <summary>
         /// Create goal.
         /// </summary>
@@ -157,9 +163,11 @@ namespace BusinessTest
             _mockGoalRepository.Verify(v => v.Create(It.IsAny<GoalModel>()), Times.Once);
             _mockGoalRepository.Verify(v => v.Save(), Times.Once);
         }
-        #endregion
+
+        #endregion Create
 
         #region Update
+
         /// <summary>
         /// Update goal.
         /// </summary>
@@ -193,9 +201,11 @@ namespace BusinessTest
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => _goalWork.Update(Guid.NewGuid(), "test name", true));
         }
-        #endregion
+
+        #endregion Update
 
         #region Delete
+
         /// <summary>
         /// Delete goal by id.
         /// </summary>
@@ -229,9 +239,11 @@ namespace BusinessTest
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => _goalWork.Delete(Guid.NewGuid()));
         }
-        #endregion
+
+        #endregion Delete
 
         #region Done
+
         /// <summary>
         /// Mark goal.
         /// </summary>
@@ -265,6 +277,7 @@ namespace BusinessTest
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => _goalWork.Done(Guid.NewGuid(), true));
         }
-        #endregion
+
+        #endregion Done
     }
 }
