@@ -113,7 +113,7 @@ namespace ApiTest
            {
                var exceptionHandlerFeature = new ExceptionHandlerFeature
                {
-                   Error = new Exception("Excaption message")
+                   Error = new Exception("Exception message")
                };
                return exceptionHandlerFeature;
            });
@@ -131,7 +131,7 @@ namespace ApiTest
             kkk.ControllerContext = controllerContext;
 
             // var problemDetails = ProblemDetailsFactory.CreateProblemDetails(httpContext);
-            // var tt=  ProblemDetailsFactory.CreateProblemDetails(httpContext);
+            // var t=  ProblemDetailsFactory.CreateProblemDetails(httpContext);
 
             // kkk.ProblemDetailsFactory = new
 
