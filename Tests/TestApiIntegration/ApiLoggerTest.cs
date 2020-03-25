@@ -21,6 +21,7 @@ namespace ApiIntegrationTest
         }
 
         #region Get logger
+
         [Fact]
         [Trait("Get Logger", "200")]
         public async Task GetLogger_Success_StatusCode200()
@@ -39,6 +40,7 @@ namespace ApiIntegrationTest
             Assert.True(items.Count > 0);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
-        #endregion
+
+        #endregion Get logger
     }
 }

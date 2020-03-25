@@ -20,6 +20,7 @@ namespace ApiIntegrationTest
         }
 
         #region Get weather
+
         [Fact]
         [Trait("Get Weather", "200")]
         public async Task GetWeather_Success_StatusCode200()
@@ -37,6 +38,7 @@ namespace ApiIntegrationTest
             Assert.NotNull(item);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
-        #endregion
+
+        #endregion Get weather
     }
 }

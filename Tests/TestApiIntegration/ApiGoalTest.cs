@@ -49,6 +49,7 @@ namespace ApiIntegrationTest
         }
 
         #region Get all goals
+
         [Fact, Order(1)]
         [Trait("Get All Goals", "200")]
         public async Task GetAllGoals_Success_StatusCode200()
@@ -67,9 +68,11 @@ namespace ApiIntegrationTest
             Assert.True(items.Count > 0);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
-        #endregion
+
+        #endregion Get all goals
 
         #region Get unmarked goals
+
         [Fact, Order(2)]
         [Trait("Get Unmarked Goals", "200")]
         public async Task GetGoals_Success_StatusCode200()
@@ -88,9 +91,11 @@ namespace ApiIntegrationTest
             Assert.True(items.Count > 0);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
-        #endregion
+
+        #endregion Get unmarked goals
 
         #region Get goal by id
+
         [Fact, Order(3)]
         [Trait("Get Goal By Id", "200")]
         public async Task GetGoal_Success_StatusCode200()
@@ -125,9 +130,11 @@ namespace ApiIntegrationTest
             Assert.NotEmpty(value);
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
-        #endregion
+
+        #endregion Get goal by id
 
         #region Create goal
+
         [Fact, Order(8)]
         [Trait("Create Goal", "201")]
         public async Task Create_Success_StatusCode201()
@@ -171,9 +178,11 @@ namespace ApiIntegrationTest
             Assert.NotEmpty(value);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
-        #endregion
+
+        #endregion Create goal
 
         #region Update goal
+
         [Fact, Order(5)]
         [Trait("Update Goal", "204")]
         public async Task Update_Success_StatusCode204()
@@ -244,9 +253,11 @@ namespace ApiIntegrationTest
             Assert.NotEmpty(value);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
-        #endregion
+
+        #endregion Update goal
 
         #region Delete goal
+
         [Fact, Order(10)]
         [Trait("Delete Goal", "204")]
         public async Task Delete_Success_StatusCode204()
@@ -279,9 +290,11 @@ namespace ApiIntegrationTest
             Assert.NotEmpty(value);
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
-        #endregion
+
+        #endregion Delete goal
 
         #region Done goal
+
         [Fact, Order(12)]
         [Trait("Done Goal", "204")]
         public async Task Done_Success_StatusCode204()
@@ -324,6 +337,7 @@ namespace ApiIntegrationTest
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
-        #endregion
+
+        #endregion Done goal
     }
 }

@@ -16,6 +16,7 @@ namespace ApiIntegrationTest
         }
 
         #region Get swagger
+
         [Fact]
         [Trait("Get Swagger JSON", "200")]
         public async Task GetSwagger_Success_Json()
@@ -47,6 +48,7 @@ namespace ApiIntegrationTest
             Assert.NotEmpty(value);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
-        #endregion
+
+        #endregion Get swagger
     }
 }
