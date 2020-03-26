@@ -59,6 +59,8 @@ namespace SmartHouse.Infrastructure.Data
 
             if (dataItems.Any())
             {
+                //var kk = _mongoDb.ListCollections().ToList();
+                //var pp = kk.Any();
                 bool exist = _mongoDb.ListCollections().Any();
                 if (!exist)
                 {
