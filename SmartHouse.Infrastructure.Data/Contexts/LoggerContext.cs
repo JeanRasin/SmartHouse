@@ -9,23 +9,9 @@ namespace SmartHouse.Infrastructure.Data
 {
     public class LoggerContext : ILoggerContext
     {
-        //public IMongoClient MongoClient { get; set; }
-
         private readonly IMongoClient _mongoClient;
 
         private readonly IMongoDatabase _mongoDb;
-
-        //public LoggerContext(string connection, string dbName)
-        //{
-        //    MongoClient = new MongoClient(connection);
-        //    mongoDb = MongoClient.GetDatabase(dbName);
-        //}
-
-        //public LoggerContext(MongoSettings configuration)
-        //{
-        //    MongoClient = new MongoClient(configuration.Connection);
-        //    mongoDb = MongoClient.GetDatabase(configuration.DatabaseName);
-        //}
 
         public LoggerContext(IMongoClient mongoClient, string databaseName)
         {
@@ -59,8 +45,6 @@ namespace SmartHouse.Infrastructure.Data
 
             if (dataItems.Any())
             {
-                //var kk = _mongoDb.ListCollections().ToList();
-                //var pp = kk.Any();
                 bool exist = _mongoDb.ListCollections().Any();
                 if (!exist)
                 {
@@ -80,7 +64,7 @@ namespace SmartHouse.Infrastructure.Data
         }
 
         /// <summary>
-        /// Add initial values to the table. 
+        /// Add initial values to the table.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="mongoDb"></param>
