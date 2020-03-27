@@ -19,12 +19,18 @@ namespace SmartHouseAPI.Controllers
             {
                 throw new InvalidOperationException("This shouldn't be invoked in non-development environments.");
             }
+           // var result0 = Problem();
 
+          // var kk = new ObjectResult("777");
+            // return
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
 
             if (context.Error == null)
             {
-                return base.Problem(detail: context.Error?.StackTrace, title: context.Error.Message);
+                //var result = base.Problem(detail: context.Error?.StackTrace, title: context.Error.Message);
+                var result = Problem();
+                //var result = base.HttpContext;
+                return result;
             }
 
             if (context.Error is KeyNotFoundException)
@@ -70,6 +76,19 @@ namespace SmartHouseAPI.Controllers
             {
                 return Problem();
             }
+        }
+
+        public override ObjectResult Problem(string detail = null,string instance = null,int? statusCode = null,string title = null,string type = null)
+        {
+            var problemDetails = ProblemDetailsFactory.CreateProblemDetails(
+                HttpContext,
+                statusCode: statusCode ?? 500,
+                title: title,
+                type: type,
+                detail: detail,
+                instance: instance);
+
+            return new ObjectResult(problemDetails);
         }
     }
 }

@@ -110,14 +110,6 @@ namespace SmartHouseAPI
 
             if (IsLogger)
             {
-                // services.Configure<MongoSettings>(Configuration);
-                //services.Configure<ConnectionStringOptions>(Configuration.GetSection("ConnectionStrings"));
-
-                // services.AddScoped<LoggerContext>();
-
-                //MongoDbLoggerConnectionConfig logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoDbLoggerConnectionConfig>();
-                //_loggerContext = new Contexts.LoggerContext(logConfig.Connection, logConfig.DbName);
-
                 MongoSettings logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoSettings>();
                 _loggerContext = new Contexts.LoggerContext(logConfig);
 

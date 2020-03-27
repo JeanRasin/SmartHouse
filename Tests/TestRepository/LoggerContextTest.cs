@@ -203,7 +203,6 @@ namespace RepositoryTest
         {
             // Arrange
             var loggerCollectionMock = new Mock<IMongoCollection<LoggerModel>>();
-            var loggerCursorMock = new Mock<IAsyncCursor<LoggerModel>>();
             var bsonCursorMock = new Mock<IAsyncCursor<BsonDocument>>();
 
             _mockDB.Setup(c => c.GetCollection<LoggerModel>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>())).Returns(loggerCollectionMock.Object).Verifiable();

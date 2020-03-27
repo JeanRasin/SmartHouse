@@ -37,6 +37,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoals()
         {
+            throw new Exception("!!!");
             IEnumerable<GoalModel> result = _goalWork.GetGoals();
             return Ok(result);
         }

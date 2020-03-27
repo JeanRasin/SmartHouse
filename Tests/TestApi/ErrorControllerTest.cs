@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SmartHouseAPI.Controllers;
 using System;
@@ -38,39 +40,75 @@ namespace ApiTest
         //    return controller;
         //}
 
-        public class FeatureCollection : IFeatureCollection
+        [Fact]
+        public void ErrorLocalDevelopment_WhenCalled111_ErrorData()
         {
-            public object this[Type key] { get => new object(); set => throw new NotImplementedException(); }
+            var request = new Mock<HttpRequest>();
+            request.Setup(x => x.Scheme).Returns("http");
+            request.Setup(x => x.Host).Returns(HostString.FromUriComponent("http://localhost:8080"));
+            request.Setup(x => x.PathBase).Returns(PathString.FromUriComponent("/api"));
 
-            public bool IsReadOnly => throw new NotImplementedException();
+            var httpContext = Mock.Of<HttpContext>(_ =>
+                _.Request == request.Object
+            );
 
-            public int Revision => throw new NotImplementedException();
-
-            // ... get the required type of feature
-            public TFeature Get<TFeature>()
+            //Controller needs a controller context 
+            var controllerContext = new ControllerContext()
             {
-                return (TFeature)this[typeof(TFeature)];    // note: cast here!
-            }
-
-            public IEnumerator<KeyValuePair<Type, object>> GetEnumerator()
+                HttpContext = httpContext,
+            };
+            //assign context to controller
+            var controller = new ErrorController()
             {
-                throw new NotImplementedException();
-            }
+                ControllerContext = controllerContext,
+            };
 
-            public void Set<TFeature>(TFeature instance)
-            {
-                this[typeof(TFeature)] = instance;          // note!
-            }
+            var mockErrorWork = new Mock<IWebHostEnvironment>();
 
-            IEnumerator IEnumerable.GetEnumerator()
+            mockErrorWork.Setup(m => m.EnvironmentName).Returns(() =>
             {
-                throw new NotImplementedException();
-            }
+                return "Development";
+            });
+
+            var result = controller.ErrorLocalDevelopment(mockErrorWork.Object);
         }
 
-        /* */
+        [Fact]
+        public void ErrorLocalDevelopment_WhenCalled000_ErrorData()
+        {
+            var controller = new ErrorController
+            {
+                ControllerContext = new ControllerContext(),
 
-        [Fact(Skip = "Do not work!!!", DisplayName = "Error controller")]
+        };
+            controller.ControllerContext.HttpContext = new DefaultHttpContext();
+            controller.ProblemDetailsFactory = controller.ControllerContext.HttpContext?.RequestServices?.GetRequiredService<ProblemDetailsFactory>();
+
+            //controller.ControllerContext.HttpContext.Request.Headers["device-id"] = "20317";
+
+            //controller
+
+            controller.HttpContext.Features.Set<IExceptionHandlerFeature>(new ExceptionHandlerFeature
+            {
+                Error = null
+            });
+
+            //  controller.ControllerContext.HttpContext.Features.Get
+
+            //HttpContext.Features.Get<IExceptionHandlerFeature>();
+
+            var mockErrorWork = new Mock<IWebHostEnvironment>();
+
+            mockErrorWork.Setup(m => m.EnvironmentName).Returns(() =>
+            {
+                return "Development";
+            });
+
+            var result = controller.ErrorLocalDevelopment(mockErrorWork.Object);
+        }
+
+        //[Fact(Skip = "Do not work!!!", DisplayName = "Error controller")]
+        [Fact]
         public void ErrorLocalDevelopment_WhenCalled_ErrorData()
         {
             var mockErrorWork = new Mock<IWebHostEnvironment>();
@@ -85,6 +123,7 @@ namespace ApiTest
             var mockErrorController = new Mock<ErrorController>()
             {
                 CallBase = true,
+
             };
 
             //mockErrorController.Setup(m => m.Problem()).Returns(() =>
