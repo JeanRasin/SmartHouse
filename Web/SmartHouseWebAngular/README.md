@@ -1,4 +1,4 @@
-﻿# 🖥 Smart House Angular 
+﻿# 🖥 WEB Angular 
 
 Этот проект фронта написан на [Angular CLI](https://github.com/angular/angular-cli) версии 8.3.14.
 Который использует [TypeScript](https://github.com/microsoft/TypeScript) версии 3.5.3.
