@@ -4,28 +4,15 @@
 В качестве набора компонентов использовался [Angular Material UI](https://material.angular.io/) версии 8.3.14.
 
 ## 🚀 Запуск проекта
-Перед запуском необходимо установить пакеты вводя команду в консоль `npm install` из папки [ClientApp](ClientApp). Так же нужно построить и проверить проект командой `npm run build`. Для запуска проекта необхоимо выполнить команду `npm start`. Проект откроется по адресу `http://localhost:4200/`. 
+Убедитесь что у вас установлен [Node.js](https://nodejs.org/en/download). Перед запуском необходимо установить пакеты вводя команду в консоль `npm install` из папки [ClientApp](ClientApp). Так же нужно построить и проверить проект командой `npm run build`. Для запуска проекта необхоимо выполнить команду `npm start`. Проект откроется по адресу `http://localhost:4200/`. 
 
-## Code scaffolding
+## Unit тесты
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Для запуска unit тестирования необходимо выполнить `npm run test` в качестве тестового фреймворка используется [Karma](https://karma-runner.github.io).
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
+## End-to-end тесты
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
 
 
 
