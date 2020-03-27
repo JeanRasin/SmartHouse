@@ -2,7 +2,7 @@
 **Smart Home System** - Проект реализации системы "умный дом". А так же для эксперементирования с разными технологиями.
 
 ## 🗜 Система состоит из элементов:
-1. 🕸 Web Front сделан на [Angular](https://github.com/angular). Проект [SmartHouseWebAngular](Web/SmartHouseWebAngular).
+1. 🖥 Web Front сделан на [Angular](https://github.com/angular). Проект [SmartHouseWebAngular](Web/SmartHouseWebAngular).
 2. ⚙️ API для фронта сделан на .[NET Core](https://github.com/dotnet/core). Проект [SmartHouseAPI](API/SmartHouseAPI).
 3. 📘 Для основной информации хранения данных используется база данных [PostgreSql](https://github.com/postgres).
 4. 📗 Для хранения логов используется база данных [MongoDB](https://github.com/mongodb).
