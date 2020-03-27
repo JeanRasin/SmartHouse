@@ -1,11 +1,11 @@
-﻿# Smart House Angular 
+﻿# 🖥 Smart House Angular 
 
-Этот проект использует [Angular CLI](https://github.com/angular/angular-cli) version 8.3.14.
-В качестве набора компонентов использовался [Angular Material UI](https://material.angular.io/) version 8.3.14.
+Этот проект фронта написан на [Angular CLI](https://github.com/angular/angular-cli) версии 8.3.14.
+В качестве набора компонентов использовался [Angular Material UI](https://material.angular.io/) версии 8.3.14.
 
-## Development server
+## 🚀 Запуск проекта
 
-Run `ng serve` or `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Для запуска проекта необхоимо выполнить команды в папке [ClientApp](ClientApp) `ng serve` или `npm start`. Проект откроется по адресу `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
