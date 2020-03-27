@@ -63,7 +63,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiIntegrationTest", "Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B385FDF5-7CD7-4A94-B9A0-B67137DC83C7}"
 	ProjectSection(SolutionItems) = preProject
-		REDAME.md = REDAME.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SoapUI Services", "SoapUI Services", "{EB05DB48-C376-4832-AD86-08854A3C34BF}"
