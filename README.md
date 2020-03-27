@@ -2,10 +2,10 @@
 Smart Home System. - Проект для системы домашней интеллектуальной системы. А так же для эксперементирования с разными технологиями.
 
 Система состоит из элементов:
-1. 🕸 Web Front сделан на [Angular](https://github.com/angular). [SmartHouseWebAngular](Web/SmartHouseWebAngular).
-2. ⚙️ API для фронта сделан на .[NET Core](https://github.com/dotnet/core). [SmartHouseAPI](API/SmartHouseAPI).
-3. 📘 Для основной информации хранения данных используется база данных [PostgreSql](https://github.com/postgres).
-4. 📗  Для хранения логов используется база данных [MongoDB](https://github.com/mongodb).
+1.🕸 Web Front сделан на [Angular](https://github.com/angular). [SmartHouseWebAngular](Web/SmartHouseWebAngular).
+2.⚙️ API для фронта сделан на .[NET Core](https://github.com/dotnet/core). [SmartHouseAPI](API/SmartHouseAPI).
+3.📘 Для основной информации хранения данных используется база данных [PostgreSql](https://github.com/postgres).
+4.📗 Для хранения логов используется база данных [MongoDB](https://github.com/mongodb).
 
 Для всех элементов реализованны тесты:
 1. 🧪 Web Front использует тесты. Для юнит тестирования используется фреймворк [Karma](https://karma-runner.github.io/latest/index.html), а для интеграционного [Jasmine](https://jasmine.github.io). [Процесс запуска](Web/SmartHouseWebAngular/README.md).
