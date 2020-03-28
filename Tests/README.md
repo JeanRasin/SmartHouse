@@ -16,3 +16,17 @@ API состоит из вертикально зависимых слоёв (Re
 docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
 ```
 Юнит и интеграционные тесты выполняются в разных контейнерах. Результаты тестов можно будет увидеть в консоле контейнеров. После выполения работы контейнеры выключаются.
+Для построения образа тестов используется файл [Dockerfile.tests](https://github.com/JeanRasin/SmartHouse/blob/master/Dockerfile.tests) с его помошью можно запускать отдельные тесты.
+Для начала нужно собрать образ из [корня](https://github.com/JeanRasin/SmartHouse) решения.
+```docker
+docker build -f Dockerfile.tests --rm -t all-test .
+```
+После запустить контейнер.
+```docker
+docker run --name all-test_business -d all-test
+```
+И запустить тест
+```docker
+docker exec -it all-test_business bash dotnet vstest TestBusiness/BusinessTest.dll
+```
+
