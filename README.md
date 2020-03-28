@@ -11,7 +11,7 @@
 5. 🌡️ Данные о погоде поступают из сервиса [Open Weather](https://openweathermap.org). Проект [SmartHouse.Service.Weather.OpenWeatherService](SmartHouse.Service.Weather.OpenWeatherService).
 
 ## 🔬 Тесты системы
-1. 🧪 Для юнит тестирования фронта используется фреймворк [Karma](https://karma-runner.github.io/latest/index.html), а для интеграционного [Protractor](https://github.com/angular/protractor). Процесс запуска [тут](Web/SmartHouseWebAngular/README.md).
+1. 🧪 Для юнит тестирования фронта используется фреймворк [Karma](https://karma-runner.github.io/latest/index.html), а для интеграционного [Protractor](https://github.com/angular/protractor). Процесс запуска [тут](Web/SmartHouseWebAngular/README.md#-unit-тесты).
 2. ⚗️ API тесты реализуют юнит и интеграционное тестирование на технологиях [NUnit](https://github.com/nunit) и [XUnit](https://github.com/xunit). Процесс запуска [тут](Tests/README.md).
 
 ## ⚙️ Эмуляция сервисов
