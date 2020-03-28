@@ -29,7 +29,7 @@ docker run --name all-test_business -d all-test
 ```docker
 docker exec -it all-test_business bash dotnet vstest TestBusiness/BusinessTest.dll
 ```
-Интеграционный тест запускается так же, но нужно запустить вспомогательные контейнеры командой, но уже без ``docker-compose.test.yml`` файла тестов.
+Интеграционный тест запускается так же, но нужно запустить вспомогательные контейнеры командой, но уже без `docker-compose.test.yml` файла тестов.
 ```docker-compose
 docker-compose -f docker-compose.yml up -d
 ```
@@ -37,4 +37,7 @@ docker-compose -f docker-compose.yml up -d
 ```docker
 docker run -it --name all-test_integration --network smarthouse_smart-house-network -d all-test
 ```
- 
+ И запустить тест
+```docker
+docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiIntegrationTest.dll
+```
