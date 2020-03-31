@@ -1,11 +1,12 @@
-# ⚙️ API
-**Smart Home System** - Проект реализации системы "умный дом". А так же для экспериментирования с разными технологиями.
+# ⚙️ REST API
+**ASP.NET Core REST API** - Backend проект для реализации API системы умный дом.
 
 ## 🧱 Функции системы
 1. Механизм получения погоды из сервиса погоды.
 2. 
 
 ## 📦 Пакеты
+* [.NET Core](https://github.com/dotnet/core) версии 3.1.
 * [Bogus](https://github.com/bchavez/Bogus) версии 29.0.1.
 * [Npgsql.EntityFrameworkCore.PostgreSQL](https://github.com/npgsql/efcore.pg) версии 3.1.2.
 * [Swashbuckle.AspNetCore.Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) версии 5.0.0.
