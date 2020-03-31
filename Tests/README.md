@@ -42,7 +42,7 @@ docker run -it --name all-test_integration --network smarthouse_smart-house-netw
 docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiIntegrationTest.dll
 ```
 ## 📦 Пакеты
-* [XUnit](https://github.com/xunit/xunit) (2.4.1).
+* [XUnit](https://github.com/xunit/xunit) (2.4.1) - .
 * [NUnit](https://github.com/nunit) версии 3.12.0.
 * [Moq](https://github.com/nunit) версии 4.13.1.
 * [Bogus](https://github.com/bchavez/Bogus) версии 29.0.1.
