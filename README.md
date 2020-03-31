@@ -35,4 +35,8 @@ docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
 
 ## Авторство
  * **Rasin Jean** - Основная работа - [JeanRasin](https://github.com/JeanRasin)
+ 
+## Лицензия
+Этот проект лицензирован по лицензии MIT - подробности см. В файле [LICENSE](https://github.com/JeanRasin/SmartHouse/blob/master/LICENSE). 
+
 
