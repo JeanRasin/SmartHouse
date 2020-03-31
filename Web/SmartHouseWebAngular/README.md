@@ -1,4 +1,4 @@
-﻿# 🖥 WEB Angular 
+# 🖥 WEB Angular 
 Веб представление проекта написанный на платформе [Angular CLI](https://github.com/angular/angular-cli). Проект содержит главную страницу `http://localhost:4200` с компонентом погоды. На странице погоды `http://localhost:4200/weather` содержится отображение погоды. На странице логов `http://localhost:4200/log` выводятся все логи [backend](https://github.com/JeanRasin/SmartHouse/tree/master/API/SmartHouseAPI) проекта.
 На странице `http://localhost:4200/goal` выводится список с задачами.
 
@@ -35,7 +35,7 @@ docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web
 * [Angular CLI](https://github.com/angular/angular-cli) версии 8.3.14.
 * [TypeScript](https://github.com/microsoft/TypeScript) версии 3.5.3.
 
-Дизайн
+UI Components
 * [Angular Material UI](https://material.angular.io/) версии 8.3.14.
 
 Unit тесты
