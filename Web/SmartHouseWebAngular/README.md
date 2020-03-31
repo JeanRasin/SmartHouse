@@ -31,3 +31,10 @@ docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web
  docker exec -it smart-house-web-angular-test_1 bash ng e2e
 ```
 
+## Пакеты
+Софт
+* [Angular CLI](https://github.com/angular/angular-cli) версии 8.3.14.
+* [TypeScript](https://github.com/microsoft/TypeScript) версии 3.5.3.
+
+Графика
+* [Angular Material UI](https://material.angular.io/) версии 8.3.14
