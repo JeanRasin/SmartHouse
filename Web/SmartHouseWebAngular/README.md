@@ -30,7 +30,7 @@ docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web
 ```
 И конечно проект и все его тесты можно запустить через [docker-compos](https://github.com/JeanRasin/SmartHouse), как это сделать можно прочитать [тут](https://github.com/JeanRasin/SmartHouse/blob/master/README.md#-docker). 
 
-## Пакеты
+## 📦 Пакеты
 ### Софт
 * [Angular CLI](https://github.com/angular/angular-cli) версии 8.3.14.
 * [TypeScript](https://github.com/microsoft/TypeScript) версии 3.5.3.
@@ -45,8 +45,8 @@ docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web
 * [Protractor](http://www.protractortest.org/) версии 5.4.2.
 * [Jasmine](https://jasmine.github.io/) версии 3.5.7.
 
-## Авторство
+## 👽 Авторство
  * **Rasin Jean** - Основная работа - [JeanRasin](https://github.com/JeanRasin)
  
- ## Лицензия
+## 📜 Лицензия
 Этот проект лицензирован по лицензии MIT - подробности см. В файле [LICENSE](https://github.com/JeanRasin/SmartHouse/blob/master/LICENSE).
