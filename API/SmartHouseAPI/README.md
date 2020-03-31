@@ -1,5 +1,5 @@
 # ⚙️ REST API
-**ASP.NET Core REST API** - Backend проект для реализации API системы умный дом. Исполльзует [Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) автоматическую систему документирования. Открыть можно по адресау `http://localhost:55673/api/docs/index.html` json описание `http://localhost:55673/api/docs/v1/swagger.json`.
+**ASP.NET Core REST API** - Backend проект для реализации API системы умный дом. Реализовано в проекте [API\SmartHouseAPI](https://github.com/JeanRasin/SmartHouse/tree/master/API/SmartHouseAPI). Исполльзует [Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) автоматическую систему документирования. Открыть можно по адресау `http://localhost:55673/api/docs/index.html` json описание `http://localhost:55673/api/docs/v1/swagger.json`.
 
 ## 📦 Пакеты
 * [.NET Core](https://github.com/dotnet/core) версии 3.1.
