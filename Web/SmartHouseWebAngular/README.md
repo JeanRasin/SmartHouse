@@ -20,7 +20,7 @@ docker build --rm -t smart-house-web-angular-test .
 ```docker
 docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web-angular-test
 ```
-Для запуска unit тестов необходимо ввести команду после чего можно открыть веб пердставление по адресу `http://localhost:9876/`.
+Для запуска unit тестов необходимо ввести команду после чего можно открыть веб пердставление по адресу `http://localhost:9876`.
 ```docker
  docker exec -it smart-house-web-angular-test_1 bash ng test
 ```
