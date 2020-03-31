@@ -25,7 +25,7 @@ docker build -f Dockerfile.tests --rm -t all-test .
 ```docker
 docker run --name all-test_business -d all-test
 ```
-И запустить тест
+И запустить тест.
 ```docker
 docker exec -it all-test_business bash dotnet vstest TestBusiness/BusinessTest.dll
 ```
