@@ -46,4 +46,4 @@ End-to-end тесты
 * [Jasmine](https://jasmine.github.io/) версии 3.5.7.
 
 ## Авторство
- * *Rasin Jean** - Основная работа - [JeanRasin](https://github.com/JeanRasin)
+ * **Rasin Jean** - Основная работа - [JeanRasin](https://github.com/JeanRasin)
