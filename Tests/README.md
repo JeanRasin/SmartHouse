@@ -37,7 +37,7 @@ docker-compose -f docker-compose.yml up -d
 ```docker
 docker run -it --name all-test_integration --network smarthouse_smart-house-network -d all-test
 ```
- И запустить тест
+ И запустить тест.
 ```docker
 docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiIntegrationTest.dll
 ```
