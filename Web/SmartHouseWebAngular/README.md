@@ -44,3 +44,6 @@ Unit тесты
 End-to-end тесты
 * [Protractor](http://www.protractortest.org/) версии 5.4.2
 * [Jasmine](https://jasmine.github.io/) версии 3.5.7.
+
+## Авторство
+ * *Rasin Jean** - Основная работа - [JeanRasin](https://github.com/JeanRasin)
