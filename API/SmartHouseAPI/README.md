@@ -1,4 +1,4 @@
-# 🏠 Smart House System 
+# ⚙️ API
 **Smart Home System** - Проект реализации системы "умный дом". А так же для экспериментирования с разными технологиями.
 
 ## 🧱 Функции системы
@@ -33,6 +33,9 @@ docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
 ```
 Все порты которые использует проект находится в файле [.env](https://github.com/JeanRasin/SmartHouse/blob/master/.env).
 
-## Авторство
- * **Rasin Jean** - Основная работа - [JeanRasin](https://github.com/JeanRasin)
+## 👽 Авторство
+ * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
+ 
+## 📜 Лицензия
+Этот проект лицензирован по лицензии MIT - подробности см. В файле [LICENSE](https://github.com/JeanRasin/SmartHouse/blob/master/LICENSE).
 
