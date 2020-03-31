@@ -51,7 +51,7 @@ docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiInteg
 * [Microsoft.AspNetCore.TestHost](https://github.com/aspnet/Hosting/tree/master/src/Microsoft.AspNetCore.TestHost) версии 3.1.2.
 
 ## 👽 Авторство
- * **Rasin Jean** - Основная работа - [JeanRasin](https://github.com/JeanRasin)
+ * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
  
 ## 📜 Лицензия
 Этот проект лицензирован по лицензии MIT - подробности см. В файле [LICENSE](https://github.com/JeanRasin/SmartHouse/blob/master/LICENSE).
