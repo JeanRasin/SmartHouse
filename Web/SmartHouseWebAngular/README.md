@@ -46,7 +46,7 @@ docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web
 * [Jasmine](https://jasmine.github.io/) версии 3.5.7.
 
 ## 👽 Авторство
- * **Rasin Jean** - Основная работа - [JeanRasin](https://github.com/JeanRasin)
+ * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
  
 ## 📜 Лицензия
 Этот проект лицензирован по лицензии MIT - подробности см. В файле [LICENSE](https://github.com/JeanRasin/SmartHouse/blob/master/LICENSE).
