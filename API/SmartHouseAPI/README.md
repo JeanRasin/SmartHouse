@@ -5,37 +5,14 @@
 1. Механизм получения погоды из сервиса погоды.
 2. 
 
-## 🗜 Элементы системы
-1. 🖥 Web Front сделан на [Angular](https://github.com/angular). Проект [SmartHouseWebAngular](Web/SmartHouseWebAngular).
-2. ⚙️ API для фронта сделан на .[NET Core](https://github.com/dotnet/core). Проект [SmartHouseAPI](API/SmartHouseAPI).
-3. 📘 Для основной информации хранения данных используется база данных [PostgreSql](https://github.com/postgres).
-4. 📗 Для хранения логов используется база данных [MongoDB](https://github.com/mongodb).
-5. 🌡️ Данные о погоде поступают из сервиса [Open Weather](https://openweathermap.org). Проект [SmartHouse.Service.Weather.OpenWeatherService](SmartHouse.Service.Weather.OpenWeatherService).
-
-## 🔬 Тесты системы
-1. 🧪 Для юнит тестирования фронта используется фреймворк [Karma](https://karma-runner.github.io/latest/index.html), а для интеграционного [Protractor](https://github.com/angular/protractor). Процесс запуска [тут](Web/SmartHouseWebAngular/README.md#-unit-тесты).
-2. ⚗️ API тесты реализуют юнит и интеграционное тестирование на технологиях [NUnit](https://github.com/nunit) и [XUnit](https://github.com/xunit). Процесс запуска [тут](Tests/README.md).
-
-## ⚙️ Эмуляция сервисов
-Для эмуляции работы сервисов используется программа [SoapUI]() где [файлы](Other\SoapUI%20Services) для эмуляции работы API сервисов и сервиса погоды.
-Так же для эмуляции сервиса погоды используется проект [WetherApiNodejs](SmartHouse.Service.Weather.OpenWeatherService) написанный на [Node.js](https://github.com/nodejs).
-
-## 🐳 Docker 
-Все функции проекта можно запустить в [Docker](https://github.com/docker) так же как и тесты.
-
-Для запуска много контейнерного приложения необходимо выполнить инструкцию через консоль из корня решения. Файл для описания много контейнерного приложения [docker-compose.yml](https://github.com/JeanRasin/SmartHouse/blob/master/docker-compose.yml). 
-```docker-compose
-docker-compose -f docker-compose.yml up -d
-```
-Для запуска вместе с тестами необходимо выполнить команду в консоле. Файл для описания много контейнерного приложения [docker-compose.test.yml](https://github.com/JeanRasin/SmartHouse/blob/master/docker-compose.test.yml). 
-```docker-compose
-docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
-```
-Все порты которые использует проект находится в файле [.env](https://github.com/JeanRasin/SmartHouse/blob/master/.env).
+## 📦 Пакеты
+* [Bogus](https://github.com/bchavez/Bogus) версии 29.0.1.
+* [Npgsql.EntityFrameworkCore.PostgreSQL](https://github.com/npgsql/efcore.pg) версии 3.1.2.
+* [Swashbuckle.AspNetCore.Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) версии 5.0.0.
+* [Microsoft.EntityFrameworkCore.Tools](https://github.com/dotnet/efcore) версии 16.2.0.
 
 ## 👽 Авторство
  * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
  
 ## 📜 Лицензия
 Этот проект лицензирован по лицензии MIT - подробности см. В файле [LICENSE](https://github.com/JeanRasin/SmartHouse/blob/master/LICENSE).
-
