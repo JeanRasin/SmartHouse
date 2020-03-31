@@ -54,4 +54,4 @@ Integration
  * **Rasin Jean** - Основная работа - [JeanRasin](https://github.com/JeanRasin)
  
 ## Лицензия
-Этот проект лицензирован по лицензии MIT - подробности см. В файле [LICENSE]().
+Этот проект лицензирован по лицензии MIT - подробности см. В файле [LICENSE](https://github.com/JeanRasin/SmartHouse/blob/master/LICENSE).
