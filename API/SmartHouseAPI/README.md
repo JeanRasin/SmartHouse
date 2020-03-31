@@ -8,9 +8,9 @@
 ## 📦 Пакеты
 * [.NET Core](https://github.com/dotnet/core) версии 3.1.
 * [Bogus](https://github.com/bchavez/Bogus) версии 29.0.1.
-* [Npgsql.EntityFrameworkCore.PostgreSQL](https://github.com/npgsql/efcore.pg) версии 3.1.2.
 * [Swashbuckle.AspNetCore.Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) версии 5.0.0.
 * [Microsoft.EntityFrameworkCore.Tools](https://github.com/dotnet/efcore) версии 16.2.0.
+* [Npgsql.EntityFrameworkCore.PostgreSQL](https://github.com/npgsql/efcore.pg) версии 3.1.2.
 
 ## 👽 Авторство
  * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
