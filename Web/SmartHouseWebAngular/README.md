@@ -29,6 +29,7 @@ docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web
 ```docker
  docker exec -it smart-house-web-angular-test_1 bash ng e2e
 ```
+И конечно проект и все его тесты можно запустить через [docker-compos](https://github.com/JeanRasin/SmartHouse), как это сделать можно прочитать [тут](https://github.com/JeanRasin/SmartHouse/blob/master/README.md#-docker). 
 
 ## Пакеты
 Софт
