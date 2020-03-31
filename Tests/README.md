@@ -45,6 +45,7 @@ docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiInteg
 * [XUnit](https://github.com/xunit/xunit) версии 2.4.1.
 * [NUnit](https://github.com/nunit) версии 3.12.0.
 * [Moq](https://github.com/nunit) версии 4.13.1.
+* [Bogus](https://github.com/bchavez/Bogus) версии 29.0.1.
 * [Microsoft.NET.Test.Sdk](https://github.com/microsoft/vstest/) версии 16.2.0.
 
 ### Integration
