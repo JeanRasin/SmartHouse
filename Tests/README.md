@@ -43,11 +43,11 @@ docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiInteg
 ```
 ## Пакеты
 Test Services
-* [nunit](https://github.com/nunit) версии 3.12.0.
+* [NUnit](https://github.com/nunit) версии 3.12.0.
 * [Moq](https://github.com/nunit) версии 4.13.1.
 
 Integration
-* [xunit](https://github.com/xunit/xunit) версии 2.4.1.
+* [XUnit](https://github.com/xunit/xunit) версии 2.4.1.
 * [Microsoft.AspNetCore.TestHost](https://github.com/aspnet/Hosting/tree/master/src/Microsoft.AspNetCore.TestHost) версии 3.1.2.
 * [Microsoft.NET.Test.Sdk](https://github.com/microsoft/vstest/) версии 16.2.0.
 
