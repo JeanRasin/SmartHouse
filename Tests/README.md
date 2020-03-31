@@ -3,7 +3,7 @@
 API состоит из вертикально зависимых слоёв ([Repository](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Infrastructure.Data), [Business logic](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Business.Data), [Net. Core API](https://github.com/JeanRasin/SmartHouse/tree/master/API/SmartHouseAPI) и [Service](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Service.Weather.OpenWeatherService)) и каждый слой тестируется отдельно и независимо от других.
 
 ## 🧪 Unit тесты
-Основные юнит тесты можно запустить через механизм тестирования Visual Studio. Либо через консоль из корня проекта теста используя команды 
+Основные юнит тесты можно запустить через механизм тестирования [Visual Studio](https://visualstudio.github.com/). Либо через консоль из корня проекта теста используя команды 
 `dotnet restore` для построения проекта и `dotnet test` для запуска теста. Например [тест](TestRepository) репозитория. Для запуска всех тестов необходиомо перейти в корень [решения](https://github.com/JeanRasin/SmartHouse) и запустить команду `dotnet test SmartHouse.sln`. Так же можно использовать команду `dotnet vstest <path\*.dll>...` для запуска отдельных тестов, например `dotnet vstest Tests\TestRepository\bin\Debug\netcoreapp3.1\RepositoryTest.dll`.
 Все тесты используют фреймворк [XUnit](https://github.com/xunit/xunit) кроме [ServicesTest.csproj](https://github.com/JeanRasin/SmartHouse/blob/master/Tests/TestServices/ServicesTest.csproj) который использует [NUnit](https://github.com/nunit).
 
@@ -41,3 +41,15 @@ docker run -it --name all-test_integration --network smarthouse_smart-house-netw
 ```docker
 docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiIntegrationTest.dll
 ```
+## Пакеты
+Test Services
+* [nunit](https://github.com/nunit) версии 3.12.0.
+* [Moq](https://github.com/nunit) версии 4.13.1.
+
+Integration
+* [xunit](https://github.com/xunit/xunit) версии 2.4.1.
+* [Microsoft.AspNetCore.TestHost](https://github.com/aspnet/Hosting/tree/master/src/Microsoft.AspNetCore.TestHost) версии 3.1.2.
+* [Microsoft.NET.Test.Sdk](https://github.com/microsoft/vstest/) версии 16.2.0.
+
+## Авторство
+ * **Rasin Jean** - Основная работа - [JeanRasin](https://github.com/JeanRasin)
