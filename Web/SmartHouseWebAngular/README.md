@@ -36,5 +36,12 @@ docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web
 * [Angular CLI](https://github.com/angular/angular-cli) версии 8.3.14.
 * [TypeScript](https://github.com/microsoft/TypeScript) версии 3.5.3.
 
-Графика
+Дизайн
 * [Angular Material UI](https://material.angular.io/) версии 8.3.14
+
+Тесты Unit
+* [Karma](https://karma-runner.github.io) версии 4.4.1.
+
+Тесты End-to-end
+* [Protractor](http://www.protractortest.org/) версии 5.4.2
+* [Jasmine](https://jasmine.github.io/) версии 3.5.7.
