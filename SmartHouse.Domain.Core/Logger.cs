@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SmartHouse.Domain.Core
 {
     [Table("logger")]
-    public class LoggerModel : MongoBaseModel
+    public class Logger : MongoBase
     {
         [BsonElement("logLevel")]
         [BsonRepresentation(BsonType.Int32)]
@@ -34,11 +34,11 @@ namespace SmartHouse.Domain.Core
         //[BsonElement("exception")]
         //public Exception Exception { get; set; }
 
-        public LoggerModel()
+        public Logger()
         {
         }
 
-        public LoggerModel(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, string message)
+        public Logger(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, string message)
         {
             Id = Guid.NewGuid().ToString("N");
             LogLevel = logLevel;

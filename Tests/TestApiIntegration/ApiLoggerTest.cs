@@ -32,7 +32,7 @@ namespace ApiIntegrationTest
             // Act
             HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
-            List<LoggerModel> items = JsonConvert.DeserializeObject<List<LoggerModel>>(value, _serializerOptions);
+            List<Logger> items = JsonConvert.DeserializeObject<List<Logger>>(value, _serializerOptions);
 
             // Assert
             Assert.NotEmpty(value);

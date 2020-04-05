@@ -1,5 +1,6 @@
 ﻿using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
+using SmartHouse.Services.Interfaces;
 using System;
 using System.Net.Http;
 using System.Threading;
@@ -28,7 +29,7 @@ namespace SmartHouse.Business.Data
         /// Get weather.
         /// </summary>
         /// <returns></returns>
-        public async Task<WeatherModel> GetWeatherAsync()
+        public async Task<Weather> GetWeatherAsync()
         {
             var cts = new CancellationTokenSource();
             return await GetWeatherAsync(cts);
@@ -39,13 +40,13 @@ namespace SmartHouse.Business.Data
         /// </summary>
         /// <param name="tokenSource"></param>
         /// <returns></returns>
-        public async Task<WeatherModel> GetWeatherAsync(CancellationTokenSource tokenSource = default)
+        public async Task<Weather> GetWeatherAsync(CancellationTokenSource tokenSource = default)
         {
             CancellationToken token = tokenSource.Token;
 
             try
             {
-                Task<WeatherModel> task = Task.Run(() =>
+                Task<Weather> task = Task.Run(() =>
                {
                    return _weatherService.GetWeatherAsync(token);
                });

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using SmartHouse.Infrastructure.Data;
+using SmartHouse.Domain.Interfaces.Contexts;
 
 namespace SmartHouseAPI.Helpers
 {

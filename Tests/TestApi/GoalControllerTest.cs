@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using SmartHouse.Domain.Core;
-using SmartHouse.Domain.Interfaces;
+using SmartHouse.Services.Interfaces;
 using SmartHouseAPI.Controllers;
 using SmartHouseAPI.InputModel;
 using System;
@@ -17,15 +17,15 @@ namespace ApiTest
     [Collection("Goal controller")]
     public class GoalControllerTest
     {
-        private static readonly List<GoalModel> _goalDataItems = GetTestData();
-        private static readonly GoalModel _goalDataItem = _goalDataItems.First();
+        private static readonly List<Goal> _goalDataItems = GetTestData();
+        private static readonly Goal _goalDataItem = _goalDataItems.First();
 
-        private readonly Mock<IGoalWork<GoalModel>> _mockGoalWork;
+        private readonly Mock<IGoalWork<Goal>> _mockGoalWork;
         private readonly GoalController _goalController;
 
         public GoalControllerTest()
         {
-            _mockGoalWork = new Mock<IGoalWork<GoalModel>>();
+            _mockGoalWork = new Mock<IGoalWork<Goal>>();
             _goalController = new GoalController(_mockGoalWork.Object);
         }
 
@@ -34,12 +34,12 @@ namespace ApiTest
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        private static List<GoalModel> GetTestData(int n = 10)
+        private static List<Goal> GetTestData(int n = 10)
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
 
-            List<GoalModel> result = new Faker<GoalModel>()
+            List<Goal> result = new Faker<Goal>()
                        .StrictMode(true)
                        .RuleFor(o => o.Id, f => f.Random.Uuid())
                        .RuleFor(o => o.Name, f => f.Random.Words(3))
@@ -68,7 +68,7 @@ namespace ApiTest
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<List<GoalModel>>(result.Value);
+            Assert.IsType<List<Goal>>(result.Value);
             Assert.Equal(result.Value, _goalDataItems);
             Assert.Equal(result.StatusCode, StatusCodes.Status200OK);
         }
@@ -106,7 +106,7 @@ namespace ApiTest
 
             //Assert
             Assert.NotNull(result);
-            Assert.IsType<List<GoalModel>>(result.Value);
+            Assert.IsType<List<Goal>>(result.Value);
             Assert.Equal(result.Value, _goalDataItems);
             Assert.Equal(result.StatusCode, StatusCodes.Status200OK);
         }
@@ -144,7 +144,7 @@ namespace ApiTest
 
             //Assert
             Assert.NotNull(result);
-            Assert.IsType<GoalModel>(result.Value);
+            Assert.IsType<Goal>(result.Value);
             Assert.Equal(result.Value, _goalDataItem);
             Assert.Equal(result.StatusCode, StatusCodes.Status200OK);
         }
@@ -157,7 +157,7 @@ namespace ApiTest
         public void GetGoal_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
-            _mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
+            _mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns((Goal)null);
 
             // Act
             var result = _goalController.GetGoal(Guid.NewGuid()) as NotFoundObjectResult;
@@ -212,7 +212,7 @@ namespace ApiTest
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<GoalModel>(result.Value);
+            Assert.IsType<Goal>(result.Value);
             Assert.Equal(result.Value, _goalDataItem);
             Assert.Equal(StatusCodes.Status201Created, result.StatusCode);
         }

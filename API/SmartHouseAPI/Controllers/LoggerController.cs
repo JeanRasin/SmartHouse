@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
+using SmartHouse.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -32,7 +32,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetLoggerAsync()
         {
-            IEnumerable<LoggerModel> result = await _loggerWork.GetLoggerAsync();
+            IEnumerable<Logger> result = await _loggerWork.GetLoggerAsync();
             return Ok(result);
         }
     }

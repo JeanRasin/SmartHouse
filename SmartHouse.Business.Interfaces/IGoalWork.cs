@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SmartHouse.Domain.Interfaces
+namespace SmartHouse.Services.Interfaces
 {
     public interface IGoalWork<T> : IDisposable where T : class
     {

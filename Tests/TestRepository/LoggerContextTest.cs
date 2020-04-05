@@ -16,7 +16,7 @@ namespace RepositoryTest
     [Collection("Logger context")]
     public class LoggerContextTest
     {
-        private static readonly List<LoggerModel> _testDataItems = GetTestData();
+        private static readonly List<Logger> _testDataItems = GetTestData();
 
         private static readonly MongoSettings _settings = new MongoSettings()
         {
@@ -38,7 +38,7 @@ namespace RepositoryTest
 
             _mockClient = new Mock<IMongoClient>();
 
-            var loggerCollectionMock = new Mock<IMongoCollection<LoggerModel>>();
+            var loggerCollectionMock = new Mock<IMongoCollection<Logger>>();
         }
 
         /// <summary>
@@ -50,13 +50,13 @@ namespace RepositoryTest
             {
             }
 
-            public override List<LoggerModel> OnModelCreating()
+            public override List<Logger> OnModelCreating()
             {
                 var eventIdFaker = new Faker<EventId>()
                  .RuleFor(o => o.StateId, f => f.Random.Int(1, 10))
                  .RuleFor(o => o.Name, f => f.Random.String2(10));
 
-                var loggerModelFaker = new Faker<LoggerModel>()
+                var loggerModelFaker = new Faker<Logger>()
                      .StrictMode(true)
                      .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
                      .RuleFor(o => o.CategoryName, f => "Category test")
@@ -74,13 +74,13 @@ namespace RepositoryTest
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        private static List<LoggerModel> GetTestData(int n = 10)
+        private static List<Logger> GetTestData(int n = 10)
         {
             var eventIdFaker = new Faker<SmartHouse.Domain.Core.EventId>()
              .RuleFor(o => o.StateId, f => f.Random.Int(1, 10))
              .RuleFor(o => o.Name, f => f.Random.String2(10));
 
-            var loggerModelFaker = new Faker<LoggerModel>()
+            var loggerModelFaker = new Faker<Logger>()
                  .StrictMode(true)
                  .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
                  .RuleFor(o => o.CategoryName, f => "Category test")
@@ -118,17 +118,17 @@ namespace RepositoryTest
         public void LoggerContext_DbSet_Success()
         {
             // Arrange
-            var loggerCollectionMock = new Mock<IMongoCollection<LoggerModel>>();
-            _mockDB.Setup(c => c.GetCollection<LoggerModel>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>())).Returns(loggerCollectionMock.Object).Verifiable();
+            var loggerCollectionMock = new Mock<IMongoCollection<Logger>>();
+            _mockDB.Setup(c => c.GetCollection<Logger>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>())).Returns(loggerCollectionMock.Object).Verifiable();
             _mockClient.Setup(c => c.GetDatabase(It.IsAny<string>(), It.IsAny<MongoDatabaseSettings>())).Returns(_mockDB.Object);
             var context = new LoggerContext(_mockClient.Object, _settings.DatabaseName);
 
             //Act
-            IMongoCollection<LoggerModel> collection = context.DbSet<LoggerModel>();
+            IMongoCollection<Logger> collection = context.DbSet<Logger>();
 
             //Assert
             Assert.NotNull(collection);
-            _mockDB.Verify(v => v.GetCollection<LoggerModel>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>()), Times.Once);
+            _mockDB.Verify(v => v.GetCollection<Logger>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>()), Times.Once);
         }
 
         #endregion DbSet
@@ -144,7 +144,7 @@ namespace RepositoryTest
             var context = new LoggerContext(_mockClient.Object, _settings.DatabaseName);
 
             //Act
-            List<LoggerModel> result = context.OnModelCreating();
+            List<Logger> result = context.OnModelCreating();
 
             //Assert
             Assert.Null(result);
@@ -175,7 +175,7 @@ namespace RepositoryTest
         public void LoggerContext_EnsureCreatedListCollectionsNotNull_Success()
         {
             // Arrange
-            var loggerCollectionMock = new Mock<IMongoCollection<LoggerModel>>();
+            var loggerCollectionMock = new Mock<IMongoCollection<Logger>>();
             var bsonDocumentItems = new List<BsonDocument>
             {
                 new BsonDocument("key", "test")
@@ -194,7 +194,7 @@ namespace RepositoryTest
 
             //Assert
             _mockDB.Verify(v => v.ListCollections(It.IsAny<ListCollectionsOptions>(), It.IsAny<CancellationToken>()), Times.Once);
-            loggerCollectionMock.Verify(v => v.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Never);
+            loggerCollectionMock.Verify(v => v.InsertOne(It.IsAny<Logger>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
@@ -202,10 +202,10 @@ namespace RepositoryTest
         public void LoggerContext_EnsureCreatedListCollectionsNull_Success()
         {
             // Arrange
-            var loggerCollectionMock = new Mock<IMongoCollection<LoggerModel>>();
+            var loggerCollectionMock = new Mock<IMongoCollection<Logger>>();
             var bsonCursorMock = new Mock<IAsyncCursor<BsonDocument>>();
 
-            _mockDB.Setup(c => c.GetCollection<LoggerModel>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>())).Returns(loggerCollectionMock.Object).Verifiable();
+            _mockDB.Setup(c => c.GetCollection<Logger>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>())).Returns(loggerCollectionMock.Object).Verifiable();
             _mockDB.Setup(c => c.ListCollections(It.IsAny<ListCollectionsOptions>(), It.IsAny<CancellationToken>())).Returns(bsonCursorMock.Object).Verifiable();
 
             _mockClient.Setup(c => c.GetDatabase(It.IsAny<string>(), It.IsAny<MongoDatabaseSettings>())).Returns(_mockDB.Object);
@@ -215,9 +215,9 @@ namespace RepositoryTest
             context.EnsureCreated();
 
             //Assert
-            _mockDB.Verify(v => v.GetCollection<LoggerModel>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>()), Times.Once);
+            _mockDB.Verify(v => v.GetCollection<Logger>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>()), Times.Once);
             _mockDB.Verify(v => v.ListCollections(It.IsAny<ListCollectionsOptions>(), It.IsAny<CancellationToken>()), Times.Once);
-            loggerCollectionMock.Verify(v => v.InsertOne(It.IsAny<LoggerModel>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Exactly(_testDataItems.Count()));
+            loggerCollectionMock.Verify(v => v.InsertOne(It.IsAny<Logger>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Exactly(_testDataItems.Count()));
         }
 
         #endregion EnsureCreatedOn

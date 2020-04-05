@@ -17,7 +17,7 @@ namespace ApiIntegrationTest
     public class ApiGoalTest : IClassFixture<TestFixture>
     {
         private readonly HttpClient _lient;
-        private readonly List<GoalModel> _itemTestData;
+        private readonly List<Goal> _itemTestData;
         private readonly JsonSerializerSettings _serializerOptions;
 
         public ApiGoalTest(TestFixture fixture)
@@ -31,14 +31,14 @@ namespace ApiIntegrationTest
         /// Get a list of goals from the service.
         /// </summary>
         /// <returns></returns>
-        private async Task<List<GoalModel>> GetAllGoals()
+        private async Task<List<Goal>> GetAllGoals()
         {
             const string url = "/api/goal/getAll";
 
             HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
 
-            List<GoalModel> items = JsonConvert.DeserializeObject<List<GoalModel>>(value, _serializerOptions);
+            List<Goal> items = JsonConvert.DeserializeObject<List<Goal>>(value, _serializerOptions);
 
             if (items.Count() == 0)
             {
@@ -60,7 +60,7 @@ namespace ApiIntegrationTest
             // Act
             HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
-            List<GoalModel> items = JsonConvert.DeserializeObject<List<GoalModel>>(value, _serializerOptions);
+            List<Goal> items = JsonConvert.DeserializeObject<List<Goal>>(value, _serializerOptions);
 
             // Assert
             Assert.NotEmpty(value);
@@ -83,7 +83,7 @@ namespace ApiIntegrationTest
             // Act
             HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
-            List<GoalModel> items = JsonConvert.DeserializeObject<List<GoalModel>>(value, _serializerOptions);
+            List<Goal> items = JsonConvert.DeserializeObject<List<Goal>>(value, _serializerOptions);
 
             // Assert
             Assert.NotEmpty(value);
@@ -101,13 +101,13 @@ namespace ApiIntegrationTest
         public async Task GetGoal_Success_StatusCode200()
         {
             // Arrange
-            GoalModel firstItem = _itemTestData.First();
+            Goal firstItem = _itemTestData.First();
             string url = $"/api/goal/{firstItem.Id}";
 
             // Act
             HttpResponseMessage response = await _lient.GetAsync(url);
             string value = await response.Content.ReadAsStringAsync();
-            GoalModel item = JsonConvert.DeserializeObject<GoalModel>(value, _serializerOptions);
+            Goal item = JsonConvert.DeserializeObject<Goal>(value, _serializerOptions);
 
             // Assert
             Assert.NotEmpty(value);
@@ -150,7 +150,7 @@ namespace ApiIntegrationTest
             // Act
             HttpResponseMessage response = await _lient.PostAsync(url, stringContent);
             string value = await response.Content.ReadAsStringAsync();
-            GoalModel item = JsonConvert.DeserializeObject<GoalModel>(value, _serializerOptions);
+            Goal item = JsonConvert.DeserializeObject<Goal>(value, _serializerOptions);
 
             // Assert
             Assert.NotEmpty(value);
@@ -189,7 +189,7 @@ namespace ApiIntegrationTest
         {
             // Arrange
             const string url = "/api/goal";
-            GoalModel firstItem = _itemTestData.First();
+            Goal firstItem = _itemTestData.First();
             var model = new GoalUpdateDto
             {
                 Id = firstItem.Id,
@@ -236,7 +236,7 @@ namespace ApiIntegrationTest
         {
             // Arrange
             const string url = "/api/goal";
-            GoalModel firstItem = _itemTestData.First();
+            Goal firstItem = _itemTestData.First();
             var model = new GoalUpdateDto
             {
                 Id = firstItem.Id,
@@ -263,7 +263,7 @@ namespace ApiIntegrationTest
         public async Task Delete_Success_StatusCode204()
         {
             // Arrange
-            GoalModel firstItem = _itemTestData.Last();
+            Goal firstItem = _itemTestData.Last();
             string url = $"/api/goal/{firstItem.Id}";
 
             // Act
@@ -301,7 +301,7 @@ namespace ApiIntegrationTest
         {
             // Arrange
             string url = $"/api/goal/done/";
-            GoalModel firstItem = _itemTestData.First();
+            Goal firstItem = _itemTestData.First();
             var model = new GoalDoneDto
             {
                 Id = firstItem.Id,

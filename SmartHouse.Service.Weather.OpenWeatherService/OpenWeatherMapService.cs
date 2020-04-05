@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using SmartHouse.Service.Weather.OpenWeatherMap.Model;
 using System;
@@ -44,7 +43,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
             this.logger = logger;
 
             // Config AutoMapper.
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<WeatherResponse, WeatherModel>()
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<WeatherResponse, Domain.Core.Weather>()
                 .ForMember("Temp", opt => opt.MapFrom(src => src.Main.Temp))
                 .ForMember("WindSpeed", opt => opt.MapFrom(src => (int)src.Wind.Speed))
                 .ForMember("WindDeg", opt => opt.MapFrom(src => src.Wind.Deg))
@@ -57,12 +56,12 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
             mapper = new Mapper(config);
         }
 
-        public async Task<WeatherModel> GetWeatherAsync()
+        public async Task<Domain.Core.Weather> GetWeatherAsync()
         {
             return await GetWeatherAsync(null);
         }
 
-        public async Task<WeatherModel> GetWeatherAsync(CancellationToken? token)
+        public async Task<Domain.Core.Weather> GetWeatherAsync(CancellationToken? token)
         {
             try
             {
@@ -107,7 +106,7 @@ namespace SmartHouse.Service.Weather.OpenWeatherMap
                 string stringResult = await response.Content.ReadAsStringAsync();
                 WeatherResponse rawWeather = JsonSerializer.Deserialize<WeatherResponse>(stringResult);
 
-                WeatherModel result = mapper.Map<WeatherResponse, WeatherModel>(rawWeather);
+                Domain.Core.Weather result = mapper.Map<WeatherResponse, Domain.Core.Weather>(rawWeather);
 
                 LogInfoWrite(stringResult);
 

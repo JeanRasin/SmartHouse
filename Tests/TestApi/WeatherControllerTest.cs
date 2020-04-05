@@ -2,8 +2,8 @@ using Bogus;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
+using SmartHouse.Services.Interfaces;
 using SmartHouseAPI.ApiException;
 using SmartHouseAPI.Controllers;
 using System;
@@ -15,7 +15,7 @@ namespace ApiTest
     [Collection("Weather controller")]
     public class WeatherControllerTest
     {
-        private static readonly WeatherModel _wetaherData = GetTestData();
+        private static readonly Weather _wetaherData = GetTestData();
 
         private readonly Mock<IWeatherWork> _mockWeatherWork;
         private readonly WeatherController _weatherController;
@@ -30,12 +30,12 @@ namespace ApiTest
         /// Get test data.
         /// </summary>
         /// <returns></returns>
-        private static WeatherModel GetTestData()
+        private static Weather GetTestData()
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
 
-            WeatherModel result = new Faker<WeatherModel>()
+            Weather result = new Faker<Weather>()
                   .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000))
                   .RuleFor(o => o.WindDeg, f => f.Random.UShort(0, 360))
                   .RuleFor(o => o.Temp, f => f.Random.Float(-100, 100))
@@ -56,7 +56,7 @@ namespace ApiTest
         /// </summary>
         [Fact]
         [Trait("Get Weather", "Success Status 200")]
-        public void GetWeatherAsync_Success_WeatherModelItem()
+        public void GetWeatherAsync_Success_WeatherItem()
         {
             // Arrange
             _mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult(_wetaherData));
@@ -66,7 +66,7 @@ namespace ApiTest
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<WeatherModel>(result.Value);
+            Assert.IsType<Weather>(result.Value);
             Assert.Equal(result.Value, _wetaherData);
             Assert.Equal(result.StatusCode, StatusCodes.Status200OK);
         }
@@ -79,7 +79,7 @@ namespace ApiTest
         public void GetWeatherAsync_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
-            _mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult<WeatherModel>(null));
+            _mockWeatherWork.Setup(m => m.GetWeatherAsync()).Returns(Task.FromResult<Weather>(null));
 
             // Act Assert
             Assert.ThrowsAsync<NotFoundException>(() => _weatherController.GetWeatherAsync());

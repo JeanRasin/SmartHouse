@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SmartHouse.Infrastructure.Data
 {
-    public class GoalRepository : IGoalRepository<GoalModel>
+    public class GoalRepository : IGoalRepository<Goal>
     {
         private readonly GoalContext _db;
 
@@ -15,7 +15,7 @@ namespace SmartHouse.Infrastructure.Data
             _db = context;
         }
 
-        public IEnumerable<GoalModel> GetGoals()
+        public IEnumerable<Goal> GetGoals()
         {
             return _db.Goals;
         }
@@ -25,9 +25,9 @@ namespace SmartHouse.Infrastructure.Data
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public GoalModel GetGoal(Guid id)
+        public Goal GetGoal(Guid id)
         {
-            GoalModel result = _db.Goals.Find(id);
+            Goal result = _db.Goals.Find(id);
 
             if (result == null)
             {
@@ -41,7 +41,7 @@ namespace SmartHouse.Infrastructure.Data
         /// Create goal.
         /// </summary>
         /// <param name="data"></param>
-        public void Create(GoalModel data)
+        public void Create(Goal data)
         {
             _db.Entry(data).State = EntityState.Added;
         }
@@ -67,7 +67,7 @@ namespace SmartHouse.Infrastructure.Data
         /// Update goal.
         /// </summary>
         /// <param name="data"></param>
-        public void Update(GoalModel data)
+        public void Update(Goal data)
         {
             var goal = _db.Goals.Find(data.Id);
             if (goal != null)

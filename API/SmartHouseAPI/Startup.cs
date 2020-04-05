@@ -11,9 +11,11 @@ using Microsoft.OpenApi.Models;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
+using SmartHouse.Domain.Interfaces.Contexts;
 using SmartHouse.Infrastructure.Data;
 using SmartHouse.Infrastructure.Data.Helpers;
 using SmartHouse.Service.Weather.OpenWeatherMap;
+using SmartHouse.Services.Interfaces;
 using SmartHouseAPI.Helpers;
 using SmartHouseAPI.Middleware;
 using System;
@@ -118,7 +120,7 @@ namespace SmartHouseAPI
                     _loggerContext.EnsureCreated();
                 }
 
-                services.AddScoped<ILoggerWork>(x => new LoggerWork(new LoggerRepository<LoggerModel>(_loggerContext, "General category")));
+                services.AddScoped<ILoggerWork>(x => new LoggerWork(new LoggerRepository<Logger>(_loggerContext, "General category")));
             }
             else
             {
@@ -133,7 +135,7 @@ namespace SmartHouseAPI
             // GisMeteo service.
             //services.AddTransient<IWeatherService, GisMeteoService>();
 
-            services.AddScoped<IGoalWork<GoalModel>, GoalWork>();
+            services.AddScoped<IGoalWork<Goal>, GoalWork>();
             services.AddScoped<IWeatherWork, WeatherWork>(x => new WeatherWork(x.GetRequiredService<IWeatherService>(), 30));
         }
 

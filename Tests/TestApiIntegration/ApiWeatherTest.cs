@@ -31,7 +31,7 @@ namespace ApiIntegrationTest
             // Act
             var response = await _lient.GetAsync(url);
             var value = await response.Content.ReadAsStringAsync();
-            WeatherModel item = JsonConvert.DeserializeObject<WeatherModel>(value, _serializerOptions);
+            Weather item = JsonConvert.DeserializeObject<Weather>(value, _serializerOptions);
 
             // Assert
             Assert.NotEmpty(value);

@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
+using SmartHouse.Domain.Interfaces.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -12,7 +13,7 @@ namespace SmartHouse.Infrastructure.Data
     /// https://gist.github.com/antdimot/5037532
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class LoggerRepository<T> : ILoggerRepository<T> where T : MongoBaseModel
+    public class LoggerRepository<T> : ILoggerRepository<T> where T : MongoBase
     {
         public string CategoryName { get; }
 

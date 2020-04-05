@@ -17,7 +17,7 @@ namespace RepositoryTest
     [Collection("Goal repository")]
     public class GoalRepositoryTest
     {
-        private static readonly GoalModel _itemTestData = GetTestData();
+        private static readonly Goal _itemTestData = GetTestData();
 
         private readonly GoalContext _mockedDbContext;
         private readonly GoalRepository _repository;
@@ -34,12 +34,12 @@ namespace RepositoryTest
         /// Get test data.
         /// </summary>
         /// <returns></returns>
-        private static GoalModel GetTestData()
+        private static Goal GetTestData()
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
 
-            GoalModel result = new Faker<GoalModel>()
+            Goal result = new Faker<Goal>()
           .StrictMode(true)
           .RuleFor(o => o.Id, f => f.Random.Uuid())
           .RuleFor(o => o.Name, f => f.Random.Words(3))
@@ -61,7 +61,7 @@ namespace RepositoryTest
         public void GetGoals_GoalModelItems()
         {
             // Act
-            IEnumerable<GoalModel> items = _repository.GetGoals();
+            IEnumerable<Goal> items = _repository.GetGoals();
 
             // Assert
             _dbContextMock.VerifyGet(v => v.Goals, "Property was not called.");
@@ -83,7 +83,7 @@ namespace RepositoryTest
             _mockedDbContext.Goals.Add(_itemTestData);
 
             // Act
-            GoalModel result = _repository.GetGoal(_itemTestData.Id);
+            Goal result = _repository.GetGoal(_itemTestData.Id);
 
             // Assert
             Assert.NotNull(result);

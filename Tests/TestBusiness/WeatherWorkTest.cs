@@ -27,13 +27,13 @@ namespace BusinessTest
         /// </summary>
         [Fact]
         [Trait("GetWeatherAsync", "Success")]
-        public async void GetWeatherAsync_WeatherModel()
+        public async void GetWeatherAsync_Weather()
         {
             // Arrange
             // Random constant.
             Randomizer.Seed = new Random(1338);
 
-            async static Task<WeatherModel> MoqGetWeatherAsync(CancellationTokenSource tokenSource, int sec)
+            async static Task<Weather> MoqGetWeatherAsync(CancellationTokenSource tokenSource, int sec)
             {
                 CancellationToken token = tokenSource.Token;
 
@@ -46,7 +46,7 @@ namespace BusinessTest
 
                 return await Task.Run(() =>
                 {
-                    WeatherModel wetaherData = new Faker<WeatherModel>()
+                    Weather wetaherData = new Faker<Weather>()
                     .StrictMode(false)
                     .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000))
                     .RuleFor(o => o.WindDeg, f => f.Random.UShort(0, 360))
@@ -67,7 +67,7 @@ namespace BusinessTest
             var weatherWork = new WeatherWork(weatherService: _mockWeatherService.Object, timeOutSec: 4);
 
             // Act
-            WeatherModel weather = await weatherWork.GetWeatherAsync(tokenSource);
+            Weather weather = await weatherWork.GetWeatherAsync(tokenSource);
 
             // Assert
             Assert.NotNull(weather);
@@ -96,7 +96,7 @@ namespace BusinessTest
         public async void GetWeatherAsync_TimeOut_OperationCanceledException()
         {
             // Arrange
-            async static Task<WeatherModel> MoqGetWeatherAsync(CancellationTokenSource tokenSource, int sec)
+            async static Task<Weather> MoqGetWeatherAsync(CancellationTokenSource tokenSource, int sec)
             {
                 CancellationToken token = tokenSource.Token;
 

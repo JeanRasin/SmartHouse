@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SmartHouse.Domain.Core
 {
-    public class MongoBaseModel
+    public class MongoBase
     {
         [BsonId]
         [Required]

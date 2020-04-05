@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
+using SmartHouse.Services.Interfaces;
 using SmartHouseAPI.Controllers;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace ApiTest
     [Collection("Logger controller")]
     public class LoggerControllerTest
     {
-        private static readonly IEnumerable<LoggerModel> _loggerList = GetTestData();
+        private static readonly IEnumerable<Logger> _loggerList = GetTestData();
 
         private readonly Mock<ILoggerWork> _mockLogger;
         private readonly LoggerController _loggerController;
@@ -32,7 +32,7 @@ namespace ApiTest
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        private static IEnumerable<LoggerModel> GetTestData(int n = 10)
+        private static IEnumerable<Logger> GetTestData(int n = 10)
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
@@ -42,7 +42,7 @@ namespace ApiTest
                   .RuleFor(o => o.Name, f => f.Random.String2(10))
                   .Generate();
 
-            IEnumerable<LoggerModel> result = new Faker<LoggerModel>()
+            IEnumerable<Logger> result = new Faker<Logger>()
                 .StrictMode(true)
                 .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
                 .RuleFor(o => o.CategoryName, f => f.Random.Words(1))
@@ -72,7 +72,7 @@ namespace ApiTest
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsAssignableFrom<IEnumerable<LoggerModel>>(result.Value);
+            Assert.IsAssignableFrom<IEnumerable<Logger>>(result.Value);
             Assert.Equal(result.Value, _loggerList);
             Assert.Equal(result.StatusCode, StatusCodes.Status200OK);
         }

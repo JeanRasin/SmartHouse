@@ -13,7 +13,7 @@ namespace SmartHouseAPI.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var goalModel = new Faker<GoalModel>()
+            var goalModel = new Faker<Goal>()
              .RuleFor(o => o.Id, f => f.Random.Guid())
              .RuleFor(o => o.Name, f => f.Random.Words(3))
              .RuleFor(o => o.DateCreate, f => f.Date.Between(new DateTime(1997, 1, 1), new DateTime(1997, 2, 1)))
@@ -22,7 +22,7 @@ namespace SmartHouseAPI.Contexts
              .Generate(40);
 
             modelBuilder
-                .Entity<GoalModel>()
+                .Entity<Goal>()
                 .HasData(goalModel);
         }
     }

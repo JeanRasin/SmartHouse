@@ -1,22 +1,23 @@
 ﻿using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using SmartHouse.Infrastructure.Data;
+using SmartHouse.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SmartHouse.Business.Data
 {
-    public class GoalWork : IGoalWork<GoalModel>
+    public class GoalWork : IGoalWork<Goal>
     {
-        private readonly IGoalRepository<GoalModel> _repository;
+        private readonly IGoalRepository<Goal> _repository;
 
         public GoalWork(GoalContext context)
         {
             _repository = new GoalRepository(context);
         }
 
-        public GoalWork(IGoalRepository<GoalModel> goalRepository)
+        public GoalWork(IGoalRepository<Goal> goalRepository)
         {
             _repository = goalRepository;
         }
@@ -25,9 +26,9 @@ namespace SmartHouse.Business.Data
         /// Get all the goals.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<GoalModel> GetGoalAll()
+        public IEnumerable<Goal> GetGoalAll()
         {
-            IOrderedEnumerable<GoalModel> result = _repository
+            IOrderedEnumerable<Goal> result = _repository
                   .GetGoals()
                   .OrderByDescending(p => p.DateUpdate);
             return result;
@@ -37,9 +38,9 @@ namespace SmartHouse.Business.Data
         /// Get outstanding goals.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<GoalModel> GetGoals()
+        public IEnumerable<Goal> GetGoals()
         {
-            IOrderedEnumerable<GoalModel> result = _repository
+            IOrderedEnumerable<Goal> result = _repository
                   .GetGoals()
                   .Where(p => p.Done == false)
                   .OrderByDescending(p => p.DateUpdate);
@@ -52,9 +53,9 @@ namespace SmartHouse.Business.Data
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public GoalModel GetGoal(Guid id)
+        public Goal GetGoal(Guid id)
         {
-            GoalModel result = _repository.GetGoal(id);
+            Goal result = _repository.GetGoal(id);
 
             if (result == null)
             {
@@ -69,9 +70,9 @@ namespace SmartHouse.Business.Data
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public GoalModel Create(string name)
+        public Goal Create(string name)
         {
-            var result = new GoalModel(name);
+            var result = new Goal(name);
 
             _repository.Create(result);
             _repository.Save();
@@ -87,7 +88,7 @@ namespace SmartHouse.Business.Data
         /// <param name="done"></param>
         public void Update(Guid id, string name, bool done)
         {
-            GoalModel result = _repository.GetGoal(id);
+            Goal result = _repository.GetGoal(id);
 
             if (result == null)
             {
@@ -107,7 +108,7 @@ namespace SmartHouse.Business.Data
         /// <param name="id"></param>
         public void Delete(Guid id)
         {
-            GoalModel result = _repository.GetGoal(id);
+            Goal result = _repository.GetGoal(id);
 
             if (result == null)
             {
@@ -125,7 +126,7 @@ namespace SmartHouse.Business.Data
         /// <param name="done"></param>
         public void Done(Guid id, bool done)
         {
-            GoalModel result = _repository
+            Goal result = _repository
                  .GetGoals()
                  .Where(p => p.Id == id)
                  .FirstOrDefault();

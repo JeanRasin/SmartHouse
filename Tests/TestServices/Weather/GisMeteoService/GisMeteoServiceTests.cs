@@ -21,7 +21,7 @@ namespace TestService
             var service = new GisMeteoService();
 
             // Act
-            WeatherModel result = await service.GetWeatherAsync();
+            Weather result = await service.GetWeatherAsync();
 
             // Assert
             Assert.IsNotNull(result);

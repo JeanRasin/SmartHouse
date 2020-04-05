@@ -13,12 +13,12 @@ namespace BusinessTest
     [Collection("Logger work")]
     public class LoggerWorkTest
     {
-        private readonly Mock<ILoggerRepository<LoggerModel>> _mockLoggerRepository;
+        private readonly Mock<ILoggerRepository<Logger>> _mockLoggerRepository;
         private readonly LoggerWork _loggerWork;
 
         public LoggerWorkTest()
         {
-            _mockLoggerRepository = new Mock<ILoggerRepository<LoggerModel>>();
+            _mockLoggerRepository = new Mock<ILoggerRepository<Logger>>();
             _loggerWork = new LoggerWork(_mockLoggerRepository.Object);
         }
 
@@ -37,7 +37,7 @@ namespace BusinessTest
                   .RuleFor(o => o.Name, f => f.Random.String2(10))
                   .Generate();
 
-            var loggerList = new Faker<LoggerModel>()
+            var loggerList = new Faker<Logger>()
                          .StrictMode(true)
                          .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
                          .RuleFor(o => o.CategoryName, f => f.Random.Words(1))
@@ -50,7 +50,7 @@ namespace BusinessTest
             _mockLoggerRepository.Setup(s => s.QueryAsync()).ReturnsAsync(loggerList);
 
             // Act
-            IEnumerable<LoggerModel> result = await _loggerWork.GetLoggerAsync();
+            IEnumerable<Logger> result = await _loggerWork.GetLoggerAsync();
 
             // Assert
             Assert.Equal(result, loggerList);
@@ -74,7 +74,7 @@ namespace BusinessTest
             };
 
             _mockLoggerRepository
-                .Setup(s => s.Create(It.IsAny<LoggerModel>()))
+                .Setup(s => s.Create(It.IsAny<Logger>()))
                 .Verifiable();
 
             // Act
@@ -87,7 +87,7 @@ namespace BusinessTest
                 );
 
             // Assert
-            _mockLoggerRepository.Verify(v => v.Create(It.IsAny<LoggerModel>()), Times.Once());
+            _mockLoggerRepository.Verify(v => v.Create(It.IsAny<Logger>()), Times.Once());
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace BusinessTest
         {
             // Arrange
             _mockLoggerRepository
-                .Setup(s => s.Create(It.IsAny<LoggerModel>()))
+                .Setup(s => s.Create(It.IsAny<Logger>()))
                 .Verifiable();
 
             // Act
@@ -112,7 +112,7 @@ namespace BusinessTest
                 );
 
             // Assert
-            _mockLoggerRepository.Verify(v => v.Create(It.IsAny<LoggerModel>()), Times.Never);
+            _mockLoggerRepository.Verify(v => v.Create(It.IsAny<Logger>()), Times.Never);
         }
 
         #endregion Log

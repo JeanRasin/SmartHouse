@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
+using SmartHouse.Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace SmartHouseAPI.Controllers
@@ -26,7 +26,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetWeatherAsync()
         {
-            WeatherModel result = await _weatherWork.GetWeatherAsync();
+            Weather result = await _weatherWork.GetWeatherAsync();
 
             if (result == null)
             {

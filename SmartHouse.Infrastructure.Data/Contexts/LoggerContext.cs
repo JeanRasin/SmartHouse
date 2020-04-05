@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using SmartHouse.Domain.Core;
+using SmartHouse.Domain.Interfaces.Contexts;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace SmartHouse.Infrastructure.Data
             _mongoDb = _mongoClient.GetDatabase(databaseName);
         }
 
-        public virtual IMongoCollection<T> DbSet<T>() where T : MongoBaseModel
+        public virtual IMongoCollection<T> DbSet<T>() where T : MongoBase
         {
             string tableName = GetTableName<T>();
             IMongoCollection<T> result = _mongoDb.GetCollection<T>(tableName);
@@ -30,7 +31,7 @@ namespace SmartHouse.Infrastructure.Data
         /// Override and set initial values
         /// </summary>
         /// <returns></returns>
-        public virtual List<LoggerModel> OnModelCreating()
+        public virtual List<Logger> OnModelCreating()
         {
             return null;
         }
@@ -41,7 +42,7 @@ namespace SmartHouse.Infrastructure.Data
         public void EnsureCreated()
         {
             // Add test data to the logger table
-            List<LoggerModel> dataItems = OnModelCreating() ?? new List<LoggerModel>();
+            List<Logger> dataItems = OnModelCreating() ?? new List<Logger>();
 
             if (dataItems.Any())
             {

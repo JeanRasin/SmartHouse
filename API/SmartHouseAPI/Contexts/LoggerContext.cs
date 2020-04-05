@@ -13,13 +13,13 @@ namespace SmartHouseAPI.Contexts
         {
         }
 
-        public override List<LoggerModel> OnModelCreating()
+        public override List<Logger> OnModelCreating()
         {
             var eventIdFaker = new Faker<EventId>()
              .RuleFor(o => o.StateId, f => f.Random.Int(1, 10))
              .RuleFor(o => o.Name, f => f.Random.String2(10));
 
-            var loggerModelFaker = new Faker<LoggerModel>()
+            var loggerModelFaker = new Faker<Logger>()
                  .StrictMode(true)
                  .RuleFor(o => o.Id, f => f.Random.Uuid().ToString("N"))
                  .RuleFor(o => o.CategoryName, f => "Category test")

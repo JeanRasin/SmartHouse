@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
+using SmartHouse.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,9 +11,9 @@ namespace SmartHouse.Business.Data
 {
     public class LoggerWork : ILoggerWork, ILogger
     {
-        private readonly ILoggerRepository<LoggerModel> _repository;
+        private readonly ILoggerRepository<Logger> _repository;
 
-        public LoggerWork(ILoggerRepository<LoggerModel> repository)
+        public LoggerWork(ILoggerRepository<Logger> repository)
         {
             _repository = repository;
         }
@@ -32,9 +33,9 @@ namespace SmartHouse.Business.Data
         /// Get logger data.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<LoggerModel>> GetLoggerAsync()
+        public async Task<IEnumerable<Logger>> GetLoggerAsync()
         {
-            IEnumerable<LoggerModel> result = await _repository.QueryAsync();
+            IEnumerable<Logger> result = await _repository.QueryAsync();
             return result;
         }
 
@@ -62,7 +63,7 @@ namespace SmartHouse.Business.Data
             if (formatter != null)
             {
                 string msg = formatter(state, exception) + Environment.NewLine;
-                _repository.Create(new LoggerModel(logLevel, new Domain.Core.EventId(eventId), msg));
+                _repository.Create(new Logger(logLevel, new Domain.Core.EventId(eventId), msg));
             }
         }
     }

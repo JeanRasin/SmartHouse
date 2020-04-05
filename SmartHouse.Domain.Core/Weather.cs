@@ -2,7 +2,7 @@
 
 namespace SmartHouse.Domain.Core
 {
-    public class WeatherModel
+    public class Weather
     {
         [JsonProperty(Required = Required.Always)]
         public float WindSpeed { get; set; }
@@ -28,11 +28,11 @@ namespace SmartHouse.Domain.Core
         [JsonProperty(Required = Required.Always)]
         public float FeelsLike { get; set; }
 
-        public WeatherModel()
+        public Weather()
         {
         }
 
-        public WeatherModel(float windSpeed, byte windDeg, float temp, string city, float pressure, float humidity, string description, float feelsLike)
+        public Weather(float windSpeed, byte windDeg, float temp, string city, float pressure, float humidity, string description, float feelsLike)
         {
             WindSpeed = windSpeed;
             WindDeg = windDeg;

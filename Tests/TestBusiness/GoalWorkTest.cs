@@ -13,15 +13,15 @@ namespace BusinessTest
     [Collection("Goal work")]
     public class GoalWorkTest
     {
-        private static readonly List<GoalModel> _testDataItems = GetTestData();
-        private static readonly GoalModel _testDataItem = _testDataItems.First();
+        private static readonly List<Goal> _testDataItems = GetTestData();
+        private static readonly Goal _testDataItem = _testDataItems.First();
 
-        private readonly Mock<IGoalRepository<GoalModel>> _mockGoalRepository;
+        private readonly Mock<IGoalRepository<Goal>> _mockGoalRepository;
         private readonly GoalWork _goalWork;
 
         public GoalWorkTest()
         {
-            _mockGoalRepository = new Mock<IGoalRepository<GoalModel>>();
+            _mockGoalRepository = new Mock<IGoalRepository<Goal>>();
             _goalWork = new GoalWork(_mockGoalRepository.Object);
         }
 
@@ -30,12 +30,12 @@ namespace BusinessTest
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        private static List<GoalModel> GetTestData(int n = 10)
+        private static List<Goal> GetTestData(int n = 10)
         {
             // Random constant.
             Randomizer.Seed = new Random(1338);
 
-            List<GoalModel> result = new Faker<GoalModel>()
+            List<Goal> result = new Faker<Goal>()
                  .StrictMode(true)
                  .RuleFor(o => o.Id, f => f.Random.Uuid())
                  .RuleFor(o => o.Name, f => f.Random.Words(3))
@@ -60,7 +60,7 @@ namespace BusinessTest
             _mockGoalRepository.Setup(s => s.GetGoals()).Returns(_testDataItems);
 
             // Act
-            IEnumerable<GoalModel> result = _goalWork.GetGoalAll();
+            IEnumerable<Goal> result = _goalWork.GetGoalAll();
 
             //Assert
             Assert.NotNull(result);
@@ -81,7 +81,7 @@ namespace BusinessTest
             //Arrange
             Randomizer.Seed = new Random(1338);
 
-            List<GoalModel> testData = new Faker<GoalModel>()
+            List<Goal> testData = new Faker<Goal>()
                  .StrictMode(true)
                  .RuleFor(o => o.Id, f => f.Random.Uuid())
                  .RuleFor(o => o.Name, f => f.Random.Words(3))
@@ -96,7 +96,7 @@ namespace BusinessTest
             _mockGoalRepository.Setup(s => s.GetGoals()).Returns(testData);
 
             // Act
-            IEnumerable<GoalModel> result = _goalWork.GetGoals();
+            IEnumerable<Goal> result = _goalWork.GetGoals();
 
             //Assert
             Assert.NotNull(result);
@@ -119,7 +119,7 @@ namespace BusinessTest
             _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(_testDataItem);
 
             // Act
-            GoalModel result = _goalWork.GetGoal(Guid.NewGuid());
+            Goal result = _goalWork.GetGoal(Guid.NewGuid());
 
             //Assert
             Assert.NotNull(result);
@@ -134,7 +134,7 @@ namespace BusinessTest
         public void GetGoal_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
+            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((Goal)null);
 
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => _goalWork.GetGoal(Guid.NewGuid()));
@@ -152,15 +152,15 @@ namespace BusinessTest
         public void Create_Success_GoalModelItem()
         {
             //Arrange
-            _mockGoalRepository.Setup(s => s.Create(It.IsAny<GoalModel>())).Verifiable();
+            _mockGoalRepository.Setup(s => s.Create(It.IsAny<Goal>())).Verifiable();
             _mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
             // Act
-            GoalModel result = _goalWork.Create("test name");
+            Goal result = _goalWork.Create("test name");
 
             //Assert
             Assert.NotNull(result);
-            _mockGoalRepository.Verify(v => v.Create(It.IsAny<GoalModel>()), Times.Once);
+            _mockGoalRepository.Verify(v => v.Create(It.IsAny<Goal>()), Times.Once);
             _mockGoalRepository.Verify(v => v.Save(), Times.Once);
         }
 
@@ -177,14 +177,14 @@ namespace BusinessTest
         {
             //Arrange
             _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns(_testDataItem);
-            _mockGoalRepository.Setup(s => s.Update(It.IsAny<GoalModel>())).Verifiable();
+            _mockGoalRepository.Setup(s => s.Update(It.IsAny<Goal>())).Verifiable();
             _mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
             // Act
             _goalWork.Update(Guid.NewGuid(), "test name", true);
 
             //Assert
-            _mockGoalRepository.Verify(v => v.Update(It.IsAny<GoalModel>()), Times.Once);
+            _mockGoalRepository.Verify(v => v.Update(It.IsAny<Goal>()), Times.Once);
             _mockGoalRepository.Verify(v => v.Save(), Times.Once);
         }
 
@@ -196,7 +196,7 @@ namespace BusinessTest
         public void Update_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
+            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((Goal)null);
 
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => _goalWork.Update(Guid.NewGuid(), "test name", true));
@@ -234,7 +234,7 @@ namespace BusinessTest
         public void Delete_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((GoalModel)null);
+            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((Goal)null);
 
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => _goalWork.Delete(Guid.NewGuid()));
@@ -253,14 +253,14 @@ namespace BusinessTest
         {
             //Arrange
             _mockGoalRepository.Setup(s => s.GetGoals()).Returns(_testDataItems);
-            _mockGoalRepository.Setup(s => s.Update(It.IsAny<GoalModel>())).Verifiable();
+            _mockGoalRepository.Setup(s => s.Update(It.IsAny<Goal>())).Verifiable();
             _mockGoalRepository.Setup(s => s.Save()).Verifiable();
 
             // Act
             _goalWork.Done(_testDataItem.Id, !_testDataItem.Done);
 
             //Assert
-            _mockGoalRepository.Verify(v => v.Update(It.IsAny<GoalModel>()), Times.Once);
+            _mockGoalRepository.Verify(v => v.Update(It.IsAny<Goal>()), Times.Once);
             _mockGoalRepository.Verify(v => v.Save(), Times.Once);
         }
 

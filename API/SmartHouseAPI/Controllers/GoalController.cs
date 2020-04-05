@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartHouse.Domain.Core;
-using SmartHouse.Domain.Interfaces;
+using SmartHouse.Services.Interfaces;
 using SmartHouseAPI.ApiException;
 using SmartHouseAPI.InputModel;
 using System;
@@ -14,9 +14,9 @@ namespace SmartHouseAPI.Controllers
     [Produces("application/json")]
     public class GoalController : ControllerBase
     {
-        private readonly IGoalWork<GoalModel> _goalWork;
+        private readonly IGoalWork<Goal> _goalWork;
 
-        public GoalController(IGoalWork<GoalModel> goalWork)
+        public GoalController(IGoalWork<Goal> goalWork)
         {
             _goalWork = goalWork;
         }
@@ -27,7 +27,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoalAll()
         {
-            IEnumerable<GoalModel> result = _goalWork.GetGoalAll();
+            IEnumerable<Goal> result = _goalWork.GetGoalAll();
             return Ok(result);
         }
 
@@ -37,8 +37,8 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoals()
         {
-            throw new Exception("!!!");
-            IEnumerable<GoalModel> result = _goalWork.GetGoals();
+            throw new Exception("!!!"); //todo:remove
+            IEnumerable<Goal> result = _goalWork.GetGoals();
             return Ok(result);
         }
 
@@ -49,7 +49,7 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoal(Guid id)
         {
-            GoalModel result = _goalWork.GetGoal(id);
+            Goal result = _goalWork.GetGoal(id);
 
             if (result == null)
             {
@@ -86,7 +86,7 @@ namespace SmartHouseAPI.Controllers
                 return BadRequest(modelStateException.Message);
             }
 
-            GoalModel result = _goalWork.Create(data.Name);
+            Goal result = _goalWork.Create(data.Name);
             return Created(Url.RouteUrl(result.Id), result);
         }
 

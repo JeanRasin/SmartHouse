@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SmartHouse.Domain.Core
 {
     [Table("Goal")]
-    public class GoalModel
+    public class Goal
     {
         [Key]
         [Column("Id", Order = 0)]
@@ -35,11 +35,11 @@ namespace SmartHouse.Domain.Core
         [JsonProperty(Required = Required.Always)]
         public bool Done { get; set; }
 
-        public GoalModel()
+        public Goal()
         {
         }
 
-        public GoalModel(string name)
+        public Goal(string name)
         {
             Id = Guid.NewGuid();
             Name = name;

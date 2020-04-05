@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SmartHouse.Business.Data
+namespace SmartHouse.Services.Interfaces
 {
     public interface ILoggerWork
     {
-        Task<IEnumerable<LoggerModel>> GetLoggerAsync();
+        Task<IEnumerable<Logger>> GetLoggerAsync();
     }
 }
