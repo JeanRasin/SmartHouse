@@ -32,14 +32,15 @@ docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web
 
 ## 📦 Пакеты
 ### 🔩 Софт
-* [Angular CLI](https://github.com/angular/angular-cli) версии 8.3.14.
-* [TypeScript](https://github.com/microsoft/TypeScript) версии 3.5.3.
+* [Angular CLI](https://github.com/angular/angular-cli) (8.3.14) - открытая и свободная платформа для разработки веб-приложений, написанная на языке TypeScript.
+* [TypeScript](https://github.com/microsoft/TypeScript) (3.5.3) -  язык программирования позиционируемый как средство разработки веб-приложений, расширяющее возможности JavaScript.
 
 ### 🖼 UI Components
-* [Angular Material UI](https://material.angular.io/) версии 8.3.14.
+* [Angular Material UI](https://material.angular.io) (8.3.14) - компоненты пользовательского интерфейса для мобильных и настольных приложений Angular..
 
 ### 🧪 Unit тесты
-* [Karma](https://karma-runner.github.io) версии 4.4.1.
+* [Karma](https://karma-runner.github.io) (4.4.1) - инструмент, который позволяет выполнять код JavaScript в нескольких реальных браузерах.
+* [karma-jasmine](https://github.com/karma-runner/karma-jasmine) (2.0.1) - плагин Karma - адаптер для платформы тестирования [Jasmine](https://github.com/jasmine/jasmine).
 
 ### ⚗️ End-to-end тесты
 * [Protractor](http://www.protractortest.org/) версии 5.4.2.
