@@ -1,6 +1,11 @@
 # ⚙️ REST API
 **ASP.NET Core REST API** - Backend проект для реализации API системы умный дом. Реализовано в проекте [API\SmartHouseAPI\SmartHouseAPI.csproj](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/SmartHouseAPI.csproj). Исполльзует [Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) автоматическую систему документирования API. Открыть можно по адресау `http://localhost:55673/api/docs/index.html` json описание `http://localhost:55673/api/docs/v1/swagger.json`.
 
+## 🎮 Контроллеры
+
+## ⚙️ Эмуляция
+Для эмуляции работы API используется программа [SoapUI](https://github.com/SmartBear/soapui) где файл [SoapUI-HTTP-API.xml](https://github.com/JeanRasin/SmartHouse/blob/master/Other/SoapUI%20Services/SoapUI-HTTP-API.xml) для эмуляции работы API контроллеров.
+
 ## 📦 Пакеты
 * [.NET Core](https://github.com/dotnet/core) (3.1) - модульная платформа для разработки программного обеспечения с открытым исходным кодом. Совместима с такими операционными системами как Windows, Linux и macOS.
 * [Bogus](https://github.com/bchavez/Bogus) (29.0.1) - генератор поддельных данных.
