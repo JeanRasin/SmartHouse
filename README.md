@@ -21,7 +21,7 @@
 
 ## 🗜 Элементы системы
 1. 🖥 Web Front сделан на [Angular](https://github.com/angular). Проект [SmartHouseWebAngular](Web/SmartHouseWebAngular).
-2. ⚙️ API для фронта сделан на .[NET Core](https://github.com/dotnet/core). Проект [SmartHouseAPI](API/SmartHouseAPI).
+2. ⚙️ REST API для фронта сделан на .[NET Core](https://github.com/dotnet/core). Проект [SmartHouseAPI](API/SmartHouseAPI).
 3. 📘 Для основной информации хранения данных используется база данных [PostgreSql](https://github.com/postgres).
 4. 📗 Для хранения логов используется база данных [MongoDB](https://github.com/mongodb).
 5. 🌡️ Данные о погоде поступают из сервиса [Open Weather](https://openweathermap.org). Проект [SmartHouse.Service.Weather.OpenWeatherService](SmartHouse.Service.Weather.OpenWeatherService).
