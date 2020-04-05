@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SmartHouse.Business.Interfaces\SmartHouse.Services.Interfaces.csproj" />
     <ProjectReference Include="..\SmartHouse.Domain.Core\SmartHouse.Domain.Core.csproj" />
     <ProjectReference Include="..\SmartHouse.Infrastructure.Data\SmartHouse.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\SmartHouse.Services.Interfaces\SmartHouse.Services.Interfaces.csproj" />
   </ItemGroup>
 
   <ItemGroup>
