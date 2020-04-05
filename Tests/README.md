@@ -1,4 +1,4 @@
-# 🧪 Тесты
+# 📋 Тесты
 Для API тестирования используются технологии [NUnit](https://github.com/nunit) и [XUnit](https://github.com/xunit/xunit). В полне достаточно было использовать [XUnit](https://github.com/xunit/xunit), но для сравнения разных тестов было принето решение часть кода тестировать NUnut.
 API состоит из вертикально зависимых слоёв ([Repository](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Infrastructure.Data), [Business logic](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Business.Data), [Net. Core API](https://github.com/JeanRasin/SmartHouse/tree/master/API/SmartHouseAPI) и [Service](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Service.Weather.OpenWeatherService)) и каждый слой тестируется отдельно и независимо от других.
 
