@@ -20,7 +20,7 @@
 5. **Tests** - Тесты всех систем включающие юнит тесты и интеграционные тесты. Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/Tests).
 
 ## 🖥 Архитектура front-end приложения
-Система может поддерживать множество представлений в данном случае используется одно представление написанное на [Angular](https://github.com/angular). Папка с проектами представлений [тут](https://github.com/JeanRasin/SmartHouse/tree/master/Web). Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/Web/SmartHouseWebAngular/README.md).
+Система может поддерживать множество представлений, в данном случае используется одно представление написанное на [Angular](https://github.com/angular). Папка с проектами представлений [тут](https://github.com/JeanRasin/SmartHouse/tree/master/Web). Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/Web/SmartHouseWebAngular/README.md).
 
 ## 🗜 Элементы системы
 1. 🖥 Web Front сделан на [Angular](https://github.com/angular). Проект [SmartHouseWebAngular](Web/SmartHouseWebAngular).
