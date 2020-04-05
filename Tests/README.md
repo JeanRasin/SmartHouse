@@ -45,7 +45,7 @@ docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiInteg
 * [XUnit](https://github.com/xunit/xunit) (2.4.1) - инструмент для модульного тестирования с открытым исходным кодом для .NET.
 * [NUnit](https://github.com/nunit) (3.12.0) - открытая среда юнит-тестирования приложений для .NET.
 * [Moq](https://github.com/moq/moq4) (4.13.1) - библиотека моделирования объектов, которые эммитируют поведение реальных объектов контролируемыми способами.
-* [Bogus](https://github.com/bchavez/Bogus) (29.0.1) генератор тестовых данных.
+* [Bogus](https://github.com/bchavez/Bogus) (29.0.1) - генератор поддельных данных.
 * [Microsoft.NET.Test.Sdk](https://github.com/microsoft/vstest) (16.2.0) - средство запуска и механизм, который обеспечивает работу тестового обозревателя и vstest.console.
 
 ### Integration
