@@ -2,11 +2,11 @@
 **ASP.NET Core REST API** - Backend проект для реализации API системы умный дом. Реализовано в проекте [API\SmartHouseAPI\SmartHouseAPI.csproj](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/SmartHouseAPI.csproj). Исполльзует [Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) автоматическую систему документирования API. Открыть можно по адресау `http://localhost:55673/api/docs/index.html` json описание `http://localhost:55673/api/docs/v1/swagger.json`.
 
 ## 📦 Пакеты
-* [.NET Core](https://github.com/dotnet/core) версии 3.1.
-* [Bogus](https://github.com/bchavez/Bogus) версии 29.0.1.
-* [Swashbuckle.AspNetCore.Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) версии 5.0.0.
-* [Microsoft.EntityFrameworkCore.Tools](https://github.com/dotnet/efcore) версии 16.2.0.
-* [Npgsql.EntityFrameworkCore.PostgreSQL](https://github.com/npgsql/efcore.pg) версии 3.1.2.
+* [.NET Core](https://github.com/dotnet/core) (3.1) - модульная платформа для разработки программного обеспечения с открытым исходным кодом. Совместима с такими операционными системами как Windows, Linux и macOS.
+* [Bogus](https://github.com/bchavez/Bogus) (29.0.1) - генератор поддельных данных.
+* [Swashbuckle.AspNetCore.Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) (5.0.0) - инструменты для документирования API.
+* [Microsoft.EntityFrameworkCore.Tools](https://github.com/dotnet/efcore) (16.2.0) - изменение object-database карты для .NET. Поддерживает запросы LINQ, отслеживание изменений, обновления и миграцию схем.
+* [Npgsql.EntityFrameworkCore.PostgreSQL](https://github.com/npgsql/efcore.pg) (3.1.2) - Entity Framework Core провайдер для PostgreSQL.
 
 ## 👽 Авторство
  * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
