@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.1" />
     <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.1.2" />
@@ -20,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SmartHouse.Service.Weather.OpenWeatherService\SmartHouse.Service.Weather.OpenWeatherMap.csproj" />
-    <ProjectReference Include="..\..\SmartHouse.Service.Wether.Gismeteo\SmartHouse.Service.Wetaher.GisMeteo.csproj" />
+    <ProjectReference Include="..\..\Weather\SmartHouse.Service.Weather.OpenWeatherService\SmartHouse.Service.Weather.OpenWeatherMap.csproj" />
+    <ProjectReference Include="..\..\Weather\SmartHouse.Service.Wether.Gismeteo\SmartHouse.Service.Wetaher.GisMeteo.csproj" />
   </ItemGroup>
 
 </Project>

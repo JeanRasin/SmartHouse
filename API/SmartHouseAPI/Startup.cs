@@ -14,6 +14,7 @@ using SmartHouse.Domain.Interfaces;
 using SmartHouse.Domain.Interfaces.Contexts;
 using SmartHouse.Infrastructure.Data;
 using SmartHouse.Infrastructure.Data.Helpers;
+using SmartHouse.Service.Weather.Gismeteo;
 using SmartHouse.Service.Weather.OpenWeatherMap;
 using SmartHouse.Services.Interfaces;
 using SmartHouseAPI.Helpers;
