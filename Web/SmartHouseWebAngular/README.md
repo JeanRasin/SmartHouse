@@ -43,8 +43,7 @@ docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web
 * [karma-jasmine](https://github.com/karma-runner/karma-jasmine) (2.0.1) - плагин Karma - адаптер для платформы тестирования [Jasmine](https://github.com/jasmine/jasmine).
 
 ### ⚗️ End-to-end тесты
-* [Protractor](http://www.protractortest.org/) версии 5.4.2.
-* [Jasmine](https://jasmine.github.io/) версии 3.5.7.
+* [Protractor](https://github.com/angular/protractor) (5.4.2) - комплексная E2E тестовая среда для приложений Angular и AngularJS.
 
 ## 👽 Авторство
  * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
