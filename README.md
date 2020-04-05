@@ -50,6 +50,8 @@ docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
 ```
 Все порты которые использует проект находится в файле [.env](https://github.com/JeanRasin/SmartHouse/blob/master/.env).
 
+## 🔮 Будущая разработка !!!
+
 ## 👽 Авторство
  * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
  
