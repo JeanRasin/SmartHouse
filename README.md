@@ -16,8 +16,8 @@
 1. **Repository** - Уровень инфроструктуры реализует интерфейсы, объявленные на нижних уровнях, и связывать их с хранилищем данных. Проект [SmartHouse.Infrastructure.Data](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Infrastructure.Data).
 2. **Business logic** - Реализация бизнес логики. Проект [SmartHouse.Infrastructure.Business](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Infrastructure.Business).
 3. **Web service** - Проекты получения данных погоды. Их может быть множество. Папка с проектами [Weather](https://github.com/JeanRasin/SmartHouse/tree/master/Weather).
-4. **API** - Основной проект REST API back-end. Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/README.md).
-5. **Tests** - Тесты всех систем включающие юнит тесты и интеграционные тесты. Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/Tests/README.md).
+4. **API** - Основной проект REST API back-end. Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI).
+5. **Tests** - Тесты всех систем включающие юнит тесты и интеграционные тесты. Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/Tests).
 
 ## 🗜 Элементы системы
 1. 🖥 Web Front сделан на [Angular](https://github.com/angular). Проект [SmartHouseWebAngular](Web/SmartHouseWebAngular).
