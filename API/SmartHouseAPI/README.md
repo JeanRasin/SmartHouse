@@ -3,9 +3,9 @@
 
 ## 🎮 Контроллеры
 * 🌡️ Контроллер погоды [WeatherController.cs](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/Controllers/WeatherController.cs).
-* Контроллер логов [LoggerController.cs](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/Controllers/LoggerController.cs).
-* Контроллер работы с задачами [GoalController.cs](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/Controllers/GoalController.cs).
-* Контроллер ошибок [ErrorController.cs](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/Controllers/ErrorController.cs).
+* 📗 Контроллер логов [LoggerController.cs](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/Controllers/LoggerController.cs).
+* 📋 Контроллер работы с задачами [GoalController.cs](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/Controllers/GoalController.cs).
+* ❗️ Контроллер ошибок [ErrorController.cs](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/Controllers/ErrorController.cs).
 
 ## ⚙️ Эмуляция
 Для эмуляции работы API используется программа [SoapUI](https://github.com/SmartBear/soapui) где файл [SoapUI-HTTP-API.xml](https://github.com/JeanRasin/SmartHouse/blob/master/Other/SoapUI%20Services/SoapUI-HTTP-API.xml) для эмуляции работы контроллеров. Для работы контроллера получение погоды в режиме `debug` можно использовать проект [SoapUI-OpenWeatherMap.xml](https://github.com/JeanRasin/SmartHouse/blob/master/Other/SoapUI%20Services/SoapUI-OpenWeatherMap.xml).
