@@ -19,6 +19,9 @@
 4. **API** - Основной проект REST API back-end. Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI).
 5. **Tests** - Тесты всех систем включающие юнит тесты и интеграционные тесты. Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/Tests).
 
+## 🖥 Архитектура front-end приложения
+
+
 ## 🗜 Элементы системы
 1. 🖥 Web Front сделан на [Angular](https://github.com/angular). Проект [SmartHouseWebAngular](Web/SmartHouseWebAngular).
 2. ⚙️ REST API для фронта сделан на .[NET Core](https://github.com/dotnet/core). Проект [SmartHouseAPI](API/SmartHouseAPI).
