@@ -19,7 +19,7 @@
 
 ## ⚙️ Эмуляция сервисов
 Для эмуляции работы сервисов используется программа [SoapUI](https://github.com/SmartBear/soapui) где [файлы](Other\SoapUI%20Services) для эмуляции работы API контроллеров [SoapUI-HTTP-API.xml](https://github.com/JeanRasin/SmartHouse/blob/master/Other/SoapUI%20Services/SoapUI-HTTP-API.xml) и сервиса погоды [SoapUI-OpenWeatherMap.xml](https://github.com/JeanRasin/SmartHouse/blob/master/Other/SoapUI%20Services/SoapUI-OpenWeatherMap.xml).
-Так же для эмуляции сервиса погоды используется проект [WetherApiNodejs](SmartHouse.Service.Weather.OpenWeatherService) написанный на [Node.js](https://github.com/nodejs), который можно запустить в Docker [docker-compose.yml](https://github.com/JeanRasin/SmartHouse/blob/376234a9d1989daf52081bc7b44f5e1726b11e9b/docker-compose.yml#L57).
+Так же для эмуляции сервиса погоды используется проект [WetherApiNodejs](SmartHouse.Service.Weather.OpenWeatherService) написанный на [Node.js](https://github.com/nodejs), который можно запустить в Docker файлом [docker-compose.yml](https://github.com/JeanRasin/SmartHouse/blob/376234a9d1989daf52081bc7b44f5e1726b11e9b/docker-compose.yml#L57).
 
 ## 🐳 Docker 
 Все функции проекта можно запустить в [Docker](https://github.com/docker) так же как и тесты.
