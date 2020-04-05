@@ -42,14 +42,14 @@ docker run -it --name all-test_integration --network smarthouse_smart-house-netw
 docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiIntegrationTest.dll
 ```
 ## 📦 Пакеты
-* [XUnit](https://github.com/xunit/xunit) (2.4.1) - .
-* [NUnit](https://github.com/nunit) версии 3.12.0.
-* [Moq](https://github.com/nunit) версии 4.13.1.
-* [Bogus](https://github.com/bchavez/Bogus) версии 29.0.1.
-* [Microsoft.NET.Test.Sdk](https://github.com/microsoft/vstest/) версии 16.2.0.
+* [XUnit](https://github.com/xunit/xunit) (2.4.1) - инструмент для модульного тестирования с открытым исходным кодом для .NET.
+* [NUnit](https://github.com/nunit) (3.12.0) - открытая среда юнит-тестирования приложений для .NET.
+* [Moq](https://github.com/moq/moq4) (4.13.1) - библиотека моделирования объектов, которые эммитируют поведение реальных объектов контролируемыми способами.
+* [Bogus](https://github.com/bchavez/Bogus) (29.0.1) генератор тестовых данных.
+* [Microsoft.NET.Test.Sdk](https://github.com/microsoft/vstest) (16.2.0) - средство запуска и механизм, который обеспечивает работу тестового обозревателя и vstest.console.
 
 ### Integration
-* [Microsoft.AspNetCore.TestHost](https://github.com/aspnet/Hosting/tree/master/src/Microsoft.AspNetCore.TestHost) версии 3.1.2.
+* [Microsoft.AspNetCore.TestHost](https://github.com/aspnet/Hosting/tree/master/src/Microsoft.AspNetCore.TestHost) (3.1.2) - веб-сервер ASP.NET Core для написания и запуска тестов.
 
 ## 👽 Авторство
  * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
