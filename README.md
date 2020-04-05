@@ -11,9 +11,9 @@
 В качестве рахитектуры проекта используется ["Onion Architecture"](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/) ("луковая" архитектура).
 1. **Domain Model** - классы моделей, которые используются в приложении и объекты которых хранятся в базе данных. Проект [SmartHouse.Domain.Core](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Domain.Core).
 2. **Domain Services** - уровень которые управляют работой с моделью домена в виде интерфейсов репозиториев. Проект [SmartHouse.Domain.Interfaces](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Domain.Interfaces).
-3. **Application Services** - уровень API или интерфейсов бизнес-логики приложения. Проект [!!!]().
+3. **Application Services** - уровень API или интерфейсов бизнес-логики приложения. Проект [SmartHouse.Services.Interfaces](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Services.Interfaces).
 ### ⭕️ Infrastructure
-1. **work!!!** -
+1. **Repository** - Уровень инфроструктуры реализует интерфейсы, объявленные на нижних уровнях, и связывать их с хранилищем данных. Проект [SmartHouse.Infrastructure.Data](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Infrastructure.Data).
 2. **web service** -
 3. **API** -
 4. **Tests** -
