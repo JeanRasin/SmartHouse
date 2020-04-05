@@ -12,9 +12,11 @@
 1. **Domain Model** - классы моделей, которые используются в приложении и объекты которых хранятся в базе данных. Проект [SmartHouse.Domain.Core](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Domain.Core).
 2. **Domain Services** - уровень которые управляют работой с моделью домена в виде интерфейсов репозиториев. Проект [SmartHouse.Domain.Interfaces](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Domain.Interfaces).
 3. **Application Services** - уровень API или интерфейсов бизнес-логики приложения. Проект [!!!]().
-4. 
-
-### ⭕️
+### ⭕️ Infrastructure
+1. **work!!!** -
+2. **web service** -
+3. **API** -
+4. **Tests** -
 
 ## 🗜 Элементы системы
 1. 🖥 Web Front сделан на [Angular](https://github.com/angular). Проект [SmartHouseWebAngular](Web/SmartHouseWebAngular).
