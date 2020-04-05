@@ -6,6 +6,13 @@
 2. 🗃 Сохранение и отображение логов системы.
 3. 📋 Механизм работы с задачами. Опеации над задачами: отображение, создание, изменение, удаление и отметка что выполненно. 
 
+## 🗜 Элементы системы
+1. 🖥 Web Front сделан на [Angular](https://github.com/angular). Проект [SmartHouseWebAngular](Web/SmartHouseWebAngular). Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/Web/SmartHouseWebAngular/README.md).
+2. ⚙️ REST API для фронта сделан на .[NET Core](https://github.com/dotnet/core). Проект [SmartHouseAPI](API/SmartHouseAPI). Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/README.md).
+3. 📘 Для основной информации хранения данных используется база данных [PostgreSQL](https://github.com/postgres).
+4. 📗 Для хранения логов используется база данных [MongoDB](https://github.com/mongodb).
+5. 🌡️ Данные о погоде поступают из сервиса [Open Weather](https://openweathermap.org). Проект [SmartHouse.Service.Weather.OpenWeatherService](SmartHouse.Service.Weather.OpenWeatherService).
+
 ## 🏗️ Архитектура back-end приложения 
 ### 🔴 Application Core
 В качестве рахитектуры проекта используется ["Onion Architecture"](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/) ("луковая" архитектура).
@@ -21,13 +28,6 @@
 
 ## 🖥 Архитектура front-end приложения
 Система может поддерживать множество представлений, в данном случае используется одно представление написанное на [Angular](https://github.com/angular). Папка с проектами представлений [тут](https://github.com/JeanRasin/SmartHouse/tree/master/Web). Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/Web/SmartHouseWebAngular/README.md).
-
-## 🗜 Элементы системы
-1. 🖥 Web Front сделан на [Angular](https://github.com/angular). Проект [SmartHouseWebAngular](Web/SmartHouseWebAngular). Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/Web/SmartHouseWebAngular/README.md).
-2. ⚙️ REST API для фронта сделан на .[NET Core](https://github.com/dotnet/core). Проект [SmartHouseAPI](API/SmartHouseAPI). Подробнее [тут](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/README.md).
-3. 📘 Для основной информации хранения данных используется база данных [PostgreSQL](https://github.com/postgres).
-4. 📗 Для хранения логов используется база данных [MongoDB](https://github.com/mongodb).
-5. 🌡️ Данные о погоде поступают из сервиса [Open Weather](https://openweathermap.org). Проект [SmartHouse.Service.Weather.OpenWeatherService](SmartHouse.Service.Weather.OpenWeatherService).
 
 ## 🔬 Тесты системы
 1. 🧪 Для юнит тестирования фронта используется фреймворк [Karma](https://karma-runner.github.io/latest/index.html), а для интеграционного [Protractor](https://github.com/angular/protractor). Процесс запуска [тут](Web/SmartHouseWebAngular/README.md#-unit-тесты).
