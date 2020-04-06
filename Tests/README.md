@@ -58,7 +58,7 @@ docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiInteg
 * [Microsoft.NET.Test.Sdk](https://github.com/microsoft/vstest) (16.5.0) - Средство запуска и механизм, который обеспечивает работу тестового обозревателя и vstest.console.
 
 ### Integration
-* [Microsoft.AspNetCore.TestHost](https://github.com/aspnet/Hosting/tree/master/src/Microsoft.AspNetCore.TestHost) (3.1.3) - веб-сервер ASP.NET Core для написания и запуска тестов.
+* [Microsoft.AspNetCore.TestHost](https://github.com/aspnet/Hosting/tree/master/src/Microsoft.AspNetCore.TestHost) (3.1.3) - Веб-сервер ASP.NET Core для написания и запуска тестов.
 
 ## 👽 Авторство
  * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
