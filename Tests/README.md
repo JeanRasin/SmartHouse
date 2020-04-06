@@ -4,7 +4,7 @@
 ## 🗜 Тестируемые системы
 1. **Repository tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestRepository) работы с хранилищем данных.
 2. **Business tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestBusiness) бизнес логики.
-3. **Services tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestServices) сервисов погоды.
+3. **Services tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestServices) получения данных погоды.
 4. **Api tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestApi) back-end REST API.
 5. **ApiIntegration tests** - Интеграционные [тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestApiIntegration)  back-end REST API.
 
