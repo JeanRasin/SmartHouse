@@ -53,6 +53,7 @@ docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiInteg
 * [NUnit](https://github.com/nunit) (3.12.0) - Открытая среда юнит-тестирования приложений для .NET.
 * [Moq](https://github.com/moq/moq4) (4.13.1) - Библиотека моделирования объектов, которые эммитируют поведение реальных объектов контролируемыми способами.
 * [EntityFrameworkCore.Testing.Moq](https://github.com/rgvlee/EntityFrameworkCore.Testing) (2.2.0) - Библиотека моделирования объектов, которые эммитируют поведение [Entity Framework Core](https://github.com/dotnet/efcore).
+* [Npgsql.EntityFrameworkCore.PostgreSQL](https://github.com/npgsql/efcore.pg) (3.1.3) - Entity Framework Core провайдер для PostgreSQL.
 * [Bogus](https://github.com/bchavez/Bogus) (29.0.1) - Генератор поддельных данных.
 * [Microsoft.NET.Test.Sdk](https://github.com/microsoft/vstest) (16.5.0) - Средство запуска и механизм, который обеспечивает работу тестового обозревателя и vstest.console.
 
