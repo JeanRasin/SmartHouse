@@ -1,7 +1,7 @@
 # 🔬 Тесты
 Для API тестирования используются технологии [NUnit](https://github.com/nunit) и [XUnit](https://github.com/xunit/xunit). В полне достаточно было использовать [XUnit](https://github.com/xunit/xunit), но для сравнения разных тестов было принето решение часть кода тестировать NUnut. В качестве арахитектуры системы используется ["Onion Architecture"](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/) состоящая из слоёв. Каждый слой отдельно тестируется.
 
-## Тестируемые системы
+## 🗜 Тестируемые системы
 1. **Repository tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestRepository) работы с хранилищем данных.
 2. **Business tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestBusiness) бизнес логики.
 3. **Services tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestServices) сервисов погоды.
