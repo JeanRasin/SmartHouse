@@ -13,9 +13,9 @@
 ## 📦 Пакеты
 * [.NET Core](https://github.com/dotnet/core) (3.1) - модульная платформа для разработки программного обеспечения с открытым исходным кодом. Совместима с такими операционными системами как Windows, Linux и macOS.
 * [Bogus](https://github.com/bchavez/Bogus) (29.0.1) - генератор поддельных данных.
-* [Swashbuckle.AspNetCore.Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) (5.0.0) - инструменты для документирования API.
-* [Microsoft.EntityFrameworkCore.Tools](https://github.com/dotnet/efcore) (16.2.0) - изменение object-database карты для .NET. Поддерживает запросы LINQ, отслеживание изменений, обновления и миграцию схем.
-* [Npgsql.EntityFrameworkCore.PostgreSQL](https://github.com/npgsql/efcore.pg) (3.1.2) - Entity Framework Core провайдер для PostgreSQL.
+* [Swashbuckle.AspNetCore.Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) (5.3.1) - инструменты для документирования API.
+* [Microsoft.EntityFrameworkCore.Tools](https://github.com/dotnet/efcore) (3.1.3) - изменение object-database карты для .NET. Поддерживает запросы LINQ, отслеживание изменений, обновления и миграцию схем.
+* [Npgsql.EntityFrameworkCore.PostgreSQL](https://github.com/npgsql/efcore.pg) (3.1.3) - Entity Framework Core провайдер для PostgreSQL.
 
 ## 👽 Авторство
  * **Rasin Jean** - Вся работа - [JeanRasin](https://github.com/JeanRasin)
