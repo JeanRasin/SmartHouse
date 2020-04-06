@@ -1,16 +1,14 @@
-# 📋 Тесты !!!
-Для API тестирования используются технологии [NUnit](https://github.com/nunit) и [XUnit](https://github.com/xunit/xunit). В полне достаточно было использовать [XUnit](https://github.com/xunit/xunit), но для сравнения разных тестов было принето решение часть кода тестировать NUnut.
-API состоит из вертикально зависимых слоёв ([Repository](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Infrastructure.Data), [Business logic](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Business.Data), [Net. Core API](https://github.com/JeanRasin/SmartHouse/tree/master/API/SmartHouseAPI) и [Service](https://github.com/JeanRasin/SmartHouse/tree/master/SmartHouse.Service.Weather.OpenWeatherService)) и каждый слой тестируется отдельно и независимо от других.
+# 📋 Тесты
+Для API тестирования используются технологии [NUnit](https://github.com/nunit) и [XUnit](https://github.com/xunit/xunit). В полне достаточно было использовать [XUnit](https://github.com/xunit/xunit), но для сравнения разных тестов было принето решение часть кода тестировать NUnut. В качестве арахитектуры системы используется "Onion Architecture" состоящая из слоёв. Каждый слой отдельно тестируется.
 
-## Тестируемые системы !!!
-1. TestRepository
-2. TestBusiness
-3. TestServices
-4. TestApi
-5. TestApiIntegration
+## Тестируемые системы
+1. **Repository tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestRepository) работы с хранилищем данных.
+2. **Business tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestBusiness) бизнес логики.
+3. **Services tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestServices) сервисов погоды.
+4. **Api tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestApi) back-end REST API.
+5. **ApiIntegration tests** - [Тесты](https://github.com/JeanRasin/SmartHouse/tree/master/Tests/TestApiIntegration) интеграционные тесты  back-end REST API.
 
 ## 🚀 Запуск тестов
-
 ### 🧪 Unit тесты
 Основные юнит тесты можно запустить через механизм тестирования [Visual Studio](https://visualstudio.github.com/). Либо через консоль из корня проекта теста используя команды 
 `dotnet restore` для построения проекта и `dotnet test` для запуска теста. Например [тест](TestRepository) репозитория. Для запуска всех тестов необходиомо перейти в корень [решения](https://github.com/JeanRasin/SmartHouse) и запустить команду `dotnet test SmartHouse.sln`. Так же можно использовать команду `dotnet vstest <path\*.dll>...` для запуска отдельных тестов, (пример `dotnet vstest Tests\TestRepository\bin\Debug\netcoreapp3.1\RepositoryTest.dll`).
