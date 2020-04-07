@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartHouse.Domain.Core\SmartHouse.Domain.Core.csproj" />
+    <ProjectReference Include="..\SmartHouse.Infrastructure.Data\SmartHouse.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\SmartHouse.Services.Interfaces\SmartHouse.Services.Interfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="GoalWork.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,38 @@
+#docker-compose.test.yml (Extended config for DEVELOPMENT env.)
+
+version: '3.7'
+services:
+  api_test:
+    image: api_test:latest
+    entrypoint: ["dotnet", "vstest", "TestRepository/RepositoryTest.dll","TestBusiness/BusinessTest.dll","TestApi/ApiTest.dll","TestServices/ServicesTest.dll", "--logger:trx;LogFileName=custom_file_name.trx","--ResultsDirectory:/var/api/test"]
+    build:
+      context: .
+      dockerfile: Dockerfile.tests
+    volumes:
+      - test_result:/var/api/test
+  api_integration_test:
+    image: api_test:latest
+    entrypoint: ["dotnet", "vstest", "TestApiIntegration/ApiIntegrationTest.dll"]
+    environment:
+      - api_url=http://api:${INTERNAL_API_PORT}
+    networks:
+      - smart-house-network
+    depends_on: 
+      - api_test
+      - api
+  front_test_angular_e2e:
+    image: smart_house_front_angular:latest
+    entrypoint: ["ng", "e2e"]
+    networks:
+     - smart-house-network
+    depends_on:
+        - front_angular      
+  front_angular_test:
+    image: smart_house_front_angular:latest
+    entrypoint: ["ng", "test"]
+    ports:
+        - ${EXTERNAL_FRONT_TEST_ANGULAR}:${INTERNAL_FRONT_TEST_ANGULAR}
+    depends_on:
+        - front_angular 
+volumes:
+  test_result:
