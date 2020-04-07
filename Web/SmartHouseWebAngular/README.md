@@ -3,7 +3,7 @@
 На странице `http://localhost:4200/goal` выводится список с задачами.
 
 ## 🚀 Запуск проекта
-Убедитесь что у вас установлен [Node.js](https://nodejs.org/en/download). Перед запуском необходимо установить пакеты вводя команду в консоль `npm install` из папки [ClientApp](ClientApp). Так же нужно построить и проверить проект командой `npm run build`. Для запуска проекта необхоимо выполнить команду `npm start`. Проект откроется по адресу `http://localhost:4200`. Предварительно необходимо запустить [API](https://github.com/JeanRasin/SmartHouse/tree/master/API/SmartHouseAPI) проекта, заглушку [SoapUI Service](https://github.com/JeanRasin/SmartHouse/tree/master/Other/SoapUI%20Services) или docker [сервис](https://github.com/JeanRasin/SmartHouse/blob/6cdb2ed65d9bc32ec7227485b7161026adab780a/docker-compose.yml#L17).
+Убедитесь что у вас установлен [Node.js](https://nodejs.org/en/download). Перед запуском необходимо установить пакеты вводя команду в консоль `npm install` из папки [ClientApp](ClientApp). Так же нужно построить и проверить проект командой `npm run build`. Для запуска проекта необходимо выполнить команду `npm start`. Проект откроется по адресу `http://localhost:4200`. Предварительно необходимо запустить [API](https://github.com/JeanRasin/SmartHouse/tree/master/API/SmartHouseAPI) проекта, заглушку [SoapUI Service](https://github.com/JeanRasin/SmartHouse/tree/master/Other/SoapUI%20Services) или docker [сервис](https://github.com/JeanRasin/SmartHouse/blob/6cdb2ed65d9bc32ec7227485b7161026adab780a/docker-compose.yml#L17).
 
 ## 🔬 Тесты
 ### 🧪 Unit тесты
@@ -13,7 +13,7 @@
 Для запуска e2e тестирования необходимо выполнить `npm run e2e` в качестве тестового фреймворка используется [Protractor](http://www.protractortest.org/) и [Jasmine](https://jasmine.github.io/).
 
 ## 🐳 Docker 
-Для запуска теста не обходимо в папке [проекта](https://github.com/JeanRasin/SmartHouse) запустить docker файл [Dockerfile](https://github.com/JeanRasin/SmartHouse/blob/master/Dockerfile) введя в консоль команду для сборки образа.
+Для запуска теста необходимо в папке [проекта](https://github.com/JeanRasin/SmartHouse) запустить docker файл [Dockerfile](https://github.com/JeanRasin/SmartHouse/blob/master/Dockerfile) введя в консоль команду для сборки образа.
 ```docker
 docker build --rm -t smart-house-web-angular-test .
 ```
@@ -21,7 +21,7 @@ docker build --rm -t smart-house-web-angular-test .
 ```docker
 docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web-angular-test
 ```
-Для запуска unit тестов необходимо ввести команду после чего можно открыть веб пердставление по адресу `http://localhost:9876`.
+Для запуска unit тестов необходимо ввести команду после чего можно открыть веб-представление по адресу `http://localhost:9876`.
 ```docker
  docker exec -it smart-house-web-angular-test_1 bash ng test
 ```
@@ -29,7 +29,7 @@ docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web
 ```docker
  docker exec -it smart-house-web-angular-test_1 bash ng e2e
 ```
-И конечно проект и все его тесты можно запустить через [docker-compos](https://github.com/JeanRasin/SmartHouse), как это сделать можно прочитать [тут](https://github.com/JeanRasin/SmartHouse/blob/master/README.md#-docker). 
+И конечно проект и все его тесты можно запустить через [docker-compose](https://github.com/JeanRasin/SmartHouse), как это сделать можно прочитать [тут](https://github.com/JeanRasin/SmartHouse/blob/master/README.md#-docker). 
 
 ## 📦 Пакеты
 ### 🔩 Софт
