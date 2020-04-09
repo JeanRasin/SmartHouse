@@ -4,14 +4,12 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["/API", "./API"]
-COPY ["/SmartHouse.Business.Data", "./SmartHouse.Business.Data"]
 COPY ["/SmartHouse.Domain.Core", "./SmartHouse.Domain.Core"]
 COPY ["/SmartHouse.Domain.Interfaces", "./SmartHouse.Domain.Interfaces"]
+COPY ["/SmartHouse.Infrastructure.Business", "./SmartHouse.Infrastructure.Business"]
 COPY ["/SmartHouse.Infrastructure.Data", "./SmartHouse.Infrastructure.Data"]
-COPY ["/SmartHouse.Service.Weather.OpenWeatherService", "./SmartHouse.Service.Weather.OpenWeatherService"]
-COPY ["/SmartHouse.Service.Wether.Gismeteo", "./SmartHouse.Service.Wether.Gismeteo"]
-COPY ["/SmartHouse.Service.Wether.Gismeteo", "./SmartHouse.Service.Wether.Gismeteo"]
 COPY ["/SmartHouse.Services.Interfaces", "./SmartHouse.Services.Interfaces"]
+COPY ["/Weather", "./Weather"]
 
 RUN dotnet restore "API/SmartHouseAPI/SmartHouseAPI.csproj"
 COPY . .

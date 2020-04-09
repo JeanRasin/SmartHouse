@@ -10,7 +10,7 @@
 
 ## 🚀 Запуск тестов
 ### 🧪 Unit тесты
-Основные юнит-тесты можно запустить через механизм тестирования [Visual Studio](https://visualstudio.github.com/). Либо через консоль из корня проекта теста используя команды 
+Основные юнит-тесты можно запустить через механизм тестирования [Visual Studio](https://visualstudio.github.com). Либо через консоль из корня проекта теста используя команды 
 `dotnet restore` для построения проекта и `dotnet test` для запуска теста. Например [тест](TestRepository) репозитория. Для запуска всех тестов необходимо перейти в корень [решения](https://github.com/JeanRasin/SmartHouse) и запустить команду `dotnet test SmartHouse.sln`. Так же можно использовать команду `dotnet vstest <path\*.dll>...` для запуска отдельных тестов, (пример `dotnet vstest Tests\TestRepository\bin\Debug\netcoreapp3.1\RepositoryTest.dll`).
 Все тесты используют фреймворк [XUnit](https://github.com/xunit/xunit) кроме [ServicesTest.csproj](https://github.com/JeanRasin/SmartHouse/blob/master/Tests/TestServices/ServicesTest.csproj) который использует [NUnit](https://github.com/nunit).
 
@@ -30,11 +30,11 @@ docker build -f Dockerfile.tests --rm -t all-test .
 ```
 После запустить контейнер.
 ```docker
-docker run --name all-test_business -d all-test
+docker run -it --name all-test_business -d all-test
 ```
 И запустить тест.
 ```docker
-docker exec -it all-test_business bash dotnet vstest TestBusiness/BusinessTest.dll
+docker exec -it all-test_business dotnet vstest TestBusiness/BusinessTest.dll
 ```
 Интеграционный тест запускается так же, но нужно запустить вспомогательные контейнеры командой, причем уже без `docker-compose.test.yml` файла тестов.
 ```docker-compose
@@ -42,11 +42,11 @@ docker-compose -f docker-compose.yml up -d
 ```
 Но и это еще не все. Нашему интеграционному тесту контейнеру нужно дать доступ к сети остальных контейнеров запустив его командой.
 ```docker
-docker run -it --name all-test_integration --network smarthouse_smart-house-network -d all-test
+docker run -it --name all-test_integration --network smarthouse_smart-house-network --env api_url=http://api:80 -d all-test
 ```
  И запустить тест.
 ```docker
-docker exec -it all-test_business bash dotnet vstest TestApiIntegration/ApiIntegrationTest.dll
+docker exec -it all-test_integration dotnet vstest TestApiIntegration/ApiIntegrationTest.dll
 ```
 ## 📦 Пакеты
 * [XUnit](https://github.com/xunit/xunit) (2.4.1) - Инструмент для модульного тестирования с открытым исходным кодом для .NET.

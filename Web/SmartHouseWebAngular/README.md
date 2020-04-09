@@ -10,24 +10,24 @@
 Для запуска Unit тестирования необходимо выполнить `npm run test` в качестве тестового фреймворка используется [Karma](https://karma-runner.github.io). Для работы с тестами через браузер необходимо перейти на страницу `http://localhost:9876`.
 
 ### ⚗️ End-to-end тесты
-Для запуска e2e тестирования необходимо выполнить `npm run e2e` в качестве тестового фреймворка используется [Protractor](http://www.protractortest.org/) и [Jasmine](https://jasmine.github.io/).
+Для запуска e2e тестирования необходимо выполнить `npm run e2e` в качестве тестового фреймворка используется [Protractor](http://www.protractortest.org) и [Jasmine](https://jasmine.github.io).
 
 ## 🐳 Docker 
-Для запуска теста необходимо в папке [проекта](https://github.com/JeanRasin/SmartHouse) запустить docker файл [Dockerfile](https://github.com/JeanRasin/SmartHouse/blob/master/Dockerfile) введя в консоль команду для сборки образа.
+Для запуска теста необходимо в папке [проекта](https://github.com/JeanRasin/SmartHouse/tree/master/Web/SmartHouseWebAngular) запустить docker файл [Dockerfile](https://github.com/JeanRasin/SmartHouse/blob/master/Web/SmartHouseWebAngular/Dockerfile) введя в консоль команду для сборки образа.
 ```docker
 docker build --rm -t smart-house-web-angular-test .
 ```
 Что бы запустить контейнер по образу необходимо выполнить команду.
 ```docker
-docker run --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web-angular-test
+docker run -it --name smart-house-web-angular-test_1 -p 9876:9876 -d smart-house-web-angular-test
 ```
 Для запуска unit тестов необходимо ввести команду после чего можно открыть веб-представление по адресу `http://localhost:9876`.
 ```docker
- docker exec -it smart-house-web-angular-test_1 bash ng test
+ docker exec -it smart-house-web-angular-test_1 ng test
 ```
 Для запуска e2e тестов необходимо ввести команду.
 ```docker
- docker exec -it smart-house-web-angular-test_1 bash ng e2e
+ docker exec -it smart-house-web-angular-test_1 ng e2e
 ```
 И конечно проект и все его тесты можно запустить через [docker-compose](https://github.com/JeanRasin/SmartHouse), как это сделать можно прочитать [тут](https://github.com/JeanRasin/SmartHouse/blob/master/README.md#-docker). 
 

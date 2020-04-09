@@ -134,7 +134,7 @@ namespace BusinessTest
         public void GetGoal_IdNotFound_KeyNotFoundException()
         {
             //Arrange
-            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Returns((Goal)null);
+            _mockGoalRepository.Setup(s => s.GetGoal(It.IsAny<Guid>())).Throws(new KeyNotFoundException());
 
             //Act & Assert
             Assert.Throws<KeyNotFoundException>(() => _goalWork.GetGoal(Guid.NewGuid()));
