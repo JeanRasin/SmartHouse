@@ -8,7 +8,7 @@
 4. ❗️ Контроллер ошибок [ErrorController.cs](https://github.com/JeanRasin/SmartHouse/blob/master/API/SmartHouseAPI/Controllers/ErrorController.cs).
 
 ## ⚙️ Эмуляция
-Для эмуляции работы API используется программа [SoapUI](https://github.com/SmartBear/soapui) где файл [SoapUI-HTTP-API.xml](https://github.com/JeanRasin/SmartHouse/blob/master/Other/SoapUI%20Services/SoapUI-HTTP-API.xml) для эмуляции работы контроллеров. Для работы контроллера получение погоды в режиме `debug` можно использовать проект [SoapUI-OpenWeatherMap.xml](https://github.com/JeanRasin/SmartHouse/blob/master/Other/SoapUI%20Services/SoapUI-OpenWeatherMap.xml).
+Для эмуляции работы API используется программа [SoapUI](https://github.com/SmartBear/soapui), где файл [SoapUI-HTTP-API.xml](https://github.com/JeanRasin/SmartHouse/blob/master/Other/SoapUI%20Services/SoapUI-HTTP-API.xml) для эмуляции работы контроллеров. Для работы контроллера получение погоды в режиме `debug` можно использовать проект [SoapUI-OpenWeatherMap.xml](https://github.com/JeanRasin/SmartHouse/blob/master/Other/SoapUI%20Services/SoapUI-OpenWeatherMap.xml).
 
 ## 📦 Пакеты
 * [.NET Core](https://github.com/dotnet/core) (3.1) - модульная платформа для разработки программного обеспечения с открытым исходным кодом. Совместима с такими операционными системами как Windows, Linux и macOS.
