@@ -157,7 +157,7 @@ namespace ApiTest
         public void GetGoal_IdNotFound_NotFoundExceptionStatus404()
         {
             // Arrange
-            _mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Returns((Goal)null);
+            _mockGoalWork.Setup(m => m.GetGoal(It.IsAny<Guid>())).Throws(new KeyNotFoundException());
 
             // Act
             var result = _goalController.GetGoal(Guid.NewGuid()) as NotFoundObjectResult;

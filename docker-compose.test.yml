@@ -32,6 +32,7 @@ services:
     entrypoint: ["ng", "test"]
     ports:
         - ${EXTERNAL_FRONT_TEST_ANGULAR}:${INTERNAL_FRONT_TEST_ANGULAR}
+        - ${EXTERNAL_FRONT_DEBUG_TEST_ANGULAR}:${INTERNAL_FRONT_DEBUG_TEST_ANGULAR}
     depends_on:
         - front_angular 
 volumes:

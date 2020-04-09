@@ -57,11 +57,6 @@ namespace SmartHouse.Business.Data
         {
             Goal result = _repository.GetGoal(id);
 
-            if (result == null)
-            {
-                throw new KeyNotFoundException($"Record id:{id} not found");
-            }
-
             return result;
         }
 

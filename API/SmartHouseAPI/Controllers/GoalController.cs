@@ -48,9 +48,12 @@ namespace SmartHouseAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetGoal(Guid id)
         {
-            Goal result = _goalWork.GetGoal(id);
-
-            if (result == null)
+            Goal result;
+            try
+            {
+                result = _goalWork.GetGoal(id);
+            }
+            catch (KeyNotFoundException)
             {
                 return NotFound($"Goal object id:{id} not found.");
             }
