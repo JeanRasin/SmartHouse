@@ -112,8 +112,12 @@ namespace RepositoryTest
         [Trait("Create", "Success")]
         public void Create_Success()
         {
-            // Act
-            _repository.Create(_itemTestData);
+            try
+            {
+                // Act
+                _repository.Create(_itemTestData);
+            }
+            catch(Exception ex) { }
 
             // Assert
             EntityState itemState = _mockedDbContext.Entry(_itemTestData).State;
