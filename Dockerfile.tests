@@ -1,3 +1,6 @@
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+WORKDIR /app
+
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["/API", "./API"]
@@ -24,7 +27,6 @@ RUN dotnet publish "TestBusiness/BusinessTest.csproj" -c Release -o /app/publish
 	dotnet publish "TestApiIntegration/ApiIntegrationTest.csproj" -c Release -o /app/publish/TestApiIntegration; \
 	dotnet publish "TestServices/ServicesTest.csproj" -c Release -o /app/publish/TestServices
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+WORKDIR /app/publish
+
 
