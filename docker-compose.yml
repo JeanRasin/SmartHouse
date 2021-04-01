@@ -42,6 +42,16 @@ services:
         - smart-house-network
     ports:
         - ${EXTERNAL_MONGO_PORT}:${INTERNAL_MONGO_PORT}
+  redis:
+    image: redis:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${REDIS_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${REDIS_PASSWORD}
+    networks:
+        - smart-house-network
+    ports:
+        - ${EXTERNAL_REDIS_PORT}:${INTERNAL_REDIS_PORT}
   postgres:
     image: postgres:latest
     restart: always

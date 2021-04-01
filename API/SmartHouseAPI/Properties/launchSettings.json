@@ -20,7 +20,7 @@
     "SmartHouseAPI": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/goal",
+      "launchUrl": "api/weather",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

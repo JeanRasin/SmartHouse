@@ -19,6 +19,7 @@ using SmartHouse.Service.Weather.OpenWeatherMap;
 using SmartHouse.Services.Interfaces;
 using SmartHouseAPI.Helpers;
 using SmartHouseAPI.Middleware;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -111,6 +112,18 @@ namespace SmartHouseAPI
                 }
             });
 
+            services.AddTransient<IDatabase>(x =>
+            {
+                var redisConnectString = Configuration.GetSection("RedisConnection")
+                .Get<RedisSettings>();
+
+                ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(redisConnectString.Connection);
+
+                IDatabase db = redis.GetDatabase(redisConnectString.DatabaseId);
+
+                return db;
+            });
+
             if (IsLogger)
             {
                 MongoSettings logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoSettings>();
@@ -137,7 +150,13 @@ namespace SmartHouseAPI
             //services.AddTransient<IWeatherService, GisMeteoService>();
 
             services.AddScoped<IGoalWork<Goal>, GoalWork>();
-            services.AddScoped<IWeatherWork, WeatherWork>(x => new WeatherWork(x.GetRequiredService<IWeatherService>(), 30));
+
+            var redisWeatherCachingTime = Configuration.GetSection("RedisWeatherCachingTime")
+                .Get<TimeSpan>();
+
+            services.AddScoped<IWeatherWork, WeatherWork>(x => 
+            new WeatherWork(x.GetRequiredService<IWeatherService>(),
+            x.GetRequiredService<IDatabase>(), redisWeatherCachingTime, 30));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
