@@ -1,12 +1,10 @@
 using Bogus;
-using BusinessTest.Helpers;
 using Moq;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,10 +21,6 @@ namespace BusinessTest
         public WeatherWorkTest()
         {
             _mockWeatherService = new Mock<IWeatherService>();
-
-           // var mockMultiplexer = new Mock<IConnectionMultiplexer>();
-
-           // mockMultiplexer.Setup(_ => _.IsConnected).Returns(false);
 
             _mockDatabase = new Mock<IDatabase>();
         }
@@ -58,16 +52,16 @@ namespace BusinessTest
                     .RuleFor(o => o.WindSpeed, f => f.Random.Float(0, 1000))
                     .Generate();
 
-                string dataJson = JsonSerializer.Serialize<Weather>(data);
+                string dataJson = JsonSerializer.Serialize(data);
 
                 var result = new RedisValue(dataJson);
 
-                return result; // todo:!!!
+                return await Task.Run(() => result);
             }
 
             _mockDatabase.Setup(_ => _.StringGetAsync(
                 It.Is<RedisKey>(_ => _ == new RedisKey("GetWeather")),
-                CommandFlags.None))
+                It.IsAny<CommandFlags>()))
                 .Returns(MoqStringGetAsync());
 
             var weatherWork = new WeatherWork(
@@ -123,18 +117,38 @@ namespace BusinessTest
             }
 
             var tokenSource = new CancellationTokenSource();
-            _mockWeatherService.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(MoqGetWeatherAsync(tokenSource: tokenSource, sec: 2));
+
+            _mockWeatherService.Setup(_ => _.GetWeatherAsync(
+                It.IsAny<CancellationToken>()))
+                .Returns(MoqGetWeatherAsync(tokenSource: tokenSource, sec: 2));
+
             var weatherWork = new WeatherWork(
                 weatherService: _mockWeatherService.Object,
                 _mockDatabase.Object,
                 new TimeSpan(1, 0, 0),
                 timeOutSec: 4);
 
+            _mockDatabase.Setup(_ => _.StringSetAsync(
+                It.Is<RedisKey>(_ => _ == new RedisKey("GetWeather")),
+                It.IsAny<RedisValue>(),
+                It.IsAny<TimeSpan>(),
+                It.IsAny<When>(),
+                It.IsAny<CommandFlags>()
+                )).Verifiable();
+
             // Act
             Weather weather = await weatherWork.GetWeatherAsync(tokenSource);
 
             // Assert
             Assert.NotNull(weather);
+
+            _mockDatabase.Verify(v => v.StringSetAsync(
+             It.Is<RedisKey>(_ => _ == new RedisKey("GetWeather")),
+             It.IsAny<RedisValue>(),
+             It.IsAny<TimeSpan>(),
+             It.IsAny<When>(),
+             It.IsAny<CommandFlags>()),
+             Times.Once);
         }
 
         /// <summary>
@@ -145,8 +159,13 @@ namespace BusinessTest
         public void GetWeatherAsync_Exception()
         {
             // Arrange
-            _mockWeatherService.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Throws(new Exception());
-            var weatherWork = new WeatherWork(_mockWeatherService.Object, _mockDatabase.Object, new TimeSpan(1, 0, 0));
+            _mockWeatherService.Setup(_ => _.GetWeatherAsync(
+                It.IsAny<CancellationToken>()))
+                .Throws(new Exception());
+
+            var weatherWork = new WeatherWork(_mockWeatherService.Object,
+                _mockDatabase.Object,
+                new TimeSpan(1, 0, 0));
 
             // Act & Assert
             Assert.ThrowsAsync<Exception>(weatherWork.GetWeatherAsync);
@@ -176,7 +195,11 @@ namespace BusinessTest
             }
 
             var tokenSource = new CancellationTokenSource();
-            _mockWeatherService.Setup(m => m.GetWeatherAsync(It.IsAny<CancellationToken>())).Returns(MoqGetWeatherAsync(tokenSource: tokenSource, sec: 3));
+
+            _mockWeatherService.Setup(_ => _.GetWeatherAsync(
+                It.IsAny<CancellationToken>()))
+                .Returns(MoqGetWeatherAsync(tokenSource: tokenSource, sec: 3));
+
             var weatherWork = new WeatherWork(
                 weatherService: _mockWeatherService.Object,
                 _mockDatabase.Object,
@@ -184,7 +207,8 @@ namespace BusinessTest
                 timeOutSec: 2);
 
             // Act & Assert
-            await Assert.ThrowsAsync<OperationCanceledException>(() => weatherWork.GetWeatherAsync(tokenSource));
+            await Assert.ThrowsAsync<OperationCanceledException>(
+                () => weatherWork.GetWeatherAsync(tokenSource));
         }
 
         #endregion WeatherWork
