@@ -44,9 +44,9 @@ services:
         - ${EXTERNAL_MONGO_PORT}:${INTERNAL_MONGO_PORT}
   redis:
     image: redis:latest
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${REDIS_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${REDIS_PASSWORD}
     networks:
         - smart-house-network
