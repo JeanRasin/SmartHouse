@@ -4,5 +4,6 @@
     {
         public string Connection { get; set; }
         public int DatabaseId { get; set; }
+        public string Password { get; set; }
     }
 }
