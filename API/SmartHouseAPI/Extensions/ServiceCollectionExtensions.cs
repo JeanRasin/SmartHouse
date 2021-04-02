@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
 using SmartHouse.Domain.Interfaces;
-using SmartHouse.Domain.Interfaces.Contexts;
 using SmartHouse.Infrastructure.Data;
 using SmartHouse.Infrastructure.Data.Helpers;
 using SmartHouse.Service.Weather.OpenWeatherMap;
@@ -29,9 +28,10 @@ namespace SmartHouseAPI.Extensions
         /// Регистрация сервисов приложения.
         /// </summary>
         /// <param name="services">Объект ServiceCollection.</param>
+        /// <param name="configuration">Configuration.</param>
+        /// <param name="currentEnvironment">Environment.</param>
         public static IServiceCollection RegisterServices(this IServiceCollection services,
-            IConfiguration configuration, IWebHostEnvironment currentEnvironment,
-            ILoggerContext loggerContext, bool isLogger)
+            IConfiguration configuration, IWebHostEnvironment currentEnvironment)
         {
             #region PostgreSql
 
@@ -80,34 +80,8 @@ namespace SmartHouseAPI.Extensions
 
             #endregion
 
-            #region Logger
-            /*
-            if (isLogger)
-            {
-                MongoSettings logConfig = configuration
-                    .GetSection("MongoDbLoggerConnection")
-                    .Get<MongoSettings>();
-
-                loggerContext = new Contexts.LoggerContext(logConfig);
-
-                if (currentEnvironment.IsDevelopment())
-                {
-                    loggerContext.EnsureCreated();
-                }
-
-                services.AddScoped<ILoggerWork>(x =>
-                new LoggerWork(
-                    new LoggerRepository<Logger>(loggerContext, "General category")));
-            }
-            else
-            {
-                services.AddLogging(cfg => cfg.AddConsole());
-            }
-            */
-            #endregion
-
             #region Weather service
-            
+
             IDictionary<string, string> parm = configuration
                 .GetSection("OpenWeatherMapService")
                 .Get<OpenWeatherMapServiceConfig>()
@@ -119,11 +93,11 @@ namespace SmartHouseAPI.Extensions
             new HttpClient(),
             logger: _.GetRequiredService<ILogger<OpenWeatherMapService>>()));
 
-            // GisMeteo service.
+            // GisMeteo service. todo: Introduce.
             //services.AddTransient<IWeatherService, GisMeteoService>();
- 
+
             #endregion
-          
+
             services.AddScoped<IGoalWork<Goal>, GoalWork>();
 
             var redisWeatherCachingTime = configuration
@@ -133,46 +107,6 @@ namespace SmartHouseAPI.Extensions
             services.AddScoped<IWeatherWork, WeatherWork>(_ =>
             new WeatherWork(_.GetRequiredService<IWeatherService>(),
             _.GetRequiredService<IDatabase>(), redisWeatherCachingTime, 30));
-
-            #region Automapper
-
-            //var autoMapperConfig = new MapperConfiguration(cfg =>
-            //    {
-            //        cfg.AddMaps(typeof(MappingAssemblyAnchor).Assembly);
-            //    });
-
-            //var mapper = autoMapperConfig.CreateMapper();
-
-            //services.AddSingleton(mapper);
-            //services.AddSingleton<IAutoMapperConverter, AutoMapperConverter>();
-
-            #endregion
-
-
-            #region AutoDependencies
-
-            //var sqlAssembly = typeof(ISqlQuery).Assembly;
-
-            //services.RegisterAssemblyTypes(sqlAssembly)
-            //    .Where(t => t.Name.EndsWith("SqlQuery")
-            //            && t.GetInterfaces().Any(ti =>
-            //                ti.Name == typeof(ISqlQuery).Name))
-            //    .AsScoped()
-            //    .Bind();
-
-            //services.RegisterAssemblyTypesByName(sqlAssembly,
-            //    t => t.EndsWith("Repository"))
-            //    .AsScoped()
-            //    .AsImplementedInterfaces()
-            //    .Bind();
-
-            //services.RegisterAssemblyTypesByName(sqlAssembly,
-            //    t => t.EndsWith("RepositorySqlQueries"))
-            //    .AsScoped()
-            //    .PropertiesAutowired()
-            //    .Bind();
-
-            #endregion
 
             return services;
         }

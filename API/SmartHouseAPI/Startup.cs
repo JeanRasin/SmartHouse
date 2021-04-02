@@ -2,7 +2,6 @@ using Bogus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,20 +9,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using SmartHouse.Business.Data;
 using SmartHouse.Domain.Core;
-using SmartHouse.Domain.Interfaces;
 using SmartHouse.Domain.Interfaces.Contexts;
 using SmartHouse.Infrastructure.Data;
 using SmartHouse.Infrastructure.Data.Helpers;
-using SmartHouse.Service.Weather.Gismeteo;
-using SmartHouse.Service.Weather.OpenWeatherMap;
 using SmartHouse.Services.Interfaces;
 using SmartHouseAPI.Extensions;
 using SmartHouseAPI.Helpers;
-using SmartHouseAPI.Middleware;
-using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
 
 namespace SmartHouseAPI
 {
@@ -92,49 +84,8 @@ namespace SmartHouseAPI
                 Randomizer.Seed = new Random(randomizerSeed);
             }
 
-            // Сервисы приложения.
-            services.RegisterServices(Configuration, _currentEnvironment, _loggerContext, IsLogger);
+            services.RegisterServices(Configuration, _currentEnvironment);
 
-            /*
-            services.AddTransient(x =>
-            {
-                string connection = Configuration.GetConnectionString("DefaultConnection");
-
-                var options = new DbContextOptionsBuilder<GoalContext>();
-                options.UseNpgsql(connection);
-
-                if (_currentEnvironment.IsDevelopment())
-                {
-                    var goalContext = new Contexts.GoalContext(options.Options);
-                    goalContext.Database.EnsureCreated();
-                    return goalContext;
-                }
-                else
-                {
-                    var goalContext = new GoalContext(options.Options);
-                    goalContext.Database.EnsureCreated();
-                    return goalContext;
-                }
-            });
-
-            services.AddTransient<IDatabase>(x =>
-            {
-                var redisConnectString = Configuration
-                .GetSection("RedisConnection")
-                .Get<RedisSettings>();
-
-                ConfigurationOptions options = ConfigurationOptions.Parse(redisConnectString.Connection); // host1:port1, host2:port2, ...
-                options.Password = redisConnectString.Password;
-
-                ConnectionMultiplexer redis = ConnectionMultiplexer
-                .Connect(options);
-
-                IDatabase db = redis.GetDatabase(redisConnectString.DatabaseId);
-
-                return db;
-            });
-            */
-            /**/
             if (IsLogger)
             {
                 MongoSettings logConfig = Configuration.GetSection("MongoDbLoggerConnection").Get<MongoSettings>();
@@ -151,29 +102,6 @@ namespace SmartHouseAPI
             {
                 services.AddLogging(cfg => cfg.AddConsole());
             }
-            
-            /*
-            IDictionary<string, string> parm = Configuration
-                .GetSection("OpenWeatherMapService")
-                .Get<OpenWeatherMapServiceConfig>()
-                .ToDictionary<string>();
-
-            // OpenWeatherMap service.
-            services.AddScoped<IWeatherService>(x => new OpenWeatherMapService(parm, new HttpClient(), logger: x.GetRequiredService<ILogger<OpenWeatherMapService>>()));
-
-            // GisMeteo service.
-            //services.AddTransient<IWeatherService, GisMeteoService>();
-
-            services.AddScoped<IGoalWork<Goal>, GoalWork>();
-
-            var redisWeatherCachingTime = Configuration
-                .GetSection("RedisWeatherCachingTime")
-                .Get<TimeSpan>();
-
-            services.AddScoped<IWeatherWork, WeatherWork>(x => 
-            new WeatherWork(x.GetRequiredService<IWeatherService>(),
-            x.GetRequiredService<IDatabase>(), redisWeatherCachingTime, 30));
-            */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -213,14 +141,8 @@ namespace SmartHouseAPI
             // CORS policy.
             app.UseCors(allowSpecificOrigins);
 
-            // Регистрация приложений.
+            // Application registration.s
             app.RegisterApplicationBuilders();
-
-            //// Exception logger write.
-            //app.UseMiddleware<ExceptionMiddleware>();
-
-            //// Logger write.
-            //app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
